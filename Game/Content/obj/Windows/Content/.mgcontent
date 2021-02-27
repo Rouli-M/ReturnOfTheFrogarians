@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/gun.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/idle.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/RouliXL.spritefont</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/corner1.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/corner2.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/corner3.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/gray.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/ground.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/wall.png</File>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/walk.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
