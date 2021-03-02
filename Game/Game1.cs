@@ -102,6 +102,7 @@ namespace Splatoon2D
             Player.LoadContent(Content);
             PhysicalObject.LoadContent(Content);
             World.LoadContent(Content);
+            HUD.LoadContent(Content);
             base.LoadContent(); // ???
         }
 
@@ -125,7 +126,7 @@ namespace Splatoon2D
             ks = Keyboard.GetState();
             GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
             // If there a controller attached, handle it
-            Input.Update();
+            Input.Update(player);
 
             previous_ms = ms;
             player.Update(gameTime, world, player);
@@ -151,6 +152,7 @@ namespace Splatoon2D
 
             spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.LinearWrap, null, null, null, transformMatrix: matrix); // we need Immediate only for the body in order to draw the effect
             player.Draw(spriteBatch);
+            HUD.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

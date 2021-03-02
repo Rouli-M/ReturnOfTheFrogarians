@@ -4,6 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/cursor1.png</File>
     <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/gun.png</File>
     <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/idle.png</File>
     <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/RouliXL.spritefont</File>
@@ -16,6 +17,7 @@
     <File>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/walk.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

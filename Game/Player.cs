@@ -188,12 +188,13 @@ namespace Splatoon2D
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition);
             // draw le bras x(
 
-            if(Direction == 1) gun.Draw(spriteBatch, FeetPosition + GetArmRelativePoint(CurrentSprite) - new Vector2(7, 16), -Input.Angle, new Vector2(7, 16));
-            else gun.Draw(spriteBatch, FeetPosition + new Vector2(-GetArmRelativePoint(CurrentSprite).X, GetArmRelativePoint(CurrentSprite).Y) - new Vector2(gun.Texture.Width, 0) + new Vector2(7, -16), (float)Math.PI - Input.Angle, new Vector2(gun.Texture.Width, 0) + new Vector2(-7, 16));
+            if(Direction == 1) gun.Draw(spriteBatch, FeetPosition + GetArmRelativePoint() - new Vector2(7, 16), -Input.Angle, new Vector2(7, 16));
+            else gun.Draw(spriteBatch, FeetPosition + new Vector2(-GetArmRelativePoint().X, GetArmRelativePoint().Y) - new Vector2(gun.Texture.Width, 0) + new Vector2(7, -16), (float)Math.PI - Input.Angle, new Vector2(gun.Texture.Width, 0) + new Vector2(-7, 16));
         }
 
-        private Vector2 GetArmRelativePoint(Sprite sprite)
+        public Vector2 GetArmRelativePoint()
         {
+            Sprite sprite = CurrentSprite;
             if(sprite == idle)
             {
                 if (sprite.frameIndex == 0) return new Vector2(-5, -76);

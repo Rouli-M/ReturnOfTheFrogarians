@@ -21,8 +21,12 @@ namespace Splatoon2D
             CameraOffset.Y += -200 * (1 / (2 * Zoom));
 
             if (totally_fixed) CenterPositionDestination = new Vector2(400, -150);
-            else if (player_locked) CenterPositionDestination = new Vector2((player.FeetPosition.X ), player.FeetPosition.Y - 50);
-            else CenterPositionDestination = new Vector2((player.FeetPosition.X + 120 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
+            else if (player_locked) CenterPositionDestination = new Vector2((player.FeetPosition.X), player.FeetPosition.Y - 50);
+            else
+            {
+                if(Input.GAMEPAD) CenterPositionDestination = new Vector2((player.FeetPosition.X + 120 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
+                else CenterPositionDestination = new Vector2((player.FeetPosition.X + HowFarTheCursorIsFromThePlayer(player) * 120 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - HowFarTheCursorIsFromThePlayer(player) * 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
+            }
             CenterPositionDestination += CameraOffset;
             CenterPositionDestination += ScreenShake;
 
@@ -31,6 +35,11 @@ namespace Splatoon2D
 
             CenterPosition = 0.1f * (8 * CenterPosition + 2 * CenterPositionDestination);
             TopLeftCameraPosition = CenterPosition - 1 / Zoom * 0.5f * new Vector2(1280, 720);
+        }
+
+        private static float HowFarTheCursorIsFromThePlayer(Player player) // return something between 0 and 1
+        {
+            return Math.Min(1, (player.FeetPosition - player.GetArmRelativePoint()).LengthSquared() / 150); 
         }
 
         public static void Reset(Player player)

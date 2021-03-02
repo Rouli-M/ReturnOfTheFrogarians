@@ -54,3 +54,4 @@ C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Window
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\tileset\gray.xnb
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\tileset\ground.xnb
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\tileset\wall.xnb
+C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\cursor1.xnb

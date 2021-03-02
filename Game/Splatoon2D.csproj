@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="Player.cs" />
