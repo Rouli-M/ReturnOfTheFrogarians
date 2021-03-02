@@ -25,7 +25,7 @@ namespace Splatoon2D
         public float scale { get; set; } //utiliser la méthode SetScale() de préférence
         public SpriteEffects effects;
         public bool loopAnimation { get; private set; }
-        public int direction, FeetOffset = 0;
+        public int direction, FeetXOffset = 0, FeetYOffset = 0;
 
         public Sprite()
         {
@@ -62,12 +62,13 @@ namespace Splatoon2D
             else effects = SpriteEffects.None;
         }
 
-        public Sprite(Texture2D Texture, float scale = 1f, int direction = 1) // Constructeur d'un sprite non animé, et donc appelé avec uniquement une texture et de manière facultative une échelle de taille.
+        public Sprite(Texture2D Texture, float scale = 1f, int direction = 1, int FeetYOffset = 0) // Constructeur d'un sprite non animé, et donc appelé avec uniquement une texture et de manière facultative une échelle de taille.
         {
             this.angle = 0f;
             this.Texture = Texture;
             this.scale = scale;
             this.direction = direction;
+            this.FeetYOffset = FeetYOffset;
             isAnimated = false;
             frameHeight = Convert.ToInt32(scale * Texture.Height);
             frameWidth = Convert.ToInt32(scale * Texture.Width);
@@ -78,7 +79,7 @@ namespace Splatoon2D
 
         public Sprite(int totalAnimationFrames, int frameWidth, int frameHeight, int timeBetweenFrames, Texture2D Texture, float scale = 1f, bool loopAnimation = true, bool reverse = false, int direction = 1, int normalFrameWidth = 0, int FeetOffset = 0) // Autre constructeur pour quand un gameObject est créé avec les paramètres ci-contre
         {
-            this.FeetOffset = FeetOffset;
+            this.FeetYOffset = FeetOffset;
             this.angle = 0f;
             this.totalFrames = totalAnimationFrames;
             this.frameWidth = frameWidth;
@@ -131,12 +132,12 @@ namespace Splatoon2D
 
         public void DrawFromFeet(SpriteBatch spriteBatch, Vector2 FeetPosition, float Angle = 0f, float Opacity = 1f) // Dessin du sprite à partir de la position des pieds (pied = milieu de l'image en bas) s'il y en a une
         {
-            FeetPosition.X -= direction * FeetOffset / 2;
+            FeetPosition.X -= direction * FeetXOffset / 2;
             float angle2;
             if (Angle == 0f) angle2 = angle;
             else angle2 = Angle;
             Vector2 FeetRelativePosition = new Vector2(-0.5f * frameWidth, -frameHeight);
-            Vector2 display_position = (FeetPosition + scale * FeetRelativePosition - Camera.TopLeftCameraPosition) * Camera.Zoom;
+            Vector2 display_position = (FeetPosition + scale * FeetRelativePosition - Camera.TopLeftCameraPosition + new Vector2(FeetXOffset, FeetYOffset)) * Camera.Zoom;
             spriteBatch.Draw(Texture, display_position, Source, Color.White * Opacity * opacity, angle2, Vector2.Zero, scale * Camera.Zoom, effects, 1f); // on obtient le point en haut à gauche à partir de la position des pieds
         }
 

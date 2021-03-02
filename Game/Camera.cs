@@ -9,7 +9,7 @@ namespace Splatoon2D
         public static float RegularZoom = 1.3f, Zoom = 1.3f;
         public static Vector2 TopLeftCameraPosition, CenterPositionDestination, CenterPosition = new Vector2(0,0), CameraOffset = new Vector2(0,0);
         public static Vector2 RoomRail, TopLeftRailCameraPosition, ScreenShake = new Vector2(0, 0);
-        private static bool player_locked = false, totally_fixed = false;
+        private static bool player_locked = true, totally_fixed = false;
         public static void Update(Player player, World world)
         {
             //ScreenShake *= 0.9f;
@@ -21,11 +21,11 @@ namespace Splatoon2D
             CameraOffset.Y += -200 * (1 / (2 * Zoom));
 
             if (totally_fixed) CenterPositionDestination = new Vector2(400, -150);
-            else if (player_locked) CenterPositionDestination = new Vector2((player.FeetPosition.X), player.FeetPosition.Y - 50);
+            else if (player_locked || player.CurrentForm == Player.PlayerForm.squid) CenterPositionDestination = new Vector2((player.FeetPosition.X), player.FeetPosition.Y - 50);
             else
             {
-                if(Input.GAMEPAD) CenterPositionDestination = new Vector2((player.FeetPosition.X + 120 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
-                else CenterPositionDestination = new Vector2((player.FeetPosition.X + HowFarTheCursorIsFromThePlayer(player) * 120 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - HowFarTheCursorIsFromThePlayer(player) * 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
+                if(Input.GamepadUsed) CenterPositionDestination = new Vector2((player.FeetPosition.X + 100 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
+                else CenterPositionDestination = new Vector2((player.FeetPosition.X + HowFarTheCursorIsFromThePlayer(player) * 100 * (float)Math.Cos(Input.Angle)), player.FeetPosition.Y - HowFarTheCursorIsFromThePlayer(player) * 50 * (float)Math.Sin(Input.Angle) - 50); // center the camera on the player
             }
             CenterPositionDestination += CameraOffset;
             CenterPositionDestination += ScreenShake;

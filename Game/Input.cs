@@ -11,7 +11,7 @@ namespace Splatoon2D
     static class Input
     {
         public static float movement_direction; // float from -1.0 to 1.0
-        public static bool GAMEPAD = false;
+        public static bool GamepadUsed = false;
         public static int aim_direction;
         public static bool Jump, Shoot, Squid;
         public static float Angle = 0f; // between zero and 2 * Math.PI
@@ -30,7 +30,7 @@ namespace Splatoon2D
             // If there a controller attached, handle it
             if (capabilities.IsConnected)
             {
-                GAMEPAD = true;
+                GamepadUsed = true;
                 GamePadState gp = GamePad.GetState(PlayerIndex.One);
                 Jump = gp.IsButtonDown(Buttons.A);
                 Shoot = gp.Triggers.Right > 0.5;
@@ -51,7 +51,7 @@ namespace Splatoon2D
             }
             else
             {
-                GAMEPAD = false;
+                GamepadUsed = false;
                 Jump = ks.IsKeyDown(Keys.Z) || ks.IsKeyDown(Keys.W) || ks.IsKeyDown(Keys.Up);
                 Shoot = ms.LeftButton == ButtonState.Pressed;
                 Squid = ks.IsKeyDown(Keys.LeftShift);

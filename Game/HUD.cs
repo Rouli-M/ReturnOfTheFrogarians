@@ -12,7 +12,7 @@ namespace Splatoon2D
         private static Sprite MouseSprite;
         public static void Draw(SpriteBatch spriteBatch)
         {
-            MouseSprite.ScreenDraw(spriteBatch, Input.ms.Position.ToVector2());
+            if(!Input.GamepadUsed) MouseSprite.ScreenDraw(spriteBatch, Input.ms.Position.ToVector2());
         }
 
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)

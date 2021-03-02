@@ -21,7 +21,7 @@ namespace Splatoon2D
 
         public Vector2 MaskPosition, MaskSpriteOffset, CurrentMaskPosition, LastTrailGenerated;
         List<Vector2> CurrentMaskPositionList;
-        public enum PlayerState { idle, run, jump, attack }
+        public enum PlayerState { idle, run, jump, attack, to_squid, to_kid }
         public PlayerState CurrentState, PreviousState;
         public enum PlayerForm { kid, squid }
         public PlayerForm CurrentForm, PreviousForm;
@@ -65,11 +65,13 @@ namespace Splatoon2D
             else state_frames = 0;
             PreviousState = CurrentState;
 
-            if (FeetPosition.Y > 20000)
+            if (FeetPosition.Y > 1500)
             {
                 FeetPosition = new Vector2(0, -1);
                 Velocity = new Vector2(0, 0);
             }
+
+            GroundFactor = 0.5f;
 
             HitboxSize = new Vector2(0, 0);
             HitboxOffset = new Vector2(0, 0);
@@ -106,9 +108,29 @@ namespace Splatoon2D
                                 }
                             case (PlayerState.jump):
                                 {
-
+                                    break;
                                 }
-                                break;
+                                
+                            case (PlayerState.to_kid):
+                                {
+                                    CurrentState = PlayerState.idle;
+                                    break;
+                                }
+                                
+                            case (PlayerState.to_squid):
+                                {
+                                    if(state_frames > 1)
+                                    {
+                                        CurrentForm = PlayerForm.squid;
+                                        CurrentState = PlayerState.idle;
+                                    }
+                                    break;
+                                }
+
+                        }
+                        if(Input.Squid)
+                        {
+                            CurrentState = PlayerState.to_squid;
                         }
                         break;
                     }
@@ -118,18 +140,52 @@ namespace Splatoon2D
                         {
                             case (PlayerState.idle):
                                 {
-
+                                    if (Input.movement_direction != 0)
+                                    {
+                                        //Velocity.X = 1 * Input.movement_direction;
+                                        //ApplyForce(new Vector2(Input.movement_direction, 0));
+                                        CurrentState = PlayerState.run;
+                                    }
                                     break;
                                 }
                             case (PlayerState.run):
                                 {
+                                    GroundFactor = 0.96f;
+                                    if (CurrentSprite.firstFrame)
+                                    {
+                                        ApplyForce(new Vector2(Input.movement_direction * 13, 0));
+                                        Direction = Math.Sign(Input.movement_direction);
+                                    }
+                                    else if (CurrentSprite.isOver)
+                                    {
+                                        if (Input.movement_direction == 0) CurrentState = PlayerState.idle;
+                                        else CurrentSprite.ResetAnimation();
+                                    }
                                     break;
                                 }
                             case (PlayerState.jump):
                                 {
 
+                                    break;
                                 }
-                                break;
+                            case (PlayerState.to_squid):
+                                {
+                                    CurrentState = PlayerState.idle;
+                                    break;
+                                }
+                            case (PlayerState.to_kid):
+                                {
+                                    if (state_frames > 2)
+                                    {
+                                        CurrentForm = PlayerForm.kid;
+                                        CurrentState = PlayerState.idle;
+                                    }
+                                    break;
+                                }
+                        }
+                        if (!Input.Squid)
+                        {
+                            CurrentState = PlayerState.to_kid;
                         }
                         break;
                     }
@@ -149,6 +205,7 @@ namespace Splatoon2D
                         {
 
                         }
+                        else if (CurrentState == PlayerState.to_squid) CurrentSprite = to_squid;
                         break;
                     }
                 case (PlayerForm.squid):
@@ -161,9 +218,12 @@ namespace Splatoon2D
                             else if (Velocity.Y > 2) CurrentSprite = squid_fall;
                             else CurrentSprite = squid_top;
                         }
+                        else if (CurrentState == PlayerState.to_kid) CurrentSprite = to_kid;
                         break;
                     }
             }
+
+           // Console.WriteLine(CurrentState + " form: " + CurrentForm);
 
             if (CurrentSprite != PreviousSprite)
             {
@@ -305,8 +365,12 @@ namespace Splatoon2D
 
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
-            idle = new Sprite(2, 81, 133, 250, Content.Load<Texture2D>("idle"));
-            walk = new Sprite(4, 436/4, 131, 130, Content.Load<Texture2D>("walk"));
+            idle = new Sprite(2, 81, 133, 250, Content.Load<Texture2D>("idle"), FeetOffset:1);
+            walk = new Sprite(4, 436/4, 131, 130, Content.Load<Texture2D>("walk"), FeetOffset: 1);
+            to_squid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset: 1);
+            to_kid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset:1);
+            squid_idle = new Sprite(2, 190/2, 30, 400, Content.Load<Texture2D>("squid_idle"), FeetOffset: 6);
+            squid_walk = new Sprite(3, 351/3, 35, 150, Content.Load<Texture2D>("squid_move"), 1f, false, FeetOffset: 6);
             gun = new Sprite(Content.Load<Texture2D>("gun"));
         }
     }

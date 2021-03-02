@@ -9,14 +9,14 @@ namespace Splatoon2D
     {
         public List<Rectangle> Ground;
         public List<PhysicalObject> Stuff;
-        private static Texture2D gray;
+        private static Texture2D gray, ground;
 
         public World(Player player)
         {
             Stuff = new List<PhysicalObject>();
             Ground = new List<Rectangle>()
             {
-                new Rectangle(-200, 400, 1000, 200)
+                new Rectangle(-200, 400, 2000, 200)
             };
         }
 
@@ -27,7 +27,12 @@ namespace Splatoon2D
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Rectangle r in Ground) Game1.DrawRectangle(spriteBatch, r, Color.White, gray);
+            foreach (Rectangle r in Ground)
+            {
+                Game1.DrawRectangle(spriteBatch, r, Color.White, gray);
+                Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, r.Width, ground.Height), Color.White, ground, true);
+            }
+
 
             foreach (PhysicalObject o in Stuff) o.Draw(spriteBatch);
         }
@@ -35,6 +40,7 @@ namespace Splatoon2D
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             gray = Content.Load<Texture2D>("tileset/gray");
+            ground = Content.Load<Texture2D>("tileset/ground");
         }
 
         public bool CheckCollision(Rectangle rectangle, Vector2 movement)

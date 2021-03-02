@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/tileset/gray.png</SourceFile>
-  <SourceTime>2021-02-27T21:43:30.9495775+01:00</SourceTime>
+  <SourceTime>2021-03-02T21:53:51.9874318+01:00</SourceTime>
   <DestFile>C:/Users/nittr/Documents/Artisanat/Splatoon fan stuff/Splatoon2D/Game/Content/bin/Windows/Content/tileset/gray.xnb</DestFile>
-  <DestTime>2021-02-27T21:45:03.8464128+01:00</DestTime>
+  <DestTime>2021-03-02T21:53:59.1387581+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2018-12-08T17:35:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
