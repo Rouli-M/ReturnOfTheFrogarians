@@ -11,9 +11,10 @@ namespace Splatoon2D
 {
     public class Player : PhysicalObject
     {
-        static Sprite idle, walk, to_squid, to_kid, arms, arms_shooting;
+        static Sprite idle, walk, to_squid, to_kid;
         static Sprite squid_idle, squid_walk, squid_rise, squid_top, squid_fall;
-        static Sprite gun;
+        static Sprite gun_rest, gun_shoot, gun_cocked;
+        static Sprite ArmSprite;
         static SoundEffect shoot_sound, to_squid_sound;
         static Effect Jam;
 
@@ -35,6 +36,7 @@ namespace Splatoon2D
 
         public int form_frames { get; private set; } 
         public int state_frames { get; private set; }
+        public int shoot_cooldown = 0;
 
         public Player():base(human_size, new Vector2(0,0))
         {
@@ -46,7 +48,6 @@ namespace Splatoon2D
             GroundBounceFactor = 0f;
             GroundFactor = 0.5f;
             Gravity = 0.7f;
-            CurrentSprite = idle;
             
             HurtboxSize = human_size;
             Velocity = new Vector2(0, 0);
@@ -76,7 +77,6 @@ namespace Splatoon2D
             HitboxSize = new Vector2(0, 0);
             HitboxOffset = new Vector2(0, 0);
 
-           
             switch (CurrentForm)
             {
                 case PlayerForm.kid:
@@ -150,10 +150,10 @@ namespace Splatoon2D
                                 }
                             case (PlayerState.run):
                                 {
-                                    GroundFactor = 0.96f;
+                                    GroundFactor = 0.93f;
                                     if (CurrentSprite.firstFrame)
                                     {
-                                        ApplyForce(new Vector2(Input.movement_direction * 13, 0));
+                                        ApplyForce(new Vector2(Input.movement_direction * 7, 0));
                                         Direction = Math.Sign(Input.movement_direction);
                                     }
                                     else if (CurrentSprite.isOver)
@@ -190,6 +190,33 @@ namespace Splatoon2D
                         break;
                     }
             }
+
+            if (Input.Shoot)
+            {
+                if (shoot_cooldown == 0)
+                {
+                    Vector2 InkSpawnPoint = FeetPosition;
+                    Vector2 ArmJointPos = GetArmRelativePoint();
+                    if (Direction == -1) ArmJointPos.X *= -1;
+
+                    Vector2 OffsetInAimDirection = 77 * new Vector2((float)Math.Cos(Input.Angle), -(float)Math.Sin(Input.Angle));
+                    Vector2 OffsetInWeaponExitDirection = (Direction == 1 ? 1 : -1) * 14 * new Vector2((float)Math.Cos(Input.Angle + Math.PI/2f), -(float)Math.Sin(Input.Angle + Math.PI / 2f));
+                    InkSpawnPoint += ArmJointPos;
+                    InkSpawnPoint += OffsetInAimDirection;
+                    //InkSpawnPoint += OffsetInWeaponExitDirection;
+                    
+                    world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle));
+                    gun_shoot.ResetAnimation();
+                    ArmSprite = gun_shoot;
+                    shoot_cooldown = 14;
+                }
+                else
+                {
+                    if (ArmSprite != gun_shoot || ArmSprite == gun_shoot && ArmSprite.isOver) ArmSprite = gun_cocked;
+                }
+            }
+            if (shoot_cooldown > 0) shoot_cooldown--;
+            else ArmSprite = gun_rest;
 
             //
             // SPRITE DETERMINATION
@@ -232,8 +259,8 @@ namespace Splatoon2D
             }
             CurrentSprite.direction = Direction;
             CurrentSprite.UpdateFrame(gameTime);
-            gun.direction = Direction;
-            gun.UpdateFrame(gameTime);
+            ArmSprite.direction = Direction;
+            ArmSprite.UpdateFrame(gameTime);
 
             foreach (PhysicalObject o in world.Stuff) { }
 
@@ -245,11 +272,10 @@ namespace Splatoon2D
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition);
-            // draw le bras x(
+            CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition) ;
 
-            if(Direction == 1) gun.Draw(spriteBatch, FeetPosition + GetArmRelativePoint() - new Vector2(7, 16), -Input.Angle, new Vector2(7, 16));
-            else gun.Draw(spriteBatch, FeetPosition + new Vector2(-GetArmRelativePoint().X, GetArmRelativePoint().Y) - new Vector2(gun.Texture.Width, 0) + new Vector2(7, -16), (float)Math.PI - Input.Angle, new Vector2(gun.Texture.Width, 0) + new Vector2(-7, 16));
+            if(Direction == 1) ArmSprite.Draw(spriteBatch, FeetPosition + GetArmRelativePoint() - GetWeaponRelativePoint(), -Input.Angle, GetWeaponRelativePoint());
+            else ArmSprite.Draw(spriteBatch, FeetPosition + new Vector2(-GetArmRelativePoint().X, GetArmRelativePoint().Y) - new Vector2(ArmSprite.frameWidth, 0) + new Vector2(GetWeaponRelativePoint().X, -GetWeaponRelativePoint().Y), (float)Math.PI - Input.Angle, new Vector2(ArmSprite.frameWidth, 0) + new Vector2(-GetWeaponRelativePoint().X, GetWeaponRelativePoint().Y));
         }
 
         public Vector2 GetArmRelativePoint()
@@ -268,6 +294,14 @@ namespace Splatoon2D
                 else return new Vector2(4, -73+2);
             }
             return new Vector2(0, -100000000); // dirty but life's dirty
+        }
+
+        public Vector2 GetWeaponRelativePoint()
+        {
+            if(ArmSprite == gun_rest) return new Vector2(7, 16);
+            else if (ArmSprite == gun_cocked) return new Vector2(7, 28);
+            else if (ArmSprite == gun_shoot) return new Vector2(7, 28);
+            return new Vector2(0, 0);
         }
 
 
@@ -371,7 +405,12 @@ namespace Splatoon2D
             to_kid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset:1);
             squid_idle = new Sprite(2, 190/2, 30, 400, Content.Load<Texture2D>("squid_idle"), FeetOffset: 6);
             squid_walk = new Sprite(3, 351/3, 35, 150, Content.Load<Texture2D>("squid_move"), 1f, false, FeetOffset: 6);
-            gun = new Sprite(Content.Load<Texture2D>("gun"));
+            gun_rest = new Sprite(Content.Load<Texture2D>("gun"));
+            gun_cocked = new Sprite(Content.Load<Texture2D>("gun_cocked"));
+            gun_shoot = new Sprite(2, 85, 39, 70, Content.Load<Texture2D>("gun_shoot"), loopAnimation:false);
+
+            // Init here because Constructor seems to be called before the content is actually loaded?
+            ArmSprite = gun_rest;
         }
     }
 }

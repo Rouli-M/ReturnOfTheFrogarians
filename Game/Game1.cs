@@ -103,6 +103,7 @@ namespace Splatoon2D
             PhysicalObject.LoadContent(Content);
             World.LoadContent(Content);
             HUD.LoadContent(Content);
+            InkShot.LoadContent(Content);
             base.LoadContent(); // ???
         }
 

@@ -1,2 +1,10 @@
 
 Game/.vs/
+
+Game/bin/
+
+Game/Content/bin/
+
+Game/Content/obj/
+
+Game/packages/
