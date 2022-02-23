@@ -13,13 +13,12 @@ namespace Splatoon2D
         static Sprite ink_shot_sprite;
         public InkShot(Vector2 SpawnPos, float Angle) : base(new Vector2(5, 5), SpawnPos)
         {
-            Velocity = 14 * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
+            Velocity = 17 * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
             Gravity = 0f;
         }
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
-
             if (lifetime > 14) Gravity = 2f;
 
             base.Update(gameTime, world, player);

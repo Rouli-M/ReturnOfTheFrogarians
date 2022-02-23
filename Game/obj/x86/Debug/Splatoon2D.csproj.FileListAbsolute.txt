@@ -64,3 +64,6 @@ C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Window
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\statue1.xnb
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\System.ValueTuple.dll
 C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\System.ValueTuple.xml
+C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\ink_marker.xnb
+C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\tileset\corner4.xnb
+C:\Users\nittr\Documents\Artisanat\Splatoon fan stuff\Splatoon2D\Game\bin\Windows\x86\Debug\Content\tileset\wall_paint.xnb

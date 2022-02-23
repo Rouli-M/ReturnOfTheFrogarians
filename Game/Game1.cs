@@ -167,7 +167,7 @@ namespace Splatoon2D
             Camera.Reset(player);
         }
 
-        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangleToDraw, Color color, Texture2D texture = null, bool start_top_off_texture = false)
+        public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle rectangleToDraw, Color color, Texture2D texture = null, bool start_top_off_texture = false, bool start_left_off_texture = false)
         {
             if (texture == null) texture = rectangle;
             spriteBatch.Draw(texture,
@@ -175,7 +175,7 @@ namespace Splatoon2D
                               (int)((rectangleToDraw.Y - (int)Camera.TopLeftCameraPosition.Y) * Camera.Zoom),
                               (int)(rectangleToDraw.Width * Camera.Zoom),
                               (int)(rectangleToDraw.Height * Camera.Zoom)),
-                new Rectangle(rectangleToDraw.X % texture.Width,
+                new Rectangle(start_left_off_texture ? 0 : rectangleToDraw.X % texture.Width,
                               start_top_off_texture ? 0 : rectangleToDraw.Y % texture.Height,
                               (int)(rectangleToDraw.Width),
                               (int)(rectangleToDraw.Height)),
