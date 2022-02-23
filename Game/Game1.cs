@@ -81,10 +81,12 @@ namespace Splatoon2D
             var scaleX = 1f;
             var scaleY = 1f;
 
+            base.Initialize();
+
+
             matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
             player = new Player();
             world = new World(player);
-            base.Initialize();
         }
 
 
@@ -104,6 +106,8 @@ namespace Splatoon2D
             World.LoadContent(Content);
             HUD.LoadContent(Content);
             InkShot.LoadContent(Content);
+            Hittable.LoadContent(Content);
+            Egg.LoadContent(Content);
             base.LoadContent(); // ???
         }
 
@@ -133,6 +137,7 @@ namespace Splatoon2D
             player.Update(gameTime, world, player);
             world.Update(gameTime, player);
             Camera.Update(player, world);
+            HUD.Update();
             SoundEffectPlayer.Update();
             base.Update(gameTime);
         }

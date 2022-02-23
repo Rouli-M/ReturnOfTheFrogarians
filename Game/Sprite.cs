@@ -116,7 +116,6 @@ namespace Splatoon2D
 
         public void ScreenDraw(SpriteBatch spriteBatch, Vector2 Position) // Dessin du sprite avec la position sur l'écran
         {
-
             spriteBatch.Draw(Texture, Position, Source, Color.White * opacity, 0f, new Vector2(0, 0), scale, effects, 1f);
         }
 

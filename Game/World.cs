@@ -13,22 +13,45 @@ namespace Splatoon2D
         public static List<(Vector2, Sprite)> Decor;
         public List<PhysicalObject> Stuff;
         private List<PhysicalObject> StuffToRemove;
-        private static Texture2D gray, ground, painted_ground, wall, painted_wall;
+        private static Texture2D gray, ground, painted_ground, wall, painted_wall, background;
         private static Texture2D outer_corner_top_left, outer_corner_top_right, inner_corner_top_left, inner_corner_top_right;
-        private static Sprite statue1;
+        private static Sprite statue1, statue2;
 
         public World(Player player)
         {
-            Stuff = new List<PhysicalObject>();
             StuffToRemove = new List<PhysicalObject>();
             PaintedGround = new List<Rectangle>();
             PaintedWalls = new List<Rectangle>();
             Ground = new List<Rectangle>()
             {
-                new Rectangle(-200, 0, 2000, 200), // ground
-                new Rectangle(-800, -800, 650, 2000), // left wall
-                new Rectangle(550, -100, 300, 200), // right bump
+                new Rectangle(-2200, 0, 3000, 200), // ground
+                new Rectangle(-2000, -1000, 650, 7000), // most left wall
+                new Rectangle(-3000, -2000, 1100, 7000), // most most left wall
+                new Rectangle(-4000, -2000, 3000, 800), // roof
+                new Rectangle(-3650, -500, 650 + 3000, 700 - 500), // roof above spawn
+                new Rectangle(0, -60, 300, 200), // right bump
+                new Rectangle(250, -300, 300, 500), // big right bump
+
+                new Rectangle(300, -150, 5000, 7000), // after bump, low ground level
+                new Rectangle(300, -200, 1000, 7000), // high ground level
+                new Rectangle(1500, -200, 300, 7000), // high ground level plateform
+                new Rectangle(2000, -200, 300, 7000), // high ground level plateform
+                new Rectangle(2500, -200, 2000, 7000), // end of hole zone, high level
             };
+
+            Stuff = new List<PhysicalObject>()
+            {
+                new Balloon(new Vector2(-270, -150)), // spawn balloon
+
+                new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
+                new Egg(new Vector2(-2000 + 650 + 60, -140)), // left from spawn eggs
+                new Egg(new Vector2(-2000 + 650 + 60, -40)), // left from spawn eggs
+
+                new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
+                new Egg(new Vector2(- 200, - 500 - 50), 5) // above spawn
+            };
+
+            //Stuff.Clear();
         }
 
         public void Update(GameTime gameTime, Player player)
@@ -38,7 +61,7 @@ namespace Splatoon2D
             StuffToRemove.Clear();
         }
 
-        public bool IsOnInk(Vector2 Position)
+        public bool IsOnInkGround(Vector2 Position)
         {
             Vector2 TestPosition = Position + new Vector2(0, 5);
             foreach(Rectangle r in PaintedGround)
@@ -48,40 +71,24 @@ namespace Splatoon2D
             return false;
         }
 
+        public bool IsOnInkWall(Vector2 Position)
+        {
+            Vector2 TestPosition = Position;
+            foreach (Rectangle r in PaintedWalls)
+            {
+                if (r.Contains(TestPosition)) return true;
+            }
+            return false;
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
+            Game1.DrawRectangle(spriteBatch, new Rectangle(-100000, -10000, 200000, 20000), Color.White, background);
+
             foreach ((Vector2 position, Sprite sprite) decor in Decor)
             {
                 decor.sprite.DrawFromFeet(spriteBatch, decor.position);
             }
-
-            /*
-            List<Rectangle> Tops = new List<Rectangle>();
-            foreach (Rectangle r1 in Ground)
-            {
-                Rectangle NewTop = new Rectangle(r1.X, r1.Y, r1.Width, ground.Height);
-                foreach (Rectangle r2 in Ground)
-                {
-                    if(r2 != r1)
-                    {
-                        if (r2.Contains(NewTop))
-                        {
-                            NewTop = Rectangle.Empty;
-                            break;
-                        }
-                        else if (r2.Intersects(NewTop))
-                        {
-                            if (NewTop.Left < r2.Right && r2.Left < NewTop.Right) // top on both sides
-                            {
-
-                            }
-                            
-                         }
-                    }
-                }
-                Tops.Add();
-            }
-            */
 
             // first draw ground
             foreach (Rectangle r in Ground)
@@ -136,13 +143,17 @@ namespace Splatoon2D
         {
             PaintZone.X -= PaintZone.X % 5;
             PaintZone.Width += 5 - PaintZone.Width % 5;
-            foreach(Rectangle r in Ground)
+            PaintZone.Y -= PaintZone.Y % 5;
+            PaintZone.Height += 5 - PaintZone.Height % 5;
+
+            foreach (Rectangle r in Ground)
             {
                 Rectangle Top = r;
                 Top.Height = ground.Height;
                 if(Top.Intersects(PaintZone))
                 {
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, Top);
+                    if (PaintedZoneAdded.Height < painted_ground.Height) return;
                     PaintedZoneAdded.Height = painted_ground.Height;
                     PaintedGround.Add(PaintedZoneAdded);
                 }
@@ -152,6 +163,7 @@ namespace Splatoon2D
                 if (LeftWall.Intersects(PaintZone))
                 {
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, LeftWall);
+                    if (PaintedZoneAdded.Width < wall.Width) return;
                     PaintedZoneAdded.Width = wall.Width;
                     PaintedWalls.Add(PaintedZoneAdded);
                 }
@@ -173,6 +185,7 @@ namespace Splatoon2D
             gray = Content.Load<Texture2D>("tileset/gray");
             ground = Content.Load<Texture2D>("tileset/ground");
             wall = Content.Load<Texture2D>("tileset/wall");
+            background = Content.Load<Texture2D>("tileset/background");
             outer_corner_top_left = Content.Load<Texture2D>("tileset/corner3");
             outer_corner_top_right = Content.Load<Texture2D>("tileset/corner4");
             inner_corner_top_left = Content.Load<Texture2D>("tileset/corner1");
@@ -181,10 +194,12 @@ namespace Splatoon2D
             painted_wall = Content.Load<Texture2D>("tileset/wall_paint");
 
             statue1 = new Sprite(Content.Load<Texture2D>("statue1"));
+            statue2 = new Sprite(Content.Load<Texture2D>("statue2"));
 
             Decor = new List<(Vector2, Sprite)>
             {
-                (new Vector2(400, 0), statue1)
+                (new Vector2( - 400, 0), statue1),
+                 (new Vector2( - 900, 0), statue2)
             };
         }
 

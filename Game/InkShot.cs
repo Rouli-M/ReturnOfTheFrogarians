@@ -25,6 +25,7 @@ namespace Splatoon2D
 
             if (groundcollision || wallcollision)
             {
+               // Console.WriteLine("Remove InkShot at " + FeetPosition);
                 world.Remove(this);
                 Rectangle PaintZone = Hurtbox;
                 PaintZone.Inflate(40, 30);

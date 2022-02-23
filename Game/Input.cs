@@ -11,6 +11,7 @@ namespace Splatoon2D
     static class Input
     {
         public static float movement_direction; // float from -1.0 to 1.0
+        public static Vector2 movement_vector;
         public static bool GamepadUsed = false;
         public static int aim_direction;
         public static bool Jump, Shoot, Squid;
@@ -36,6 +37,7 @@ namespace Splatoon2D
                 Shoot = gp.Triggers.Right > 0.5;
                 Squid = gp.Triggers.Left > 0.5;
                 movement_direction = gp.ThumbSticks.Left.X;
+                movement_vector = gp.ThumbSticks.Left;
 
                 if (gp.ThumbSticks.Right.X != 0 || gp.ThumbSticks.Right.Y != 0)
                 {
@@ -59,6 +61,10 @@ namespace Splatoon2D
                 if (LeftPressed(ks) && RightPressed(ks) || !LeftPressed(ks) && !RightPressed(ks)) movement_direction = 0;
                 else if (LeftPressed(ks)) movement_direction = -1;
                 else if (RightPressed(ks)) movement_direction = 1;
+
+                if (!Jump) movement_vector = new Vector2(movement_direction, 0);
+                else if (movement_direction != 0) movement_vector = new Vector2(movement_direction * 0.5f, -0.5f);
+                else movement_vector = new Vector2(0, -1f);
 
                 Vector2 ScreenMousePosition = ms.Position.ToVector2() * 1 / Camera.Zoom + Camera.TopLeftCameraPosition; // dark magic stuff
 

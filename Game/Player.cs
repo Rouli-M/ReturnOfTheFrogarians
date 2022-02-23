@@ -11,8 +11,8 @@ namespace Splatoon2D
 {
     public class Player : PhysicalObject
     {
-        static Sprite idle, walk, to_squid, to_kid;
-        static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_top, squid_fall;
+        static Sprite idle, walk, walk_slow, to_squid, to_kid;
+        static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_fall;
         static Sprite gun_rest, gun_shoot, gun_cocked;
         static Sprite ArmSprite;
         static SoundEffect shoot_sound, to_squid_sound;
@@ -40,7 +40,7 @@ namespace Splatoon2D
 
         public Player():base(human_size, new Vector2(0,0))
         {
-            FeetPosition = new Vector2(200, -1);
+            FeetPosition = new Vector2(-640, -1);
             CurrentState = PlayerState.idle;
             CurrentForm = PlayerForm.kid;
            
@@ -56,6 +56,8 @@ namespace Splatoon2D
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
+            //if (lifetime % 100 == 55) HUD.SpawnEgg(4, FeetPosition);
+
             this.world = world;
             //juice = 70;
 
@@ -65,6 +67,7 @@ namespace Splatoon2D
             if (PreviousState == CurrentState) state_frames += 1;
             else state_frames = 0;
             PreviousState = CurrentState;
+            Vector2 PreviousVelocity = Velocity;
 
             if (FeetPosition.Y > 1500)
             {
@@ -74,10 +77,16 @@ namespace Splatoon2D
 
             GroundFactor = 0.5f;
 
-            HitboxSize = new Vector2(0, 0);
+            if(CurrentForm == PlayerForm.kid) HitboxSize = new Vector2(50, 130);
+            else HitboxSize = new Vector2(50, 30);
+
             HitboxOffset = new Vector2(0, 0);
 
-            bool is_on_ink = world.IsOnInk(FeetPosition);
+            bool is_on_ink_ground = world.IsOnInkGround(FeetPosition);
+            bool is_on_ink_wall = CheckIfIsOnInkedWall(world);
+            bool is_on_ink = is_on_ink_ground || is_on_ink_wall;
+
+            if (is_on_ink_wall) is_on_ink_ground = false;
 
             switch (CurrentForm)
             {
@@ -97,21 +106,35 @@ namespace Splatoon2D
                                         CurrentState = PlayerState.run;
                                     }
 
-                                    if (Input.Jump) Jump();
+                                    if (Input.Jump && IsOnGround(world)) Jump();
                                     break;
                                 }
                             case (PlayerState.run):
                                 {
-                                    if (Input.Jump) Jump();
+                                    if (Input.Jump && IsOnGround(world)) Jump();
 
                                     if (!IsOnGround(world) || Input.Jump) 
                                         goto case (PlayerState.jump);
 
-                                    ApplyForce(new Vector2(5 * Input.movement_direction, 0));
+                                    float walk_speed = 4f;
+                                    if (Input.Shoot) walk_speed = 2f;
+                                    ApplyForce(new Vector2(walk_speed * Input.movement_direction, 0));
                                     if (Input.movement_direction == 0) CurrentState = PlayerState.idle;
 
                                     if (Input.aim_direction != 0) Direction = Input.aim_direction;
                                     else if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
+
+                                    /*
+                                    if (Direction != Input.movement_direction)
+                                    {
+                                        walk.reverse = true;
+                                        walk_slow.reverse = true;
+                                    }
+                                    else
+                                    {
+                                        walk.reverse = false;
+                                        walk_slow.reverse = false;
+                                    }*/
 
                                     
                                     break;
@@ -149,29 +172,50 @@ namespace Splatoon2D
                     }
                 case PlayerForm.squid:
                     {
+                        Console.WriteLine(CurrentState.ToString() +  "Squid form X pos : " + FeetPosition + (is_on_ink ? "On ink" : "not in ink") + (is_on_ink_wall ? " (wall) ":"") + (is_on_ink_ground ? " (ground) " : ""));
                         switch (CurrentState)
                         {
                             case (PlayerState.idle):
                                 {
-                                    if (Input.movement_direction != 0)
+                                    if (IsOnGround(world) && Input.Jump) Jump(!is_on_ink);
+                                    else if (Input.movement_direction != 0)
                                     {
                                         //Velocity.X = 1 * Input.movement_direction;
-                                        //ApplyForce(new Vector2(Input.movement_direction, 0));
-                                        CurrentState = PlayerState.run;
+                                        ApplyForce(new Vector2(Input.movement_direction, 0));
+                                        Velocity.X *= 0.8f;
+                                        if(IsOnGround(world) || is_on_ink_wall) CurrentState = PlayerState.run;
+                                        Direction = Math.Sign(Input.movement_direction);
                                     }
+                                    else if(is_on_ink_wall && Input.movement_vector.Y < 0) CurrentState = PlayerState.run;
                                     break;
                                 }
                             case (PlayerState.run):
                                 {
-                                    if (is_on_ink)
+                                    if (IsOnGround(world) && Input.Jump) Jump(!is_on_ink);
+                                    else if (is_on_ink_ground)
                                     {
                                         GroundFactor = 0.8f;
-                                        ApplyForce(new Vector2(Input.movement_direction * 2, 0));
+                                        ApplyForce(new Vector2(Input.movement_direction * 2f, 0));
+                                        Direction = Math.Sign(Input.movement_direction);
+                                    }
+                                    else if (is_on_ink_wall)
+                                    {
+                                        Vector2 WallMovementDirection = 1.5f * Input.movement_vector;
+                                        WallMovementDirection.Y -= Math.Abs(WallMovementDirection.X);
+
+                                        ApplyForce(WallMovementDirection);
+                                        if(Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
+                                        Velocity.Y *= 0.9f;
                                     }
                                     else
                                     {
+                                        if (Input.movement_direction == 0)
+                                        {
+                                            CurrentState = PlayerState.idle;
+                                            goto case (PlayerState.idle);
+                                        }
                                         GroundFactor = 0.93f;
-                                        if (CurrentSprite.firstFrame)
+                                        if (CurrentSprite.firstFrame && IsOnGround(world))
                                         {
                                             ApplyForce(new Vector2(Input.movement_direction * 7, 0));
                                             Direction = Math.Sign(Input.movement_direction);
@@ -187,7 +231,11 @@ namespace Splatoon2D
                                 }
                             case (PlayerState.jump):
                                 {
-
+                                    if(Math.Abs(Velocity.X) > 4 && Math.Abs(Velocity.Y) < 2f)
+                                    {
+                                        ApplyForce(new Vector2(0, -0.3f)); // long jump 
+                                    }
+                                    if (IsOnGround(world) || is_on_ink) CurrentState = PlayerState.idle;
                                     break;
                                 }
                             case (PlayerState.to_squid):
@@ -249,7 +297,11 @@ namespace Splatoon2D
                 case (PlayerForm.kid):
                     {
                         if (CurrentState == PlayerState.idle) CurrentSprite = idle;
-                        else if (CurrentState == PlayerState.run) CurrentSprite = walk;
+                        else if (CurrentState == PlayerState.run)
+                        {
+                            if (Input.Shoot) CurrentSprite = walk_slow;
+                            else CurrentSprite = walk;
+                        }
                         else if (CurrentState == PlayerState.jump)
                         {
 
@@ -260,14 +312,13 @@ namespace Splatoon2D
                 case (PlayerForm.squid):
                     {
                         if (CurrentState == PlayerState.to_kid) CurrentSprite = to_kid;
-                        else if(is_on_ink && IsOnWorldGround(world)) CurrentSprite = squid_hidden;
+                        else if(is_on_ink /*&& IsOnWorldGround(world)*/) CurrentSprite = squid_hidden;
                         else if (CurrentState == PlayerState.idle) CurrentSprite = squid_idle;
                         else if (CurrentState == PlayerState.run) CurrentSprite = squid_walk;
                         else if (CurrentState == PlayerState.jump)
                         {
-                            if (Velocity.Y < -2) CurrentSprite = squid_rise;
-                            else if (Velocity.Y > 2) CurrentSprite = squid_fall;
-                            else CurrentSprite = squid_top;
+                            if (Velocity.Y < 2) CurrentSprite = squid_rise;
+                            else CurrentSprite = squid_fall;
                         }
                         
                         break;
@@ -289,16 +340,28 @@ namespace Splatoon2D
             foreach (PhysicalObject o in world.Stuff) { }
 
             base.Update(gameTime, world, this);
+            if (wallcollision && CheckIfIsOnInkedWall(world) && Math.Abs(PreviousVelocity.X) > 4) Velocity.Y = 0;
             Hitbox = UpdateHitbox(FeetPosition);
         }
 
-        public void Jump()
+        private bool CheckIfIsOnInkedWall(World world)
+        {
+            return world.IsOnInkWall(FeetPosition + new Vector2(-Hurtbox.Width / 2 - 2, -2))
+                || world.IsOnInkWall(FeetPosition + new Vector2(Hurtbox.Width / 2 + 2, -2));
+        }
+
+        public void Jump(bool small = false)
         {
             if (Velocity.X > 20) Velocity.X = 20;
             if (Velocity.X < -20) Velocity.X = -20;
 
             CurrentState = PlayerState.jump;
-            ApplyForce(new Vector2(0, -15));
+
+            float force = 13;
+            if (CurrentForm == PlayerForm.kid) force = 10;
+            else force = 13;
+            if (small) force = 8;
+            ApplyForce(new Vector2(0, -force));
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -323,6 +386,13 @@ namespace Splatoon2D
                 else if(sprite.frameIndex == 0) return new Vector2(4, -73-1);
                 else if(sprite.frameIndex == 1) return new Vector2(4, -73+1);
                 else return new Vector2(4, -73+2);
+            }
+            else if (sprite == walk_slow)
+            {
+                if (sprite.frameIndex == 0) return new Vector2(-7, -76 );
+                else if (sprite.frameIndex == 1) return new Vector2(-7, -76 + 2);
+                else if (sprite.frameIndex == 3) return new Vector2(-7, -76+3);
+                else return new Vector2(-7,-76 + 4);
             }
             return new Vector2(0, -100000000); // dirty but life's dirty
         }
@@ -431,12 +501,15 @@ namespace Splatoon2D
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             idle = new Sprite(2, 81, 133, 250, Content.Load<Texture2D>("idle"), FeetOffset:1);
-            walk = new Sprite(4, 436/4, 131, 130, Content.Load<Texture2D>("walk"), FeetOffset: 1);
+            walk = new Sprite(4, 436/4, 133, 200, Content.Load<Texture2D>("walk"), FeetOffset: 1);
+            walk_slow = new Sprite(4, 324 / 4, 131, 130, Content.Load<Texture2D>("walk_slow"), FeetOffset: 1);
             to_squid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset: 1);
             to_kid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset:1);
             squid_idle = new Sprite(2, 190/2, 30, 400, Content.Load<Texture2D>("squid_idle"), FeetOffset: 6);
             squid_walk = new Sprite(3, 351/3, 35, 150, Content.Load<Texture2D>("squid_move"), 1f, false, FeetOffset: 6);
             squid_hidden = new Sprite(Content.Load<Texture2D>("ink_marker"), FeetYOffset: 1);
+            squid_rise = new Sprite(Content.Load<Texture2D>("squid_rise"), FeetYOffset: 1);
+            squid_fall = new Sprite(Content.Load<Texture2D>("squid_fall"), FeetYOffset: 1);
             gun_rest = new Sprite(Content.Load<Texture2D>("gun"));
             gun_cocked = new Sprite(Content.Load<Texture2D>("gun_cocked"));
             gun_shoot = new Sprite(2, 85, 39, 70, Content.Load<Texture2D>("gun_shoot"), loopAnimation:false);

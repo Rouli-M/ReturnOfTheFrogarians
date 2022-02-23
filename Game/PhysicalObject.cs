@@ -24,6 +24,7 @@ namespace Splatoon2D
         {
             //bomb = Content.Load<Sprite>("bomb");
         }
+
         public PhysicalObject(Vector2 HurtboxSize, Vector2 FeetPosition, bool isParticle = false)
         {
             is_particle = isParticle;
