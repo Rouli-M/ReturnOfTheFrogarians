@@ -10,7 +10,7 @@ namespace Splatoon2D
     public class Marina:PhysicalObject
     {
         int frame_since_last_ink_detected = 10000;
-        public Marina(Vector2 Spawn):base(new Vector2(55, 130), Spawn)
+        public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn)
         {
             CurrentSprite = marina_idle;
             Gravity = 1f;
@@ -22,11 +22,13 @@ namespace Splatoon2D
             {
                 if(o is InkShot s)
                 {
-                    if(Vector2.Distance(o.FeetPosition, FeetPosition) < 250)
+                    if (Hurtbox.Contains(s.FeetPosition)) s.Cancel(world);
+                    else if (Vector2.Distance(o.FeetPosition, FeetPosition) < 250)
                     {
                         CurrentSprite = marina_inked;
                         frame_since_last_ink_detected = 0;
                     }
+
                 }
             }
             frame_since_last_ink_detected++;

@@ -133,18 +133,6 @@
 /processorParam:TextureFormat=Color
 /build:enemy_bullet.png
 
-#begin enemy_bullet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:enemy_bullet.png
-
 #begin frog_attack.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -295,6 +283,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:shot.png
+
+#begin shot_reject.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:shot_reject.png
 
 #begin squid_fall.png
 /importer:TextureImporter

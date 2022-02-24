@@ -70,7 +70,7 @@ namespace Splatoon2D
             {
                 if(o is InkShot s)
                 {
-                    if (o.Hurtbox.Intersects(Shieldbox) && !s.is_enemy) world.Remove(o);
+                    if (o.Hurtbox.Intersects(Shieldbox) && !s.is_enemy) s.Cancel(world);
                 }
             }
 

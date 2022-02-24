@@ -10,7 +10,7 @@ namespace Splatoon2D
 {
     public class InkShot : PhysicalObject
     {
-        static Sprite player_shot_sprite, enemy_shot_sprite;
+        static Sprite player_shot_sprite, enemy_shot_sprite, player_shot_denied_sprite;
         Sprite ink_shot_sprite;
         public bool is_enemy;
         public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false) : base(new Vector2(5, 5), SpawnPos)
@@ -50,10 +50,17 @@ namespace Splatoon2D
             //ink_shot_sprite.DrawFromFeet(spriteBatch, FeetPosition, angle);
         }
 
+        public void Cancel(World world)
+        {
+            world.Spawn(new Particle(FeetPosition, player_shot_denied_sprite));
+            world.Remove(this);
+        }
+
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             player_shot_sprite = new Sprite(Content.Load<Texture2D>("shot"));
             enemy_shot_sprite = new Sprite(Content.Load<Texture2D>("enemy_bullet"));
+            player_shot_denied_sprite = new Sprite(3, 17, 34, 80, Content.Load<Texture2D>("shot_reject"), loopAnimation:false);
         }
     }
 }

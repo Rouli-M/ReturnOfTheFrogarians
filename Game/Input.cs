@@ -40,6 +40,9 @@ namespace Splatoon2D
                 Squid = gp.Triggers.Left > 0.5;
                 movement_direction = gp.ThumbSticks.Left.X;
                 movement_vector = gp.ThumbSticks.Left;
+                movement_vector.Y *= -1;
+                if(Math.Abs(movement_vector.X) + Math.Abs(movement_vector.Y) > 0)
+                    movement_vector /= (Math.Abs(movement_vector.X) + Math.Abs(movement_vector.Y));
 
                 if (gp.ThumbSticks.Right.X != 0 || gp.ThumbSticks.Right.Y != 0)
                 {

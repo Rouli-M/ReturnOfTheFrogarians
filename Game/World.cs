@@ -39,8 +39,8 @@ namespace Splatoon2D
                 new Rectangle(1500 + 2000, -200, 300, 7000), // high ground level plateform
                 new Rectangle(1500 + 2500, -200, 2000, 7000), // end of hole zone, high level
 
-                new Rectangle(2250, - 700, 200, 350),
-                new Rectangle(2250, - 700, 700, 150),
+                new Rectangle(2250, - 700, 200, 350), // plateform above holes
+                new Rectangle(2250 + 100, - 700, 700 - 100, 150),
             };
 
             Stuff = new List<PhysicalObject>()
@@ -196,7 +196,6 @@ namespace Splatoon2D
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, LeftWall);
                     if (PaintedZoneAdded.Width < wall.Width) break ;
                     PaintedZoneAdded.Width = wall.Width;
-                    PaintedWalls.Add((PaintedZoneAdded, enemy));
                     SmallListOfAddedPaintedWalls.Add(PaintedZoneAdded);
                 }
 
@@ -208,7 +207,6 @@ namespace Splatoon2D
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, RightWall);
                     if (PaintedZoneAdded.Width < wall.Width) break;
                     PaintedZoneAdded.Width = wall.Width;
-                    PaintedWalls.Add((PaintedZoneAdded, enemy));
                     SmallListOfAddedPaintedWalls.Add(PaintedZoneAdded);
                 }
             }
