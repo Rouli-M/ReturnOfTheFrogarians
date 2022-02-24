@@ -28,11 +28,17 @@ namespace Splatoon2D
             else Gravity = 0.05f;
             XTreshold = 0.001f;
 
+            if(player.Hitbox.Intersects(Hurtbox) && is_enemy)
+            {
+                player.Damage(45f);
+                player.Bump(this);
+                world.Remove(this);
+            }
+
             base.Update(gameTime, world, player);
 
             if (groundcollision || wallcollision)
             {
-                Console.WriteLine("Remove InkShot at " + FeetPosition);
                 world.Remove(this);
                 Rectangle PaintZone = Hurtbox;
                 

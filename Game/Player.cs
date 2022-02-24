@@ -11,13 +11,18 @@ namespace Splatoon2D
 {
     public class Player : PhysicalObject
     {
+        // Hey since this code is public I thought I should say that
+        // I'm coding mainly to myself. Attributes are often static
+        // or public just because it's convenient on the moment. 
+
         static Sprite idle, walk, walk_slow, to_squid, to_kid;
         static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_fall;
         static Sprite gun_rest, gun_shoot, gun_cocked;
         static Sprite ArmSprite;
         static SoundEffect shoot_sound, to_squid_sound;
         static Effect Jam;
-        public bool is_on_ink = false;
+        public float damage; // from 0 (safe) to 100 (fully inked)
+        public bool is_on_ink = false, is_on_enemy_ink_ground = false;
 
         public static Vector2 human_size;
 
@@ -37,7 +42,7 @@ namespace Splatoon2D
 
         public int form_frames { get; private set; } 
         public int state_frames { get; private set; }
-        public int shoot_cooldown = 0;
+        public int shoot_cooldown = 0, heal_cooldown = 0, cant_squid_cooldown = 0;
 
         public Player():base(human_size, new Vector2(0,0))
         {
@@ -49,6 +54,7 @@ namespace Splatoon2D
             GroundBounceFactor = 0f;
             GroundFactor = 0.5f;
             Gravity = 0.7f;
+            damage = 0f;
             
             HurtboxSize = human_size;
             Velocity = new Vector2(0, 0);
@@ -83,12 +89,28 @@ namespace Splatoon2D
 
             HitboxOffset = new Vector2(0, 0);
 
+            // enemy ink/healing behavior
             bool is_on_ink_ground = world.IsOnInkGround(FeetPosition);
+            is_on_enemy_ink_ground = world.IsOnInkGround(FeetPosition, true);
             bool is_on_ink_wall = CheckIfIsOnInkedWall(world);
             is_on_ink = is_on_ink_ground || is_on_ink_wall;
 
             if (is_on_ink_wall) is_on_ink_ground = false;
 
+            if(is_on_enemy_ink_ground)
+            {
+                if (damage < 60) damage += 0.25f;
+            }
+            else if (heal_cooldown > 0) heal_cooldown--;
+            else
+            {
+                if (damage > 0f) damage--;
+                if (damage < 0f) damage = 0f;
+            }
+            if (cant_squid_cooldown > 0) cant_squid_cooldown--;
+            if (!is_on_enemy_ink_ground && IsOnGround(world)) cant_squid_cooldown = 0;
+
+            // State/form dependant behavior
             switch (CurrentForm)
             {
                 case PlayerForm.kid:
@@ -119,6 +141,7 @@ namespace Splatoon2D
 
                                     float walk_speed = 4f;
                                     if (Input.Shoot) walk_speed = 2f;
+                                    if (is_on_enemy_ink_ground) walk_speed /= 2f;
                                     ApplyForce(new Vector2(walk_speed * Input.movement_direction, 0));
                                     if (Input.movement_direction == 0) CurrentState = PlayerState.idle;
 
@@ -167,13 +190,17 @@ namespace Splatoon2D
                         }
                         if(Input.Squid)
                         {
-                            CurrentState = PlayerState.to_squid;
+                            if(cant_squid_cooldown == 0) CurrentState = PlayerState.to_squid;
                         }
                         break;
                     }
                 case PlayerForm.squid:
                     {
-                        Console.WriteLine(CurrentState.ToString() +  "Squid form X pos : " + FeetPosition + (is_on_ink ? "On ink" : "not in ink") + (is_on_ink_wall ? " (wall) ":"") + (is_on_ink_ground ? " (ground) " : ""));
+                        if (is_on_enemy_ink_ground)
+                        {
+                            CurrentState = PlayerState.to_kid;
+                            cant_squid_cooldown =60;
+                        }
                         switch (CurrentState)
                         {
                             case (PlayerState.idle):
@@ -185,7 +212,7 @@ namespace Splatoon2D
                                         ApplyForce(new Vector2(Input.movement_direction, 0));
                                         Velocity.X *= 0.8f;
                                         if(IsOnGround(world) || is_on_ink_wall) CurrentState = PlayerState.run;
-                                        Direction = Math.Sign(Input.movement_direction);
+                                        if(Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
                                     }
                                     else if(is_on_ink_wall && Input.movement_vector.Y < 0) CurrentState = PlayerState.run;
                                     break;
@@ -197,7 +224,7 @@ namespace Splatoon2D
                                     {
                                         GroundFactor = 0.8f;
                                         ApplyForce(new Vector2(Input.movement_direction * 2f, 0));
-                                        Direction = Math.Sign(Input.movement_direction);
+                                        if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
                                     }
                                     else if (is_on_ink_wall)
                                     {
@@ -219,7 +246,7 @@ namespace Splatoon2D
                                         if (CurrentSprite.firstFrame && IsOnGround(world))
                                         {
                                             ApplyForce(new Vector2(Input.movement_direction * 7, 0));
-                                            Direction = Math.Sign(Input.movement_direction);
+                                            if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
                                         }
                                         else if (CurrentSprite.isOver)
                                         {
@@ -262,6 +289,7 @@ namespace Splatoon2D
                     }
             }
 
+            // Shooting behavior
             if (Input.Shoot)
             {
                 if (shoot_cooldown == 0)
@@ -276,6 +304,7 @@ namespace Splatoon2D
                     InkSpawnPoint += OffsetInAimDirection;
                     //InkSpawnPoint += OffsetInWeaponExitDirection;
 #if DEBUG
+                    // In debug you can shoot enemy ink by holding alt while shooting
                     world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle, Input.ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt)));
 #else
                     world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle));
@@ -284,10 +313,7 @@ namespace Splatoon2D
                     ArmSprite = gun_shoot;
                     shoot_cooldown = 14;
                 }
-                else
-                {
-                    if (ArmSprite != gun_shoot || ArmSprite == gun_shoot && ArmSprite.isOver) ArmSprite = gun_cocked;
-                }
+                else if (ArmSprite != gun_shoot || ArmSprite == gun_shoot && ArmSprite.isOver) ArmSprite = gun_cocked;
             }
             if (shoot_cooldown > 0) shoot_cooldown--;
             else ArmSprite = gun_rest;
@@ -329,26 +355,24 @@ namespace Splatoon2D
                     }
             }
 
-           // Console.WriteLine(CurrentState + " form: " + CurrentForm);
-
-            if (CurrentSprite != PreviousSprite)
-            {
-                CurrentSprite.ResetAnimation();
-                //Console.WriteLine("Switched to sprite " + CurrentSprite.Texture.Name);
-            }
+            if (CurrentSprite != PreviousSprite) CurrentSprite.ResetAnimation();
             CurrentSprite.direction = Direction;
             CurrentSprite.UpdateFrame(gameTime);
             ArmSprite.direction = Direction;
             ArmSprite.UpdateFrame(gameTime);
 
 #if DEBUG
+            // in debug mode, you can fly where you aim by holding ctrl
             if (Input.ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl)) Velocity = (HUD.GetPointerWorldVector(Input.ms.Position.ToVector2()) - FeetPosition) /10f;
 #endif
 
             foreach (PhysicalObject o in world.Stuff) { }
 
             base.Update(gameTime, world, this);
+
+            // special behavior for when you jump in squid form with high velocity toward a wall, that prevent you from slipping down
             if (wallcollision && CheckIfIsOnInkedWall(world) && Math.Abs(PreviousVelocity.X) > 4) Velocity.Y = 0;
+           
             Hitbox = UpdateHitbox(FeetPosition);
         }
 
@@ -356,6 +380,18 @@ namespace Splatoon2D
         {
             return world.IsOnInkWall(FeetPosition + new Vector2(-Hurtbox.Width / 2 - 2, -2))
                 || world.IsOnInkWall(FeetPosition + new Vector2(Hurtbox.Width / 2 + 2, -2));
+        }
+
+        public void Damage(float amount)
+        {
+            damage += amount;
+            if (damage > 100f) damage = 100f;
+            heal_cooldown = (int)amount + 80;
+        }
+
+        public void Bump(PhysicalObject bumper)
+        {
+            Velocity = new Vector2(-Direction(bumper) * 5, -3);
         }
 
         public void Jump(bool small = false)
@@ -366,7 +402,8 @@ namespace Splatoon2D
             CurrentState = PlayerState.jump;
 
             float force = 13;
-            if (CurrentForm == PlayerForm.kid) force = 10;
+            if (is_on_enemy_ink_ground) force = 6;
+            else if (CurrentForm == PlayerForm.kid) force = 11;
             else force = 13;
             if (small) force = 8;
             ApplyForce(new Vector2(0, -force));

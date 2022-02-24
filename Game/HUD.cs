@@ -11,14 +11,24 @@ namespace Splatoon2D
     public static class HUD
     {
         public static Sprite MouseSprite, EggSprite, SmallEggSprite, EggBoxSprite;
+        public static Sprite dmg1, dmg2, dmg3, dmg4, dmg5;
         private static SpriteFont RouliFont;
         private static Random R = new Random();
+        private static Player _player;
         private static List<(int, Vector2, Vector2)> eggs = new List<(int, Vector2, Vector2)>();
         private static Vector2 EggAttractionPoint = new Vector2(100, 600);
         public static int egg_count = 0;
         public static void Draw(SpriteBatch spriteBatch)
         {
-            if(!Input.GamepadUsed) MouseSprite.ScreenDraw(spriteBatch, Input.ms.Position.ToVector2());
+            Sprite overlay_dmg_sprite = null;
+            if (_player.damage > 5 * 100 / 6f) overlay_dmg_sprite = dmg5;
+            else if (_player.damage > 4 * 100 / 6f) overlay_dmg_sprite = dmg4;
+            else if (_player.damage > 3 * 100 / 6f) overlay_dmg_sprite = dmg3;
+            else if (_player.damage > 2 * 100 / 6f) overlay_dmg_sprite = dmg2;
+            else if (_player.damage > 1 * 100 / 6f) overlay_dmg_sprite = dmg1;
+            if(overlay_dmg_sprite != null) overlay_dmg_sprite.ScreenDraw(spriteBatch, Vector2.Zero);
+
+            if (!Input.GamepadUsed) MouseSprite.ScreenDraw(spriteBatch, Input.ms.Position.ToVector2());
 
             EggSprite.ScreenDraw(spriteBatch, new Microsoft.Xna.Framework.Vector2(30, 600));
             spriteBatch.DrawString(RouliFont, "x" + egg_count, new Vector2(133, 622), Color.Black);
@@ -29,8 +39,9 @@ namespace Splatoon2D
             }
         }
 
-        public static void Update()
+        public static void Update(Player player)
         {
+            _player = player;
             List<(int, Vector2, Vector2)> updatedEggs = new List<(int, Vector2, Vector2)>();
             foreach((int i, Vector2 p, Vector2 v) e in eggs)
             {
@@ -58,6 +69,12 @@ namespace Splatoon2D
             SmallEggSprite = new Sprite(Content.Load<Texture2D>("egg"), scale: 2f);
             EggBoxSprite = new Sprite(Content.Load<Texture2D>("egg_box"), scale: 2f);
             RouliFont = Content.Load<SpriteFont>("RouliXL");
+
+            dmg1 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage1"), scale: 6f);
+            dmg2 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage2"), scale: 6f);
+            dmg3 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage3"), scale: 6f);
+            dmg4 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage4"), scale: 6f);
+            dmg5 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage5"), scale: 6f);
         }
 
         public static void SpawnEgg(int count, Vector2 SpawnPosition)

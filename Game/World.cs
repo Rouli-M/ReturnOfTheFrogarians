@@ -84,12 +84,12 @@ namespace Splatoon2D
             StuffToAdd.Clear();
         }
 
-        public bool IsOnInkGround(Vector2 Position)
+        public bool IsOnInkGround(Vector2 Position, bool test_if_enemy = false)
         {
             Vector2 TestPosition = Position + new Vector2(0, 5);
             foreach((Rectangle r, bool enemy_ink) in PaintedGround)
             {
-                if (r.Contains(TestPosition) && !enemy_ink) return true;
+                if (r.Contains(TestPosition) && enemy_ink == test_if_enemy) return true;
             }
             return false;
         }

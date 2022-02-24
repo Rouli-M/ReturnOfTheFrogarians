@@ -99,7 +99,12 @@ namespace Splatoon2D
             ViewBox = Hurtbox;
             ViewBox.Width = 450;
             if (direction == -1) ViewBox.Offset(new Point(-450 + Hurtbox.Width, 0));
-            Game1.DrawRectangle(Hurtbox);
+            if(player.Hitbox.Intersects(Hitbox))
+            {
+                player.Damage(30);
+                player.Bump(this);
+            }
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)

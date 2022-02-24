@@ -137,7 +137,7 @@ namespace Splatoon2D
             player.Update(gameTime, world, player);
             world.Update(gameTime, player);
             Camera.Update(player, world);
-            HUD.Update();
+            HUD.Update(player);
             SoundEffectPlayer.Update();
             base.Update(gameTime);
         }
