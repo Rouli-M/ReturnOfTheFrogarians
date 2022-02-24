@@ -20,9 +20,13 @@ namespace Splatoon2D
         internal float WallBounceFactor, GroundBounceFactor = 0f, GroundFactor, Gravity, XTreshold = 0.1f;
         internal bool is_particle = false, wallcollision = false, groundcollision = false, push_player = false, is_solid = false, player_hit = false, is_boxable = true, is_movable = true;
 
+        public static Sprite bell_idle, bell_hit, marina_idle, marina_inked;
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
-            //bomb = Content.Load<Sprite>("bomb");
+            bell_idle = new Sprite(Content.Load<Texture2D>("bell_idle"));
+            bell_hit = new Sprite(3, 209, 172, 100, Content.Load<Texture2D>("bell_ring"), loopAnimation:false);
+            marina_idle = new Sprite(4, 129, 154, 220, Content.Load<Texture2D>("marina_idle"));
+            marina_inked = new Sprite(2, 129, 154, 220, Content.Load<Texture2D>("marina_inked"));
         }
 
         public PhysicalObject(Vector2 HurtboxSize, Vector2 FeetPosition, bool isParticle = false)

@@ -49,6 +49,8 @@ namespace Splatoon2D
                 new Egg(new Vector2(-2000 + 650 + 60, -140)), // left from spawn eggs
                 new Egg(new Vector2(-2000 + 650 + 60, -40)), // left from spawn eggs
 
+                new Bell(new Vector2(1348, -300 - 83)),
+                new Marina(new Vector2(823, -317)),
                 
 
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
@@ -205,6 +207,9 @@ namespace Splatoon2D
             Decor = new List<(Vector2, Sprite)>
             {
                 (new Vector2( - 400, 0), statue1),
+                (new Vector2(430, -300), statue1),
+                (new Vector2(1050, -300), statue1),
+                (new Vector2(1050 + 1000 - 380, -300), statue1),
                  (new Vector2( - 900, 0), statue2)
             };
         }
