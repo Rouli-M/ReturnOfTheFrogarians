@@ -10,26 +10,35 @@ namespace Splatoon2D
 {
     public class InkShot : PhysicalObject
     {
-        static Sprite ink_shot_sprite;
-        public InkShot(Vector2 SpawnPos, float Angle) : base(new Vector2(5, 5), SpawnPos)
+        static Sprite player_shot_sprite, enemy_shot_sprite;
+        Sprite ink_shot_sprite;
+        public bool is_enemy;
+        public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false) : base(new Vector2(5, 5), SpawnPos)
         {
-            Velocity = 17 * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
+            Velocity = (is_enemy ? 4.5f : 17) * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
             Gravity = 0f;
+            this.is_enemy = is_enemy;
+            if (is_enemy) ink_shot_sprite = enemy_shot_sprite;
+            else ink_shot_sprite = player_shot_sprite;
         }
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
-            if (lifetime > 14) Gravity = 2f;
+            if (lifetime > 14 && !is_enemy) Gravity = 2f;
+            else Gravity = 0.05f;
+            XTreshold = 0.001f;
 
             base.Update(gameTime, world, player);
 
             if (groundcollision || wallcollision)
             {
-               // Console.WriteLine("Remove InkShot at " + FeetPosition);
+                Console.WriteLine("Remove InkShot at " + FeetPosition);
                 world.Remove(this);
                 Rectangle PaintZone = Hurtbox;
-                PaintZone.Inflate(40, 30);
-                world.Paint(PaintZone);
+                
+                if(is_enemy) PaintZone.Inflate(80, 80);
+                else PaintZone.Inflate(40, 30);
+                world.Paint(PaintZone, is_enemy);
             }
         }
 
@@ -43,7 +52,8 @@ namespace Splatoon2D
 
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
-            ink_shot_sprite = new Sprite(Content.Load<Texture2D>("shot"));
+            player_shot_sprite = new Sprite(Content.Load<Texture2D>("shot"));
+            enemy_shot_sprite = new Sprite(Content.Load<Texture2D>("enemy_bullet"));
         }
     }
 }

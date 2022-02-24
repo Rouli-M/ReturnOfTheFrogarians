@@ -17,6 +17,7 @@ namespace Splatoon2D
         static Sprite ArmSprite;
         static SoundEffect shoot_sound, to_squid_sound;
         static Effect Jam;
+        public bool is_on_ink = false;
 
         public static Vector2 human_size;
 
@@ -84,7 +85,7 @@ namespace Splatoon2D
 
             bool is_on_ink_ground = world.IsOnInkGround(FeetPosition);
             bool is_on_ink_wall = CheckIfIsOnInkedWall(world);
-            bool is_on_ink = is_on_ink_ground || is_on_ink_wall;
+            is_on_ink = is_on_ink_ground || is_on_ink_wall;
 
             if (is_on_ink_wall) is_on_ink_ground = false;
 
@@ -274,8 +275,11 @@ namespace Splatoon2D
                     InkSpawnPoint += ArmJointPos;
                     InkSpawnPoint += OffsetInAimDirection;
                     //InkSpawnPoint += OffsetInWeaponExitDirection;
-                    
+#if DEBUG
+                    world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle, Input.ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftAlt)));
+#else
                     world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle));
+#endif
                     gun_shoot.ResetAnimation();
                     ArmSprite = gun_shoot;
                     shoot_cooldown = 14;

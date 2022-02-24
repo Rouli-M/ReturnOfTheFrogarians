@@ -58,6 +58,7 @@ namespace Splatoon2D
             this.Source = sprite.Source;
             this.reverse = sprite.reverse;
             this.isAnimated = sprite.isAnimated;
+            this.FeetYOffset = sprite.FeetYOffset;
             if (direction == -1) effects = SpriteEffects.FlipHorizontally;
             else effects = SpriteEffects.None;
         }
@@ -77,9 +78,9 @@ namespace Splatoon2D
             else effects = SpriteEffects.None;
         }
 
-        public Sprite(int totalAnimationFrames, int frameWidth, int frameHeight, int timeBetweenFrames, Texture2D Texture, float scale = 1f, bool loopAnimation = true, bool reverse = false, int direction = 1, int normalFrameWidth = 0, int FeetOffset = 0) // Autre constructeur pour quand un gameObject est créé avec les paramètres ci-contre
+        public Sprite(int totalAnimationFrames, int frameWidth, int frameHeight, int timeBetweenFrames, Texture2D Texture, float scale = 1f, bool loopAnimation = true, bool reverse = false, int direction = 1, int normalFrameWidth = 0, int FeetOffset = 0, int FeetYOffset = 0) // Autre constructeur pour quand un gameObject est créé avec les paramètres ci-contre
         {
-            this.FeetYOffset = FeetOffset;
+            this.FeetYOffset = FeetYOffset;
             this.angle = 0f;
             this.totalFrames = totalAnimationFrames;
             this.frameWidth = frameWidth;

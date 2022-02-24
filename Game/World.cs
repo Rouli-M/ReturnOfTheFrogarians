@@ -8,20 +8,21 @@ namespace Splatoon2D
     public class World
     {
         public List<Rectangle> Ground;
-        public List<Rectangle> PaintedGround;
-        public List<Rectangle> PaintedWalls;
+        public List<(Rectangle, bool)> PaintedGround;
+        public List<(Rectangle, bool)> PaintedWalls;
         public static List<(Vector2, Sprite)> Decor;
         public List<PhysicalObject> Stuff;
-        private List<PhysicalObject> StuffToRemove;
-        private static Texture2D gray, ground, painted_ground, wall, painted_wall, background;
+        private List<PhysicalObject> StuffToRemove, StuffToAdd;
+        private static Texture2D gray, ground, painted_ground, wall, painted_wall, background, painted_ground_enemy, painted_wall_enemy;
         private static Texture2D outer_corner_top_left, outer_corner_top_right, inner_corner_top_left, inner_corner_top_right;
         private static Sprite statue1, statue2;
 
         public World(Player player)
         {
             StuffToRemove = new List<PhysicalObject>();
-            PaintedGround = new List<Rectangle>();
-            PaintedWalls = new List<Rectangle>();
+            StuffToAdd = new List<PhysicalObject>();
+            PaintedGround = new List<(Rectangle, bool)>();
+            PaintedWalls = new List<(Rectangle, bool)>();
             Ground = new List<Rectangle>()
             {
                 new Rectangle(-2200, 0, 3000, 200), // ground
@@ -37,12 +38,21 @@ namespace Splatoon2D
                 new Rectangle(1500 + 1500, -200, 300, 7000), // high ground level plateform
                 new Rectangle(1500 + 2000, -200, 300, 7000), // high ground level plateform
                 new Rectangle(1500 + 2500, -200, 2000, 7000), // end of hole zone, high level
+
+                new Rectangle(2250, - 700, 200, 350),
+                new Rectangle(2250, - 700, 700, 150),
             };
 
             Stuff = new List<PhysicalObject>()
             {
+                new Frogtarian(new Vector2(-400, 0)),
+                new Frogtarian(new Vector2(3637, -235)),
+
                 new Balloon(new Vector2(-270, -150)), // spawn balloon
                 new Balloon(new Vector2(591, -430)), // second balloon
+                new Balloon(new Vector2(2886, -430)), // third ballon, hold field
+                new Balloon(new Vector2(3393, -430)), // fourth ballon, hold field
+                new Balloon(new Vector2(3887, -430)), // fifth ballon, hold field
 
 
                 new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
@@ -52,12 +62,14 @@ namespace Splatoon2D
                 new Bell(new Vector2(1348, -300 - 83)),
                 new Marina(new Vector2(823, -317)),
                 
-
+                // egg boxes
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
-                new Egg(new Vector2(- 200, - 500 - 50), 5) // above spawn
+                new Egg(new Vector2(- 200, - 500 - 50), 5), // above spawn
+                new Egg(new Vector2(2986, -472), 5) // above hole field, have to drop from above
             };
 
             Stuff.AddRange(EggLine(new Vector2(220, -100), new Vector2(0, -1), 3)); // line mur à droite du spawn
+            Stuff.AddRange(EggLine(new Vector2(2300, -748), new Vector2(1, 0), 5)); // plateform above before hole filed
 
             //Stuff.Clear();
         }
@@ -66,15 +78,18 @@ namespace Splatoon2D
         {
             foreach (PhysicalObject o in Stuff) o.Update(gameTime, this, player);
             foreach (PhysicalObject o in StuffToRemove) Stuff.Remove(o);
+            foreach (PhysicalObject o in StuffToAdd) Stuff.Add(o);
+
             StuffToRemove.Clear();
+            StuffToAdd.Clear();
         }
 
         public bool IsOnInkGround(Vector2 Position)
         {
             Vector2 TestPosition = Position + new Vector2(0, 5);
-            foreach(Rectangle r in PaintedGround)
+            foreach((Rectangle r, bool enemy_ink) in PaintedGround)
             {
-                if (r.Contains(TestPosition)) return true;
+                if (r.Contains(TestPosition) && !enemy_ink) return true;
             }
             return false;
         }
@@ -82,9 +97,9 @@ namespace Splatoon2D
         public bool IsOnInkWall(Vector2 Position)
         {
             Vector2 TestPosition = Position;
-            foreach (Rectangle r in PaintedWalls)
+            foreach ((Rectangle r, bool enemy_ink) in PaintedWalls)
             {
-                if (r.Contains(TestPosition)) return true;
+                if (r.Contains(TestPosition) && !enemy_ink) return true;
             }
             return false;
         }
@@ -121,15 +136,21 @@ namespace Splatoon2D
             }
 
             // then draw painted ground
-            foreach (Rectangle r in PaintedGround)
+            foreach ((Rectangle r, bool enemy_ink) in PaintedGround)
             {
-                Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, r.Width, ground.Height), Color.White, painted_ground, true);
+                if(enemy_ink)
+                    Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, r.Width, ground.Height), Color.White, painted_ground_enemy, true);
+                else
+                    Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, r.Width, ground.Height), Color.White, painted_ground, true);
             }
 
             // then draw painted walls
-            foreach (Rectangle r in PaintedWalls)
+            foreach ((Rectangle r, bool enemy_ink) in PaintedWalls)
             {
-                Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, wall.Width, r.Height), Color.White, painted_wall, true);
+                if(enemy_ink)
+                    Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, wall.Width, r.Height), Color.White, painted_wall_enemy, true);
+                else     
+                    Game1.DrawRectangle(spriteBatch, new Rectangle(r.X, r.Y - ground.Height / 2, wall.Width, r.Height), Color.White, painted_wall, true);
             }
 
             // then draw inner ground
@@ -147,12 +168,14 @@ namespace Splatoon2D
             foreach (PhysicalObject o in Stuff) o.Draw(spriteBatch);
         }
 
-        public void Paint(Rectangle PaintZone)
+        public void Paint(Rectangle PaintZone, bool enemy = false)
         {
             PaintZone.X -= PaintZone.X % 5;
             PaintZone.Width += 5 - PaintZone.Width % 5;
             PaintZone.Y -= PaintZone.Y % 5;
             PaintZone.Height += 5 - PaintZone.Height % 5;
+            List<Rectangle> SmallListOfAddedPaintedGrounds = new List<Rectangle>();
+            List<Rectangle> SmallListOfAddedPaintedWalls = new List<Rectangle>();
 
             foreach (Rectangle r in Ground)
             {
@@ -161,9 +184,9 @@ namespace Splatoon2D
                 if(Top.Intersects(PaintZone))
                 {
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, Top);
-                    if (PaintedZoneAdded.Height < painted_ground.Height) return;
+                    if (PaintedZoneAdded.Height < painted_ground.Height) break;
                     PaintedZoneAdded.Height = painted_ground.Height;
-                    PaintedGround.Add(PaintedZoneAdded);
+                    SmallListOfAddedPaintedGrounds.Add(PaintedZoneAdded);
                 }
 
                 Rectangle LeftWall = r;
@@ -171,9 +194,10 @@ namespace Splatoon2D
                 if (LeftWall.Intersects(PaintZone))
                 {
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, LeftWall);
-                    if (PaintedZoneAdded.Width < wall.Width) return;
+                    if (PaintedZoneAdded.Width < wall.Width) break ;
                     PaintedZoneAdded.Width = wall.Width;
-                    PaintedWalls.Add(PaintedZoneAdded);
+                    PaintedWalls.Add((PaintedZoneAdded, enemy));
+                    SmallListOfAddedPaintedWalls.Add(PaintedZoneAdded);
                 }
 
                 Rectangle RightWall = r;
@@ -182,10 +206,113 @@ namespace Splatoon2D
                 if (RightWall.Intersects(PaintZone))
                 {
                     Rectangle PaintedZoneAdded = Rectangle.Intersect(PaintZone, RightWall);
+                    if (PaintedZoneAdded.Width < wall.Width) break;
                     PaintedZoneAdded.Width = wall.Width;
-                    PaintedWalls.Add(PaintedZoneAdded);
+                    PaintedWalls.Add((PaintedZoneAdded, enemy));
+                    SmallListOfAddedPaintedWalls.Add(PaintedZoneAdded);
                 }
             }
+
+            // if the new ink landed on some opposite team ink, we need to remove/reduce the old ink
+
+            // first for the ground:
+            List<(Rectangle, bool)> PaintedGroundToRemove = new List<(Rectangle, bool)>();
+            List<(Rectangle, bool)> PaintedGroundToAdd = new List<(Rectangle, bool)>();
+
+            foreach (Rectangle newly_painted_wall in SmallListOfAddedPaintedGrounds)
+            {
+                Rectangle rectangle_to_check_for_closing_gaps = Rectangle.Empty;
+
+                foreach ((Rectangle r, bool enemy_ink) in PaintedGround)
+                {
+                    if (enemy_ink != enemy)
+                    {
+                        if (newly_painted_wall.Intersects(r))
+                        {
+                            PaintedGroundToRemove.Add((r, enemy_ink));
+                            if (r.Left < newly_painted_wall.Left)
+                                PaintedGroundToAdd.Add((new Rectangle(r.X, r.Y, newly_painted_wall.Left - r.Left, r.Height), enemy_ink));
+                            if (newly_painted_wall.Right < r.Right)
+                                PaintedGroundToAdd.Add((new Rectangle(newly_painted_wall.Right, r.Y, r.Right - newly_painted_wall.Right, r.Height), enemy_ink));
+                        }
+                    }
+                    else
+                    {
+                        if(r.Intersects(newly_painted_wall))
+                        {
+                            PaintedGroundToRemove.Add((r, enemy_ink));
+                            PaintedGroundToRemove.Add((newly_painted_wall, enemy_ink));
+                            if (rectangle_to_check_for_closing_gaps != Rectangle.Empty) // a fusion occured in the very same loop! closing gap
+                            {
+                                PaintedGroundToAdd.Remove((rectangle_to_check_for_closing_gaps, enemy));
+                                PaintedGroundToAdd.Add((Rectangle.Union(r, rectangle_to_check_for_closing_gaps), enemy));
+                            }
+                            else
+                            {
+                                rectangle_to_check_for_closing_gaps = Rectangle.Union(r, newly_painted_wall);
+                                PaintedGroundToAdd.Add((rectangle_to_check_for_closing_gaps, enemy));
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (Rectangle r in SmallListOfAddedPaintedGrounds) PaintedGroundToAdd.Add((r, enemy));
+
+            foreach ((Rectangle, bool) zone in PaintedGroundToAdd) PaintedGround.Add(zone);
+            foreach ((Rectangle, bool) zone in PaintedGroundToRemove) PaintedGround.Remove(zone);
+
+            // then for the walls
+            List<(Rectangle, bool)> PaintedWallsToRemove = new List<(Rectangle, bool)>();
+            List<(Rectangle, bool)> PaintedWallsToAdd = new List<(Rectangle, bool)>();
+
+            foreach (Rectangle newly_painted_wall in SmallListOfAddedPaintedWalls)
+            {
+                Rectangle rectangle_to_check_for_closing_gaps = Rectangle.Empty;
+
+                foreach ((Rectangle r, bool enemy_ink) in PaintedWalls)
+                {
+                    if (enemy_ink != enemy)
+                    {
+                        if (newly_painted_wall.Intersects(r))
+                        {
+                            PaintedWallsToRemove.Add((r, enemy_ink));
+                            if (r.Top < newly_painted_wall.Top)
+                                PaintedWallsToAdd.Add((new Rectangle(r.X, r.Y, r.Width, newly_painted_wall.Top - r.Top), enemy_ink));
+                            if (newly_painted_wall.Bottom < r.Bottom)
+                                PaintedWallsToAdd.Add((new Rectangle(r.X, newly_painted_wall.Bottom, r.Width, r.Bottom - newly_painted_wall.Bottom), enemy_ink));
+                        }
+                    }
+                    else
+                    {
+                        if (r.Intersects(newly_painted_wall))
+                        {
+                            PaintedWallsToRemove.Add((r, enemy_ink));
+                            PaintedWallsToRemove.Add((newly_painted_wall, enemy_ink));
+                            if (rectangle_to_check_for_closing_gaps != Rectangle.Empty) // a fusion occured in the very same loop! closing gap
+                            {
+                                PaintedWallsToAdd.Remove((rectangle_to_check_for_closing_gaps, enemy));
+                                PaintedWallsToAdd.Add((Rectangle.Union(r, rectangle_to_check_for_closing_gaps), enemy));
+                            }
+                            else
+                            {
+                                rectangle_to_check_for_closing_gaps = Rectangle.Union(r, newly_painted_wall);
+                                PaintedWallsToAdd.Add((rectangle_to_check_for_closing_gaps, enemy));
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (Rectangle r in SmallListOfAddedPaintedWalls) PaintedWallsToAdd.Add((r, enemy));
+
+            foreach ((Rectangle, bool) zone in PaintedWallsToAdd) PaintedWalls.Add(zone);
+            foreach ((Rectangle, bool) zone in PaintedWallsToRemove) PaintedWalls.Remove(zone);
+
+
+            Console.WriteLine("Total paint rectangles: ");
+            Console.WriteLine("     Ground: " + PaintedGround.Count);
+            Console.WriteLine("     Wall: " + PaintedWalls.Count);
         }
 
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
@@ -200,6 +327,9 @@ namespace Splatoon2D
             inner_corner_top_right = Content.Load<Texture2D>("tileset/corner2");
             painted_ground = Content.Load<Texture2D>("tileset/ground_paint");
             painted_wall = Content.Load<Texture2D>("tileset/wall_paint");
+            painted_ground_enemy = Content.Load<Texture2D>("tileset/ground_paint_green");
+            painted_wall_enemy = Content.Load<Texture2D>("tileset/wall_paint_green");
+
 
             statue1 = new Sprite(Content.Load<Texture2D>("statue1"));
             statue2 = new Sprite(Content.Load<Texture2D>("statue2"));
@@ -232,6 +362,11 @@ namespace Splatoon2D
         public void Remove(PhysicalObject o)
         {
             StuffToRemove.Add(o);
+        }
+
+        public void Spawn(PhysicalObject o)
+        {
+            StuffToAdd.Add(o);
         }
 
         public bool CheckCollision(Vector2 FeetPosition, Vector2 Size)
