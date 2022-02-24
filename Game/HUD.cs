@@ -68,5 +68,16 @@ namespace Splatoon2D
                 eggs.Add((0, ScreenPos, new Vector2(R.Next(-12, 12), R.Next(-12, 12))));
             }
         }
+
+        public static string GetPointerPosition(Vector2 ScreenPos)
+        {
+            Vector2 WorldPos = GetPointerWorldVector(ScreenPos);
+            return "new Vector2(" + (int)WorldPos.X + ", " + (int)WorldPos.Y + ")"; 
+        }
+
+        public static Vector2 GetPointerWorldVector(Vector2 ScreenPos)
+        {
+            return ScreenPos / (float)Camera.Zoom + Camera.TopLeftCameraPosition;
+        }
     }
 }

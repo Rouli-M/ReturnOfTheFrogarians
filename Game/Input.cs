@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace Splatoon2D
 {
@@ -54,9 +56,9 @@ namespace Splatoon2D
             else
             {
                 GamepadUsed = false;
-                Jump = ks.IsKeyDown(Keys.Z) || ks.IsKeyDown(Keys.W) || ks.IsKeyDown(Keys.Up);
-                Shoot = ms.LeftButton == ButtonState.Pressed;
-                Squid = ks.IsKeyDown(Keys.LeftShift);
+                Jump = ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Z) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up);
+                Shoot = ms.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
+                Squid = ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift);
 
                 if (LeftPressed(ks) && RightPressed(ks) || !LeftPressed(ks) && !RightPressed(ks)) movement_direction = 0;
                 else if (LeftPressed(ks)) movement_direction = -1;
@@ -74,16 +76,20 @@ namespace Splatoon2D
 
             Angle = (float)(Angle % (Math.PI * 2));
             aim_direction = Math.Sign((float)Math.Cos(Angle));
+
+#if DEBUG
+            if (ms.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed) Clipboard.SetText(HUD.GetPointerPosition(ms.Position.ToVector2()));
+#endif
         }
 
         private static bool LeftPressed(KeyboardState ks)
         {
-            return (ks.IsKeyDown(Keys.Q) || ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.Left));
+            return (ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Q) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Left));
         }
 
         private static bool RightPressed(KeyboardState ks)
         {
-            return (ks.IsKeyDown(Keys.D) || ks.IsKeyDown(Keys.Right));
+            return (ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.D) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Right));
         }
     }
 }

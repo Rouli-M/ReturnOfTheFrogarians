@@ -337,6 +337,10 @@ namespace Splatoon2D
             ArmSprite.direction = Direction;
             ArmSprite.UpdateFrame(gameTime);
 
+#if DEBUG
+            if (Input.ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftControl)) Velocity = (HUD.GetPointerWorldVector(Input.ms.Position.ToVector2()) - FeetPosition) /10f;
+#endif
+
             foreach (PhysicalObject o in world.Stuff) { }
 
             base.Update(gameTime, world, this);

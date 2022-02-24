@@ -30,26 +30,32 @@ namespace Splatoon2D
                 new Rectangle(-4000, -2000, 3000, 800), // roof
                 new Rectangle(-3650, -500, 650 + 3000, 700 - 500), // roof above spawn
                 new Rectangle(0, -60, 300, 200), // right bump
-                new Rectangle(250, -300, 300, 500), // big right bump
+                new Rectangle(250, -300, 300 + 1500, 500), // big right bump
 
-                new Rectangle(300, -150, 5000, 7000), // after bump, low ground level
-                new Rectangle(300, -200, 1000, 7000), // high ground level
-                new Rectangle(1500, -200, 300, 7000), // high ground level plateform
-                new Rectangle(2000, -200, 300, 7000), // high ground level plateform
-                new Rectangle(2500, -200, 2000, 7000), // end of hole zone, high level
+                new Rectangle(1500 + 300, -150, 5000, 7000), // after bump, low ground level
+                new Rectangle(1500 + 300, -200, 1000, 7000), // high ground level
+                new Rectangle(1500 + 1500, -200, 300, 7000), // high ground level plateform
+                new Rectangle(1500 + 2000, -200, 300, 7000), // high ground level plateform
+                new Rectangle(1500 + 2500, -200, 2000, 7000), // end of hole zone, high level
             };
 
             Stuff = new List<PhysicalObject>()
             {
                 new Balloon(new Vector2(-270, -150)), // spawn balloon
+                new Balloon(new Vector2(591, -430)), // second balloon
+
 
                 new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
                 new Egg(new Vector2(-2000 + 650 + 60, -140)), // left from spawn eggs
                 new Egg(new Vector2(-2000 + 650 + 60, -40)), // left from spawn eggs
 
+                
+
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
                 new Egg(new Vector2(- 200, - 500 - 50), 5) // above spawn
             };
+
+            Stuff.AddRange(EggLine(new Vector2(220, -100), new Vector2(0, -1), 3)); // line mur à droite du spawn
 
             //Stuff.Clear();
         }
@@ -256,6 +262,16 @@ namespace Splatoon2D
             return ToReturn;
         }
 
+        private List<Egg> EggLine(Vector2 start, Vector2 dir, int count)
+        {
+            dir.Normalize();
+            List<Egg> eggs = new List<Egg>();
+            for (int i = 0; i < count; i++)
+            {
+                eggs.Add(new Egg(start + dir * 70 * i));
+            }
+            return eggs;
+        }
 
     }
 }
