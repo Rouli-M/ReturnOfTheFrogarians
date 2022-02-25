@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Splatoon2D
 {
@@ -13,6 +14,7 @@ namespace Splatoon2D
         public int life, loot, shake_force;
         public static Sprite balloon1, balloon2, balloon3, balloon4;
         public static Sprite frogtarian_idle, frogtarian_move, frogtarian_shoot;
+        public static SoundEffect bell_sound, ballon_pop_sound;
         public Vector2 shake_offset;
         public Hittable(Vector2 Size, Vector2 Position):base(Size, Position)
         {
@@ -42,8 +44,7 @@ namespace Splatoon2D
 
             if (life <= 0)
             {
-                HUD.SpawnEgg(loot, FeetPosition);
-                world.Remove(this);
+                Die(world);
             }
 
             base.Update(gameTime, world, player);
@@ -53,6 +54,12 @@ namespace Splatoon2D
         public virtual bool ShotTouched(InkShot o)
         {
             return o.Hurtbox.Intersects(this.Hurtbox);
+        }
+
+        public virtual void Die(World world)
+        {
+            HUD.SpawnEgg(loot, FeetPosition);
+            world.Remove(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -66,6 +73,9 @@ namespace Splatoon2D
             balloon2 = new Sprite(Content.Load<Texture2D>("balloon/balloon2"));
             balloon3 = new Sprite(Content.Load<Texture2D>("balloon/balloon3"));
             balloon4 = new Sprite(Content.Load<Texture2D>("balloon/balloon4"));
+
+            ballon_pop_sound = Content.Load<SoundEffect>("balloon/pop");
+            bell_sound = Content.Load<SoundEffect>("bell_sound");
 
             frogtarian_idle = new Sprite(2, 151, 191, 333, Content.Load<Texture2D>("frog_idle"), FeetYOffset:10);
             frogtarian_move = new Sprite(6, 151, 191, 120, Content.Load<Texture2D>("frog_walk"), FeetYOffset: 10);

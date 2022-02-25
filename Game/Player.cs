@@ -15,11 +15,12 @@ namespace Splatoon2D
         // I'm coding mainly to myself. Attributes are often static
         // or public just because it's convenient on the moment. 
 
-        static Sprite idle, walk, walk_slow, to_squid, to_kid;
+        static Sprite idle, walk, jump, walk_slow, to_squid, to_kid;
         static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_fall;
         static Sprite gun_rest, gun_shoot, gun_cocked;
         static Sprite ArmSprite;
-        static SoundEffect shoot_sound, to_squid_sound;
+        static SoundEffect enter_ink_sound, swim_sound, slide_sound, squid_jump_sound, shoot_sound;
+        static SoundEffectInstance swim_sound_instance;
         static Effect Jam;
         public float damage; // from 0 (safe) to 100 (fully inked)
         public bool is_on_ink = false, is_on_enemy_ink_ground = false;
@@ -67,7 +68,7 @@ namespace Splatoon2D
 
             this.world = world;
             //juice = 70;
-
+            bool previous_is_on_ink = is_on_ink;
             if (PreviousForm == CurrentForm) form_frames += 1;
             else form_frames = 0;
             PreviousForm = CurrentForm;
@@ -109,6 +110,9 @@ namespace Splatoon2D
             }
             if (cant_squid_cooldown > 0) cant_squid_cooldown--;
             if (!is_on_enemy_ink_ground && IsOnGround(world)) cant_squid_cooldown = 0;
+
+            // random bit of code to stop swim sound
+            if (previous_is_on_ink && !is_on_ink) swim_sound_instance.Stop();
 
             // State/form dependant behavior
             switch (CurrentForm)
@@ -165,8 +169,11 @@ namespace Splatoon2D
                                 }
                             case (PlayerState.jump):
                                 {
+                                    if (Input.aim_direction != 0) Direction = Input.aim_direction;
+                                    else if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
+
                                     Velocity.X *= 0.9f;
-                                    ApplyForce(new Vector2(0.4f * Input.movement_direction, 0));
+                                    ApplyForce(new Vector2(0.5f * Input.movement_direction, 0));
                                     if (IsOnGround(world)) CurrentState = PlayerState.idle;
                                     break;
                                 }
@@ -196,6 +203,7 @@ namespace Splatoon2D
                     }
                 case PlayerForm.squid:
                     {
+                        if ((!previous_is_on_ink || PreviousState == PlayerState.to_squid) && is_on_ink) SoundEffectPlayer.Play(enter_ink_sound);
                         if (is_on_enemy_ink_ground)
                         {
                             CurrentState = PlayerState.to_kid;
@@ -219,6 +227,8 @@ namespace Splatoon2D
                                 }
                             case (PlayerState.run):
                                 {
+                                    if(is_on_ink) swim_sound_instance.Play();
+                                    if(Input.movement_vector.Length() < 0.15f) swim_sound_instance.Stop();
                                     if (IsOnGround(world) && Input.Jump) Jump(!is_on_ink);
                                     else if (is_on_ink_ground)
                                     {
@@ -230,7 +240,6 @@ namespace Splatoon2D
                                     {
                                         Vector2 WallMovementDirection = 1.5f * Input.movement_vector;
                                         WallMovementDirection.Y -= Math.Abs(WallMovementDirection.X);
-
                                         ApplyForce(WallMovementDirection);
                                         if(Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
                                         Velocity.Y *= 0.9f;
@@ -246,6 +255,7 @@ namespace Splatoon2D
                                         if (CurrentSprite.firstFrame && IsOnGround(world))
                                         {
                                             ApplyForce(new Vector2(Input.movement_direction * 7, 0));
+                                            SoundEffectPlayer.Play(slide_sound);
                                             if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
                                         }
                                         else if (CurrentSprite.isOver)
@@ -283,6 +293,7 @@ namespace Splatoon2D
                         }
                         if (!Input.Squid)
                         {
+                            swim_sound_instance.Stop();
                             CurrentState = PlayerState.to_kid;
                         }
                         break;
@@ -292,7 +303,7 @@ namespace Splatoon2D
             // Shooting behavior
             if (Input.Shoot)
             {
-                if (shoot_cooldown == 0)
+                if (shoot_cooldown == 0 && player.CurrentForm == PlayerForm.kid)
                 {
                     Vector2 InkSpawnPoint = FeetPosition;
                     Vector2 ArmJointPos = GetArmRelativePoint();
@@ -309,9 +320,10 @@ namespace Splatoon2D
 #else
                     world.Stuff.Add(new InkShot(InkSpawnPoint, Input.Angle));
 #endif
+                    SoundEffectPlayer.Play(shoot_sound, 1f, (float)r.NextDouble() * 0.3f);
                     gun_shoot.ResetAnimation();
                     ArmSprite = gun_shoot;
-                    shoot_cooldown = 14;
+                    shoot_cooldown = 12;
                 }
                 else if (ArmSprite != gun_shoot || ArmSprite == gun_shoot && ArmSprite.isOver) ArmSprite = gun_cocked;
             }
@@ -334,7 +346,7 @@ namespace Splatoon2D
                         }
                         else if (CurrentState == PlayerState.jump)
                         {
-
+                            CurrentSprite = jump;
                         }
                         else if (CurrentState == PlayerState.to_squid) CurrentSprite = to_squid;
                         break;
@@ -404,7 +416,11 @@ namespace Splatoon2D
             float force = 13;
             if (is_on_enemy_ink_ground) force = 6;
             else if (CurrentForm == PlayerForm.kid) force = 11;
-            else force = 13;
+            else
+            {
+                force = 13;
+                if (!small) SoundEffectPlayer.Play(squid_jump_sound);
+            }
             if (small) force = 8;
             ApplyForce(new Vector2(0, -force));
         }
@@ -431,6 +447,10 @@ namespace Splatoon2D
                 else if(sprite.frameIndex == 0) return new Vector2(4, -73-1);
                 else if(sprite.frameIndex == 1) return new Vector2(4, -73+1);
                 else return new Vector2(4, -73+2);
+            }
+            else if (sprite == jump)
+            {
+                return new Vector2(-5, -76);
             }
             else if (sprite == walk_slow)
             {
@@ -547,6 +567,7 @@ namespace Splatoon2D
         {
             idle = new Sprite(2, 81, 133, 250, Content.Load<Texture2D>("idle"), FeetOffset:1);
             walk = new Sprite(4, 436/4, 133, 200, Content.Load<Texture2D>("walk"), FeetOffset: 1);
+            jump = new Sprite(3, 99, 133, 160, Content.Load<Texture2D>("jump"), FeetOffset: 1, loopAnimation:false);
             walk_slow = new Sprite(4, 324 / 4, 131, 130, Content.Load<Texture2D>("walk_slow"), FeetOffset: 1);
             to_squid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset: 1);
             to_kid = new Sprite(Content.Load<Texture2D>("uuuh"), FeetYOffset:1);
@@ -558,6 +579,14 @@ namespace Splatoon2D
             gun_rest = new Sprite(Content.Load<Texture2D>("gun"));
             gun_cocked = new Sprite(Content.Load<Texture2D>("gun_cocked"));
             gun_shoot = new Sprite(2, 85, 39, 70, Content.Load<Texture2D>("gun_shoot"), loopAnimation:false);
+
+            slide_sound = Content.Load<SoundEffect>("slide_tiny");
+            enter_ink_sound = Content.Load<SoundEffect>("splash");
+            swim_sound = Content.Load<SoundEffect>("swim");
+            swim_sound_instance = swim_sound.CreateInstance();
+            swim_sound_instance.IsLooped = true;
+            squid_jump_sound = Content.Load<SoundEffect>("squid_jump");
+            shoot_sound = Content.Load<SoundEffect>("shoot");
 
             // Init here because Constructor seems to be called before the content is actually loaded?
             ArmSprite = gun_rest;

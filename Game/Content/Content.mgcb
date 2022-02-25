@@ -61,6 +61,12 @@
 /processorParam:TextureFormat=Color
 /build:balloon/balloon4.png
 
+#begin balloon/pop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:balloon/pop.wav
+
 #begin bell_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -84,6 +90,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:bell_ring.png
+
+#begin bell_sound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bell_sound.wav
 
 #begin cursor1.png
 /importer:TextureImporter
@@ -217,6 +229,12 @@
 /processorParam:TextureFormat=Color
 /build:gun_shoot.png
 
+#begin HUD/collect_sound2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:HUD/collect_sound2.wav
+
 #begin HUD/screen_damage1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -301,6 +319,24 @@
 /processorParam:TextureFormat=Color
 /build:ink_marker.png
 
+#begin jump.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:jump.png
+
+#begin liquid_bit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:liquid_bit.wav
+
 #begin marina_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -332,6 +368,12 @@
 /processorParam:TextureFormat=Compressed
 /build:RouliXL.spritefont
 
+#begin shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:shoot.wav
+
 #begin shot.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -356,6 +398,18 @@
 /processorParam:TextureFormat=Color
 /build:shot_reject.png
 
+#begin slide_tiny.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:slide_tiny.wav
+
+#begin splash.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:splash.wav
+
 #begin squid_fall.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -379,6 +433,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:squid_idle.png
+
+#begin squid_jump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:squid_jump.wav
 
 #begin squid_move.png
 /importer:TextureImporter
@@ -427,6 +487,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:statue2.png
+
+#begin swim.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:swim.wav
 
 #begin tileset/background.png
 /importer:TextureImporter

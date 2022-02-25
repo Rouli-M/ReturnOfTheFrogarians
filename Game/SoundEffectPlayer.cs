@@ -18,6 +18,12 @@ namespace Splatoon2D
             FramePlaylistPitch.Add(Pitch);
         }
 
+        public static void PlayInstance(SoundEffectInstance instance)
+            // usefull when the caller wants to interrupt the sound
+        {
+            instance.Play();
+        }
+
         public static void Update()
         {
             SoundPlayedThisFrame = new List<SoundEffect>();

@@ -32,10 +32,17 @@ namespace Splatoon2D
             base.Update(gameTime, world, player);
         }
 
+        public override void Die(World world)
+        {
+            SoundEffectPlayer.Play(ballon_pop_sound);
+            base.Die(world);
+        }
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition + new Vector2(0, 80) + offset + shake_offset);
         }
+
     }
 
 }

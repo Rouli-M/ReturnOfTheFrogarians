@@ -5,12 +5,14 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Splatoon2D
 {
     public static class HUD
     {
         public static Sprite MouseSprite, EggSprite, SmallEggSprite, EggBoxSprite;
+        public static SoundEffect collect_sound2; 
         public static Sprite dmg1, dmg2, dmg3, dmg4, dmg5;
         private static SpriteFont RouliFont;
         private static Random R = new Random();
@@ -56,7 +58,12 @@ namespace Splatoon2D
                     EggDirection.Normalize();
                     new_v += EggDirection * 4.5f;
                 }
-                if (e.p.X < 70 || e.p.Y > 700) egg_count++ ;
+                if (e.p.X < 70 || e.p.Y > 700)
+                {
+                    egg_count++;
+                    SoundEffectPlayer.Play(collect_sound2);
+                    updatedEggs.Remove(e);
+                }
                 else updatedEggs.Add((e.i + 1, e.p + new_v, new_v));
             }
             eggs = updatedEggs;
@@ -75,6 +82,8 @@ namespace Splatoon2D
             dmg3 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage3"), scale: 6f);
             dmg4 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage4"), scale: 6f);
             dmg5 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage5"), scale: 6f);
+
+            collect_sound2 = Content.Load<SoundEffect>("HUD/collect_sound2");
         }
 
         public static void SpawnEgg(int count, Vector2 SpawnPosition)
