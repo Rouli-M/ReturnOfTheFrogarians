@@ -13,7 +13,7 @@ namespace Splatoon2D
         static Sprite player_shot_sprite, enemy_shot_sprite, player_shot_denied_sprite;
         Sprite ink_shot_sprite;
         public bool is_enemy;
-        public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false) : base(new Vector2(5, 5), SpawnPos)
+        public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false) : base(is_enemy ? new Vector2(25, 25) : new Vector2(5,5), SpawnPos)
         {
             Velocity = (is_enemy ? 4.5f : 17) * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
             Gravity = 0f;
@@ -51,9 +51,11 @@ namespace Splatoon2D
         public override void Draw(SpriteBatch spriteBatch)
         {
             float angle = (float)Math.Atan2(Velocity.Y, Velocity.X);
-
-            ink_shot_sprite.Draw(spriteBatch, FeetPosition - new Vector2(ink_shot_sprite.frameWidth/2, ink_shot_sprite.frameHeight), angle, new Vector2(20, 7));
+            Vector2 pivot = new Vector2(20, 7);
+            if (is_enemy) pivot = new Vector2(28, 21);
+            ink_shot_sprite.Draw(spriteBatch, FeetPosition - new Vector2(ink_shot_sprite.frameWidth/2, ink_shot_sprite.frameHeight), angle, pivot);
             //ink_shot_sprite.DrawFromFeet(spriteBatch, FeetPosition, angle);
+            //Game1.DrawRectangle(spriteBatch, Hurtbox, Color.Red, ink_shot_sprite.Texture);
         }
 
         public void Cancel(World world)
@@ -62,7 +64,7 @@ namespace Splatoon2D
             world.Remove(this);
         }
 
-        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        new public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             player_shot_sprite = new Sprite(Content.Load<Texture2D>("shot"));
             enemy_shot_sprite = new Sprite(Content.Load<Texture2D>("enemy_bullet"));

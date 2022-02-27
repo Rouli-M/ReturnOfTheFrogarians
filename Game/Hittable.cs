@@ -11,14 +11,18 @@ namespace Splatoon2D
 {
     public class Hittable : PhysicalObject
     {
-        public int life, loot, shake_force;
+        public int total_life, life, loot, shake_force;
         public static Sprite balloon1, balloon2, balloon3, balloon4;
         public static Sprite frogtarian_idle, frogtarian_move, frogtarian_shoot;
         public static SoundEffect bell_sound, ballon_pop_sound;
+        //Color inkable_surface_color; // color of the sprite that will receive player ink
+        static Effect InkEffect;
+        static Texture2D ink_text0, ink_text1, ink_text2, ink_text3, ink_text4, ink_text5;
+        public Effect _InkEffect;
         public Vector2 shake_offset;
         public Hittable(Vector2 Size, Vector2 Position):base(Size, Position)
         {
-
+            _InkEffect = InkEffect.Clone();
         }
 
         public override void Update(GameTime gameTime, World world, Player player)
@@ -64,10 +68,46 @@ namespace Splatoon2D
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.LinearWrap, null, null, null, transformMatrix: Game1.matrix);
+            /*
+            */
+            //
+            _InkEffect.Parameters["jam_texture"].SetValue(GetInkText());
+
+            float x_offset = (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)) * CurrentSprite.frameWidth;
+            float y_offset = (CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) * CurrentSprite.frameHeight;
+            _InkEffect.Parameters["spritesheet_offset_x"].SetValue(x_offset); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
+            _InkEffect.Parameters["spritesheet_offset_y"].SetValue(y_offset);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
+            _InkEffect.Parameters["spritesheet_width"].SetValue((float)CurrentSprite.Texture.Width); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
+            _InkEffect.Parameters["spritesheet_height"].SetValue((float)CurrentSprite.Texture.Height);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
+            _InkEffect.Parameters["frame_number_x"].SetValue(CurrentSprite.Texture.Width / (float)CurrentSprite.frameWidth); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
+            _InkEffect.Parameters["frame_number_y"].SetValue(CurrentSprite.Texture.Height / (float)CurrentSprite.frameHeight);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
+
+            _InkEffect.CurrentTechnique.Passes[0].Apply();
+
+            DrawCurrentSprite(spriteBatch);
+
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.AnisotropicWrap, null, null, null, transformMatrix: Game1.matrix);
+        }
+
+        public virtual void DrawCurrentSprite(SpriteBatch spriteBatch)
+        {
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition + shake_offset);
         }
 
-        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        public Texture2D GetInkText()
+        {
+            if (life / (float)total_life > 5 / 6f) return ink_text0;
+            if (life / (float)total_life > 4 / 6f) return ink_text1;
+            if (life / (float)total_life > 3 / 6f) return ink_text2;
+            if (life / (float)total_life > 2 / 6f) return ink_text3;
+            if (life / (float)total_life > 1 / 6f) return ink_text4;
+            return ink_text5;
+        }
+
+        new public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             balloon1 = new Sprite(Content.Load<Texture2D>("balloon/balloon1"));
             balloon2 = new Sprite(Content.Load<Texture2D>("balloon/balloon2"));
@@ -80,6 +120,14 @@ namespace Splatoon2D
             frogtarian_idle = new Sprite(2, 151, 191, 333, Content.Load<Texture2D>("frog_idle"), FeetYOffset:10);
             frogtarian_move = new Sprite(6, 151, 191, 120, Content.Load<Texture2D>("frog_walk"), FeetYOffset: 10);
             frogtarian_shoot = new Sprite(3, 151, 191, 100, Content.Load<Texture2D>("frog_attack"), FeetYOffset: 10);
+
+            InkEffect = Content.Load<Effect>("InkEffect");
+            ink_text0 = Content.Load<Texture2D>("ink_effect/ink_text_0");
+            ink_text1 = Content.Load<Texture2D>("ink_effect/ink1");
+            ink_text2 = Content.Load<Texture2D>("ink_effect/ink2");
+            ink_text3 = Content.Load<Texture2D>("ink_effect/ink3");
+            ink_text4 = Content.Load<Texture2D>("ink_effect/ink4");
+            ink_text5 = Content.Load<Texture2D>("ink_effect/ink5");
         }
     }
 }

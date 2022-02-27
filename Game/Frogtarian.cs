@@ -26,7 +26,8 @@ namespace Splatoon2D
             _move = new Sprite(frogtarian_move);
             _shoot = new Sprite(frogtarian_shoot);
             direction = -1;
-            life = 10;
+            total_life = 10;
+            life = total_life;
             loot = 3;
             state = FrogtarianState.idle;
             state_frames = 0;

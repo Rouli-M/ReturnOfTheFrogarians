@@ -39,7 +39,7 @@ namespace Splatoon2D
 
         public Vector2 HitboxSize, HitboxOffset;
         public Rectangle Hitbox;
-        public int Direction;
+        new public int Direction;
 
         public int form_frames { get; private set; } 
         public int state_frames { get; private set; }
@@ -403,7 +403,7 @@ namespace Splatoon2D
 
         public void Bump(PhysicalObject bumper)
         {
-            Velocity = new Vector2(-Direction(bumper) * 5, -3);
+            Velocity = new Vector2(-Direction(bumper) * 10, -4);
         }
 
         public void Jump(bool small = false)
@@ -425,7 +425,7 @@ namespace Splatoon2D
             ApplyForce(new Vector2(0, -force));
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        new public void Draw(SpriteBatch spriteBatch)
         {
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition) ;
 
@@ -563,7 +563,7 @@ namespace Splatoon2D
         }
         
 
-        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        new public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             idle = new Sprite(2, 81, 133, 250, Content.Load<Texture2D>("idle"), FeetOffset:1);
             walk = new Sprite(4, 436/4, 133, 200, Content.Load<Texture2D>("walk"), FeetOffset: 1);

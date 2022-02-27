@@ -37,7 +37,7 @@ namespace Splatoon2D
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition + offset);
         }
 
-        public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
+        public static new void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             egg = new Sprite(Content.Load<Texture2D>("egg"));
             egg_box = new Sprite(Content.Load<Texture2D>("egg_box"));

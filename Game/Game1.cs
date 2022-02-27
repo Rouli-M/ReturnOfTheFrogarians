@@ -21,7 +21,7 @@ namespace Splatoon2D
         public Player player;
         public World world;
         int totalGameTime, FramerateProblemFrames;
-        Matrix matrix;
+        public static Matrix matrix;
         public static MouseState ms, previous_ms;
         public static KeyboardState ks;
         public SpriteFont Rouli;
@@ -149,7 +149,6 @@ namespace Splatoon2D
         protected override void Draw(GameTime gameTime)
         {
             totalGameTime += gameTime.ElapsedGameTime.Milliseconds;
-            //spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null, null, transformMatrix: matrix);
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.AnisotropicWrap, null, null, null, transformMatrix: matrix);
 
             GraphicsDevice.Clear(Color.White);

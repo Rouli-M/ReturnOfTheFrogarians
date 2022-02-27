@@ -16,7 +16,6 @@ namespace Splatoon2D
             if(player.lifetime % 5 == 0) ScreenShake *= -0.5f;
 
             CameraOffset = new Vector2();
-            int i = 0;
 
             CameraOffset.Y += -200 * (1 / (2 * Zoom));
 
