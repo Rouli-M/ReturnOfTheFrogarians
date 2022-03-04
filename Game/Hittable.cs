@@ -13,7 +13,7 @@ namespace Splatoon2D
     {
         public int total_life, life, loot, shake_force;
         public static Sprite balloon1, balloon2, balloon3, balloon4;
-        public static Sprite frogtarian_idle, frogtarian_move, frogtarian_shoot;
+        public static Sprite frogtarian_idle, frogtarian_move, frogtarian_shoot, interrogation, exclamation;
         public static SoundEffect bell_sound, ballon_pop_sound;
         //Color inkable_surface_color; // color of the sprite that will receive player ink
         static Effect InkEffect;
@@ -35,13 +35,7 @@ namespace Splatoon2D
                 {
                     if(ShotTouched(shot))
                     {
-                        Console.WriteLine("Shot touched by " + this);
-                        life--;
-                        world.Remove(shot);
-                        //display_offset = shake_force * new Vector2(-1, 0);
-                        Vector2 shake_direction = Hurtbox.Center.ToVector2() - shot.Hurtbox.Center.ToVector2();
-                        shake_direction.Normalize();
-                        shake_offset = shake_force * shake_direction;
+                        ShotReaction(world, player, shot);
                     }
                 }
             }
@@ -54,6 +48,16 @@ namespace Splatoon2D
             base.Update(gameTime, world, player);
         }
 
+        public virtual void ShotReaction(World world, Player player, InkShot shot)
+        {
+            Console.WriteLine("Shot touched by " + this);
+            life--;
+            world.Remove(shot);
+            //display_offset = shake_force * new Vector2(-1, 0);
+            Vector2 shake_direction = Hurtbox.Center.ToVector2() - shot.Hurtbox.Center.ToVector2();
+            shake_direction.Normalize();
+            shake_offset = shake_force * shake_direction;
+        }
 
         public virtual bool ShotTouched(InkShot o)
         {
@@ -113,6 +117,8 @@ namespace Splatoon2D
             balloon2 = new Sprite(Content.Load<Texture2D>("balloon/balloon2"));
             balloon3 = new Sprite(Content.Load<Texture2D>("balloon/balloon3"));
             balloon4 = new Sprite(Content.Load<Texture2D>("balloon/balloon4"));
+            interrogation = new Sprite(Content.Load<Texture2D>("interrogation"));
+            exclamation = new Sprite(Content.Load<Texture2D>("exclamation"));
 
             ballon_pop_sound = Content.Load<SoundEffect>("balloon/pop");
             bell_sound = Content.Load<SoundEffect>("bell_sound");
@@ -128,6 +134,7 @@ namespace Splatoon2D
             ink_text3 = Content.Load<Texture2D>("ink_effect/ink3");
             ink_text4 = Content.Load<Texture2D>("ink_effect/ink4");
             ink_text5 = Content.Load<Texture2D>("ink_effect/ink5");
+
         }
     }
 }

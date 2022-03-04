@@ -46,6 +46,7 @@ namespace Splatoon2D
             Stuff = new List<PhysicalObject>()
             {
                 new Frogtarian(new Vector2(-400, 0)),
+                new Frogtarian(new Vector2(-400, -1000)),
                 new Frogtarian(new Vector2(3637, -235)),
 
                 new Balloon(new Vector2(-270, -150)), // spawn balloon

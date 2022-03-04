@@ -18,6 +18,7 @@ namespace Splatoon2D
         static Sprite idle, walk, jump, walk_slow, to_squid, to_kid;
         static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_fall;
         static Sprite gun_rest, gun_shoot, gun_cocked;
+        static Sprite enemy_ink_particle;
         static Sprite ArmSprite;
         static SoundEffect enter_ink_sound, swim_sound, slide_sound, squid_jump_sound, shoot_sound;
         static SoundEffectInstance swim_sound_instance;
@@ -414,7 +415,13 @@ namespace Splatoon2D
             CurrentState = PlayerState.jump;
 
             float force = 13;
-            if (is_on_enemy_ink_ground) force = 6;
+            if (is_on_enemy_ink_ground)
+            {
+                force = 6;
+                world.Stuff.Add(new Particle(FeetPosition, enemy_ink_particle, new Vector2(-2, -4), new Vector2(0, 0.3f), 25));
+                world.Stuff.Add(new Particle(FeetPosition, enemy_ink_particle, new Vector2(0,  -4), new Vector2(0, 0.3f), 25));
+                world.Stuff.Add(new Particle(FeetPosition, enemy_ink_particle, new Vector2(2,  -4), new Vector2(0, 0.3f), 25));
+            }
             else if (CurrentForm == PlayerForm.kid) force = 11;
             else
             {
@@ -428,8 +435,8 @@ namespace Splatoon2D
         new public void Draw(SpriteBatch spriteBatch)
         {
             CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition) ;
-
-            if(Direction == 1) ArmSprite.Draw(spriteBatch, FeetPosition + GetArmRelativePoint() - GetWeaponRelativePoint(), -Input.Angle, GetWeaponRelativePoint());
+            //Game1.DrawRectangle(spriteBatch, Hitbox, Color.Red, HUD.EggBoxSprite.Texture);
+            if (Direction == 1) ArmSprite.Draw(spriteBatch, FeetPosition + GetArmRelativePoint() - GetWeaponRelativePoint(), -Input.Angle, GetWeaponRelativePoint());
             else ArmSprite.Draw(spriteBatch, FeetPosition + new Vector2(-GetArmRelativePoint().X, GetArmRelativePoint().Y) - new Vector2(ArmSprite.frameWidth, 0) + new Vector2(GetWeaponRelativePoint().X, -GetWeaponRelativePoint().Y), (float)Math.PI - Input.Angle, new Vector2(ArmSprite.frameWidth, 0) + new Vector2(-GetWeaponRelativePoint().X, GetWeaponRelativePoint().Y));
         }
 
@@ -579,6 +586,7 @@ namespace Splatoon2D
             gun_rest = new Sprite(Content.Load<Texture2D>("gun"));
             gun_cocked = new Sprite(Content.Load<Texture2D>("gun_cocked"));
             gun_shoot = new Sprite(2, 85, 39, 70, Content.Load<Texture2D>("gun_shoot"), loopAnimation:false);
+            enemy_ink_particle = new Sprite(Content.Load<Texture2D>("enemy_paint_particle"));
 
             slide_sound = Content.Load<SoundEffect>("slide_tiny");
             enter_ink_sound = Content.Load<SoundEffect>("splash");
