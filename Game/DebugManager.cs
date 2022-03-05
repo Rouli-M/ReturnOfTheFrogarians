@@ -48,6 +48,8 @@ namespace Splatoon2D
             if (JustPressed(Keys.F6)) show_ground = !show_ground;
             if (JustPressed(Keys.F7)) Camera.static_cam = !Camera.static_cam;
             if (JustPressed(Keys.F11)) game.graphics.ToggleFullScreen();
+            if (JustPressed(Keys.C)) world.PaintedGround.Clear();
+            if (JustPressed(Keys.C)) world.PaintedWalls.Clear();
 
             if (!editor_enabled) return;
 
@@ -56,8 +58,6 @@ namespace Splatoon2D
 
             //Vector2 ScreenMousePosition = ms.Position.ToVector2() * 1 / Camera.Zoom + Camera.TopLeftCameraPosition;
             Vector2 ScreenMousePosition = HUD.GetPointerWorldVector(ms.Position.ToVector2());
-            Console.WriteLine("mouse pos" + ms.Position);
-            Console.WriteLine("world mouse pos" + ScreenMousePosition);
             if (ks.IsKeyDown(Keys.LeftShift)) ScreenMousePosition = (ScreenMousePosition - new Vector2(ScreenMousePosition.X % 5, ScreenMousePosition.Y % 5));
             if (JustPressed(Keys.O))
             {
@@ -124,27 +124,27 @@ namespace Splatoon2D
                     {
                         if (RectangleMoveCD <= 0)
                         {
-                            int MagicOffsetX = (int)(4 * GetMovement().X - (4 * GetMovement().X) % 5);
-                            int MagicOffsetY = (int)(4 * GetMovement().Y - (4 * GetMovement().Y) % 5);
+                            int MagicOffsetX = (int)(GetMovement().X);
+                            int MagicOffsetY = (int)(GetMovement().Y);
 
                             if (ks.IsKeyDown(Keys.Tab)) // inflate
                             {
                                 if (GetMovement().X != 0)
                                 {
-                                    SelectedGround.Width += MagicOffsetX;
+                                    SelectedGround.Width += MagicOffsetX * 25;
                                     if (GetMovement().X < 0)
                                     {
-                                        SelectedGround.Width -= 2 * MagicOffsetX;
-                                        SelectedGround.X += MagicOffsetX;
+                                        SelectedGround.Width -= 2 * MagicOffsetX * 25;
+                                        SelectedGround.X += MagicOffsetX * 25;
                                     }
                                 }
                                 if (GetMovement().Y != 0)
                                 {
-                                    SelectedGround.Height += MagicOffsetY;
+                                    SelectedGround.Height += MagicOffsetY * 25;
                                     if (GetMovement().Y < 0)
                                     {
-                                        SelectedGround.Height -= 2 * MagicOffsetY;
-                                        SelectedGround.Y += MagicOffsetY;
+                                        SelectedGround.Height -= 2 * MagicOffsetY * 25;
+                                        SelectedGround.Y += MagicOffsetY * 25;
                                     }
                                 }
                             }
@@ -152,25 +152,25 @@ namespace Splatoon2D
                             {
                                 if (GetMovement().X != 0)
                                 {
-                                    SelectedGround.Width -= Math.Abs(MagicOffsetX);
+                                    SelectedGround.Width -= Math.Abs(MagicOffsetX * 25);
                                     if (GetMovement().X > 0)
                                     {
-                                        SelectedGround.X += MagicOffsetX;
+                                        SelectedGround.X += MagicOffsetX * 25;
                                     }
                                 }
                                 if (GetMovement().Y != 0)
                                 {
-                                    SelectedGround.Height -= Math.Abs(MagicOffsetY);
+                                    SelectedGround.Height -= Math.Abs(MagicOffsetY * 25);
                                     if (GetMovement().Y > 0)
                                     {
-                                        SelectedGround.Y += MagicOffsetY;
+                                        SelectedGround.Y += MagicOffsetY * 25;
                                     }
                                 }
                             }
                             else // move
                             {
-                                SelectedGround.Location += new Point((int)(4 * GetMovement().X - (4 * GetMovement().X) % 5),
-                                                                (int)(4 * GetMovement().Y - (4 * GetMovement().Y) % 5));
+                                SelectedGround.Location += new Point((int)(25 * GetMovement().X),
+                                                                (int)(25 * GetMovement().Y));
                             }
                             RectangleMoveCD = 5;
                         }
@@ -227,7 +227,6 @@ namespace Splatoon2D
             if (ks.IsKeyDown(Keys.Right)) Movement.X += 1;
             if (ks.IsKeyDown(Keys.Left)) Movement.X -= 1;
             if (ks.IsKeyDown(Keys.LeftControl)) Movement *= 4f;
-            else Movement *= 1.6f;
 
             return Movement;
         }

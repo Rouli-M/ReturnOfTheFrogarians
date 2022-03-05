@@ -44,7 +44,7 @@ namespace Splatoon2D
             graphics.GraphicsProfile = GraphicsProfile.HiDef;
             var ActualWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             var ActualHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Window.Title = "Splatoon 2D fangame";
+            Window.Title = "Return of the Frogarians";
             Window.AllowUserResizing = false;
 
             string culture = Convert.ToString(CultureInfo.CurrentCulture.Name);

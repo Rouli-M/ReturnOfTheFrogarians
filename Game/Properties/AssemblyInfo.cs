@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Splatoon2D")]
-[assembly: AssemblyProduct("Splatoon2D")]
+[assembly: AssemblyTitle("ReturnOfTheFrogarians")]
+[assembly: AssemblyProduct("ReturnOfTheFrogarians")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]

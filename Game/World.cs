@@ -16,8 +16,8 @@ namespace Splatoon2D
         private List<PhysicalObject> StuffToRemove, StuffToAdd;
         private static Texture2D gray, ground, painted_ground, wall, painted_wall, background, painted_ground_enemy, painted_wall_enemy;
         private static Texture2D outer_corner_top_left, outer_corner_top_right, inner_corner_top_left, inner_corner_top_right;
-        private static Sprite statue1, statue2;
-        private static Sprite decor1, decor2, decor3, decor4, decor5;
+        private static Sprite statue1, statue2, statue3, statue4, statue5;
+        private static Sprite decor1, decor2, decor3, decor4, decor5, decor6;
 
         public World(Player player)
         {
@@ -46,20 +46,44 @@ namespace Splatoon2D
                 new Rectangle(2250 + 100, - 700, 700 - 100, 150),
 
                 */
-                							new Rectangle(-2200, 0, 3000, 200) ,
+                			new Rectangle(-2200, 0, 3000, 200) ,
                             new Rectangle(-2000, -1000, 650, 7000) ,
                             new Rectangle(-3000, -2000, 1100, 7000) ,
                             new Rectangle(-4000, -2000, 3000, 800) ,
                             new Rectangle(-3650, -500, 3650, 200) ,
                             new Rectangle(0, -60, 300, 200) ,
                             new Rectangle(250, -300, 1800, 500) ,
-                            new Rectangle(1800, -150, 5000, 7000) ,
                             new Rectangle(1800, -200, 1000, 7000) ,
-                            new Rectangle(3000, -200, 300, 7000) ,
                             new Rectangle(3500, -200, 300, 7000) ,
-                            new Rectangle(4000, -200, 2000, 7000) ,
                             new Rectangle(2250, -700, 200, 350) ,
                             new Rectangle(2350, -700, 600, 150) ,
+                            new Rectangle(4000, -200, 2000, 7000) ,
+                            new Rectangle(4100, -625, 100, 150) ,
+                            new Rectangle(3850, -675, 350, 80) ,
+                            new Rectangle(4300, -500, 100, 110) ,
+                            new Rectangle(4100, -550, 300, 70) ,
+                            new Rectangle(4300, -425, 300, 75) ,
+                            new Rectangle(5775, -650, 500, 765) ,
+                            new Rectangle(4675, -875, 500, 745) ,
+                            new Rectangle(5100, -800, 450, 940) ,
+                            new Rectangle(5350, -725, 550, 790) ,
+                            new Rectangle(6000, -400, 875, 330) ,
+                            new Rectangle(1800, -150, 5800, 7000) ,
+                            new Rectangle(7475, -775, 475, 1070) ,
+                            new Rectangle(6450, -1025, 125, 365) ,
+                            new Rectangle(5700, -1400, 475, 240) ,
+                            new Rectangle(6100, -1400, 125, 440) ,
+                            new Rectangle(-1075, -1275, 550, 75) ,
+                            new Rectangle(4800, -1400, 150, 110) ,
+                            new Rectangle(5250, -1400, 150, 120) ,
+                            new Rectangle(3475, -1200, 700, 115) ,
+                            new Rectangle(4075, -1400, 100, 290) ,
+                            new Rectangle(4100, -1400, 400, 110) ,
+                            new Rectangle(6500, -875, 500, 215) ,
+                            new Rectangle(7225, -775, 300, 95) ,
+                            new Rectangle(-2050, -2400, 10350, 535) ,
+                            new Rectangle(7675, -2175, 625, 2655) ,
+                            new Rectangle(3000, -200, 300, 7000) ,
             };
 
             Stuff = new List<PhysicalObject>()
@@ -67,6 +91,9 @@ namespace Splatoon2D
                 //new Frogtarian(new Vector2(-400, 0)),
                 new Frogtarian(new Vector2(-400, -1000)),
                 new Frogtarian(new Vector2(3637, -235)),
+                new Frogtarian(new Vector2(4279, -1448)),
+                new Frogtarian(new Vector2(4935, -906)),
+                new Frogtarian(new Vector2(6659, -431)),
 
                 new Balloon(new Vector2(-270, -150)), // spawn balloon
                 new Balloon(new Vector2(591, -430)), // second balloon
@@ -76,6 +103,8 @@ namespace Splatoon2D
 
                 new Balloon(new Vector2(2041, -531)), // ballon at intersection top/bottom
                 new Balloon(new Vector2(1841, -827)), // ballon jsut above
+                new Balloon(new Vector2(7353, -1030)), // rabbit 1
+                new Balloon(new Vector2(7549, -1030)), // rabbit 1
 
 
                 new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
@@ -89,11 +118,17 @@ namespace Splatoon2D
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
                 new Egg(new Vector2(- 200, - 500 - 50), 5), // above spawn
                 new Egg(new Vector2(2986, -472), 5), // above hole field, have to drop from above
-                new Egg(new Vector2(3150, -818), 5) // above hole field, have to jump
+                new Egg(new Vector2(3150, -818), 5), // above hole field, have to jump
+                new Egg(new Vector2(3630, -810), 5), // above hole field on right, have to jump
+                new Egg(new Vector2(3780, -1476), 5) // on plateform high above hole field
             };
 
             Stuff.AddRange(EggLine(new Vector2(220, -100), new Vector2(0, -1), 3)); // line mur à droite du spawn
             Stuff.AddRange(EggLine(new Vector2(2300, -748), new Vector2(1, 0), 9)); // plateform above before hole filed
+            Stuff.AddRange(EggLine(new Vector2(3389, -1218), new Vector2(0, 1), 9)); // Falling in middle of hole field
+            Stuff.AddRange(EggLine(new Vector2(7440, -660), new Vector2(0, 1), 6)); // On wall bottom full right
+            Stuff.AddRange(EggLine(new Vector2(5025, -1501), new Vector2(1, 0), 3)); // au dessus du vide en jump des plateformes
+            Stuff.AddRange(EggLine(new Vector2(4557, -1501), new Vector2(1, 0), 3)); // deuxième au dessus du vide en jump des plateformes
 
             //Stuff.Clear();
         }
@@ -359,12 +394,16 @@ namespace Splatoon2D
 
             statue1 = new Sprite(Content.Load<Texture2D>("statue1"));
             statue2 = new Sprite(Content.Load<Texture2D>("statue2"));
+            statue3 = new Sprite(Content.Load<Texture2D>("statue3"));
+            statue4 = new Sprite(Content.Load<Texture2D>("statue4"));
+            statue5 = new Sprite(Content.Load<Texture2D>("statue5"));
 
             decor1 = new Sprite(Content.Load<Texture2D>("decor/1"));
             decor2 = new Sprite(Content.Load<Texture2D>("decor/2"));
             decor3 = new Sprite(Content.Load<Texture2D>("decor/3"));
             decor4 = new Sprite(Content.Load<Texture2D>("decor/4"));
             decor5 = new Sprite(Content.Load<Texture2D>("decor/5"));
+            decor6 = new Sprite(Content.Load<Texture2D>("decor/6"));
 
             Decor = new List<(Vector2, Sprite)>
             {
@@ -372,12 +411,23 @@ namespace Splatoon2D
                 (new Vector2(430, -300), statue1),
                 (new Vector2(1050, -300), statue1),
                 (new Vector2(1050 + 1000 - 380, -300), statue1),
-                (new Vector2( - 900, 0), statue2),
+                (new Vector2( - 900, 0), statue1),
 
                 (new Vector2(2626, -190), statue1),
-                (new Vector2(3140, -190), statue1),
-                (new Vector2(3644, -190), statue1),
+                (new Vector2(3140, -190), statue4),
+                (new Vector2(3644, -190), Flip(statue4)),
                 (new Vector2(4154, -190), statue1),
+                (new Vector2(4907, -870), statue2),
+                (new Vector2(5347, -800), statue2),
+                (new Vector2(5713, -720), statue2),
+                (new Vector2(6073, -640), statue2),
+                (new Vector2(6560, -400), statue1),
+                (new Vector2(6784, -860), statue1),
+                (new Vector2(3757, -1190), statue3),
+                (new Vector2(4300, -1400), statue1),
+                (new Vector2(-663, -505), statue5),
+                (new Vector2(-1055, -505), statue1),
+                (new Vector2(-663 + 392, -505), statue1),
             };
 
             FrontDecor = new List<(Vector2, Sprite)>
@@ -393,6 +443,17 @@ namespace Splatoon2D
                 (new Vector2(3633, -18), decor5),
                 (new Vector2(2344, -471), decor4),
                 (new Vector2(1866, -103), decor3),
+                (new Vector2(-1403, 136), decor3),
+
+                (new Vector2(6078, -1225), decor1),
+                (new Vector2(5761, -578), decor2),
+                (new Vector2(6622, -724), decor3),
+                (new Vector2(6677, -210), decor4),
+                (new Vector2(7389, 0), decor5),
+                (new Vector2(7725, -444), decor1),
+                (new Vector2(7965, -752), decor2),
+                (new Vector2(4929, -675), decor6),
+
             };
         }
 
@@ -419,6 +480,14 @@ namespace Splatoon2D
         public void Spawn(PhysicalObject o)
         {
             StuffToAdd.Add(o);
+        }
+
+        static Sprite Flip(Sprite s)
+        {
+            Sprite flipped = new Sprite(s);
+            flipped.direction *= -1;
+            flipped.UpdateFrame(new GameTime());
+            return flipped;
         }
 
         public bool CheckCollision(Vector2 FeetPosition, Vector2 Size)

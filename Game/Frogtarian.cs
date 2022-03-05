@@ -126,7 +126,7 @@ namespace Splatoon2D
             if (Direction(player) != direction && turn_timer == 0)
             {
                 world.Spawn(new Particle(FeetPosition + new Vector2(56, -Hurtbox.Height + 30), exclamation, 61));
-                turn_timer = 45;
+                turn_timer = 55;
                 state = FrogtarianState.idle;
                 Velocity.X = 0;
             }
