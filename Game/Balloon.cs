@@ -29,7 +29,10 @@ namespace Splatoon2D
             else if (life > max_life * 0.25f) CurrentSprite = balloon3;
             else CurrentSprite = balloon3;
             */
-
+            if (player.Hitbox.Intersects(Hurtbox))
+            {
+                player.Bump(this);
+            }
             offset = 10 * new Vector2((float)Math.Cos(lifetime / 200f), (float)Math.Sin(lifetime / 25f));
 
             base.Update(gameTime, world, player);

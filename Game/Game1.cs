@@ -27,6 +27,7 @@ namespace Splatoon2D
         public SpriteFont Rouli;
         static public float GlobalResizeRatio, BadFramerateRegister;
         static List<Rectangle> RectangleToDrawList = new List<Rectangle>() { };
+        int intro_frames; //disclaimer when launching the game
 
         public Game1()
         {
@@ -100,6 +101,7 @@ namespace Splatoon2D
             DateTime LoadContentBegin = System.DateTime.Now;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Rouli = Content.Load<SpriteFont>("RouliXL");
+            rectangle = Content.Load<Texture2D>("rectangle");
             //rectangle = Content.Load<Texture2D>("rectangle");
             Player.LoadContent(Content);
             PhysicalObject.LoadContent(Content);
@@ -131,14 +133,16 @@ namespace Splatoon2D
             ks = Keyboard.GetState();
             GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
             // If there a controller attached, handle it
-            Input.Update(player);
-
-            previous_ms = ms;
-            player.Update(gameTime, world, player);
-            world.Update(gameTime, player);
+            if(DebugManager.SelectedGround == Rectangle.Empty)
+            {
+                Input.Update(player);
+                player.Update(gameTime, world, player);
+                world.Update(gameTime, player);
+            }
             Camera.Update(player, world);
             HUD.Update(player);
             SoundEffectPlayer.Update();
+            DebugManager.Update(this, gameTime, world, player, ks, Mouse.GetState());
             base.Update(gameTime);
         }
 
@@ -158,6 +162,8 @@ namespace Splatoon2D
             spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.LinearWrap, null, null, null, transformMatrix: matrix); // we need Immediate only for the body in order to draw the effect
             player.Draw(spriteBatch);
             HUD.Draw(spriteBatch);
+
+            DebugManager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
