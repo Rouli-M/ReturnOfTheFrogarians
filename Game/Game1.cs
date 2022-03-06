@@ -24,7 +24,7 @@ namespace Splatoon2D
         public static Matrix matrix;
         public static MouseState ms, previous_ms;
         public static KeyboardState ks;
-        public SpriteFont Rouli;
+        public static SpriteFont Rouli;
         static public float GlobalResizeRatio, BadFramerateRegister;
         static List<Rectangle> RectangleToDrawList = new List<Rectangle>() { };
         int intro_frames; //disclaimer when launching the game

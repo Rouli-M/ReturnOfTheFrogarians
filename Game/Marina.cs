@@ -10,7 +10,8 @@ namespace Splatoon2D
     public class Marina:NPC
     {
         int frame_since_last_ink_detected = 10000;
-        public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn)
+        bool spoke_intro = false;
+        public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn, new Vector2(30, -190))
         {
             CurrentSprite = marina_idle;
             Gravity = 1f;
@@ -22,16 +23,40 @@ namespace Splatoon2D
             {
                 if(o is InkShot s)
                 {
-                    if (Hurtbox.Contains(s.FeetPosition)) s.Cancel(world);
-                    else if (Vector2.Distance(o.FeetPosition, FeetPosition) < 250)
+                    if (Hurtbox.Contains(s.FeetPosition))
                     {
+                        s.Cancel(world);
+                        if (CurrentSprite != marina_inked) Say(GetRandomExclamation(), 70, true);
                         CurrentSprite = marina_inked;
                         frame_since_last_ink_detected = 0;
+                    }
+                    else if (Vector2.Distance(o.FeetPosition, FeetPosition) < 250)
+                    {
+
                     }
 
                 }
             }
             frame_since_last_ink_detected++;
+
+            if ((player.FeetPosition - FeetPosition).Length() < 400)
+            {
+                if (!spoke_intro)
+                {
+                    spoke_intro = true;
+                    Say("Oh hey you!", 150);
+                    Say("You're not a laywer\n  or something?", 200);
+                    Say("Good, we're gonna\nneed your help", 200);
+                    Say("These Frogarians\nare everywhere...", 200);
+                    Say("I don't know how\nthey got here", 200);
+                    Say("But obviously they should'nt\ninvade us like that", 200);
+                    Say("Could you maybe\ntake care of them?", 200);
+                }
+                if (HUD.egg_count > 75) Say("Woah, that's a lot of eggs!", 200, false, true);
+                else if (HUD.egg_count > 50) Say("You've been doing great,\n    keep it up!", 200, false, true);
+                else if (HUD.egg_count > 10) Say("You get to keep the eggs,\n   lucky you!", 200, false, true);
+            }
+
 
             if (CurrentSprite == marina_inked && frame_since_last_ink_detected > 70)
             {
@@ -40,6 +65,21 @@ namespace Splatoon2D
 
             CurrentSprite.UpdateFrame(gameTime);
             base.Update(gameTime, world, player);
+        }
+
+        public string GetRandomExclamation()
+        {
+            int id = r.Next(0, 11);
+            if (id == 0) return "Hey!!";
+            if (id == 2) return "Can you not??";
+            if (id == 3) return "Help!";
+            if (id == 4) return "I'm calling\nmy agent..";
+            if (id == 5) return "Stop!";
+            if (id == 6) return "Ouch!";
+            if (id == 7) return "Be carefull!!";
+            if (id == 8) return "I'm not a frog!!";
+            if (id == 9) return "I'm under attack!";
+            return "Not cool!";
         }
     }
 }
