@@ -23,7 +23,7 @@ namespace Splatoon2D
         static SoundEffect enter_ink_sound, swim_sound, slide_sound, squid_jump_sound, shoot_sound;
         static SoundEffectInstance swim_sound_instance;
         public float damage; // from 0 (safe) to 100 (fully inked)
-        public bool is_on_ink = false, is_on_enemy_ink_ground = false;
+        public bool is_on_ink = false, is_on_enemy_ink_ground = false, inked_coyote = false;
 
         public static Vector2 human_size;
 
@@ -42,6 +42,7 @@ namespace Splatoon2D
 
         public int form_frames { get; private set; } 
         public int state_frames { get; private set; }
+        public int coyote_frames = 0; // if > 0, legally allowed to jump
         public int shoot_cooldown = 0, heal_cooldown = 0, cant_squid_cooldown = 0;
 
         public Player():base(human_size, new Vector2(0,0))
@@ -109,6 +110,14 @@ namespace Splatoon2D
             }
             if (cant_squid_cooldown > 0) cant_squid_cooldown--;
             if (!is_on_enemy_ink_ground && IsOnGround(world)) cant_squid_cooldown = 0;
+            if(coyote_frames > 0) coyote_frames--;
+
+            if (IsOnGround(world))
+            {
+                coyote_frames = 10;
+                inked_coyote = is_on_ink;
+            }
+            if (is_on_ink_wall) coyote_frames = 0;
 
             // random bit of code to stop swim sound
             if (previous_is_on_ink && !is_on_ink) swim_sound_instance.Stop();
@@ -132,12 +141,12 @@ namespace Splatoon2D
                                         CurrentState = PlayerState.run;
                                     }
 
-                                    if (Input.Jump && IsOnGround(world)) Jump();
+                                    if (Input.Jump) Jump();
                                     break;
                                 }
                             case (PlayerState.run):
                                 {
-                                    if (Input.Jump && IsOnGround(world)) Jump();
+                                    if (Input.Jump) Jump();
 
                                     if (!IsOnGround(world) || Input.Jump) 
                                         goto case (PlayerState.jump);
@@ -212,8 +221,8 @@ namespace Splatoon2D
                         {
                             case (PlayerState.idle):
                                 {
-                                    if (IsOnGround(world) && Input.Jump) Jump(!is_on_ink);
-                                    else if (Input.movement_direction != 0)
+                                    if (Input.Jump) Jump();
+                                    if (Input.movement_direction != 0)
                                     {
                                         //Velocity.X = 1 * Input.movement_direction;
                                         ApplyForce(new Vector2(Input.movement_direction, 0));
@@ -228,8 +237,8 @@ namespace Splatoon2D
                                 {
                                     if(is_on_ink) swim_sound_instance.Play();
                                     if(Input.movement_vector.Length() < 0.15f) swim_sound_instance.Stop();
-                                    if (IsOnGround(world) && Input.Jump) Jump(!is_on_ink);
-                                    else if (is_on_ink_ground)
+                                    if (Input.Jump) Jump();
+                                    if (is_on_ink_ground)
                                     {
                                         GroundFactor = 0.8f;
                                         ApplyForce(new Vector2(Input.movement_direction * 2f, 0));
@@ -405,12 +414,18 @@ namespace Splatoon2D
             Velocity = new Vector2(-Direction(bumper) * 10, -4);
         }
 
-        public void Jump(bool small = false)
+        public void Jump()
         {
+            if (coyote_frames == 0) return;
+            //Console.WriteLine("Jump registered");
+            bool small = !is_on_ink && CurrentForm == PlayerForm.squid && !inked_coyote;
+
             if (Velocity.X > 20) Velocity.X = 20;
             if (Velocity.X < -20) Velocity.X = -20;
 
             CurrentState = PlayerState.jump;
+
+            Velocity.Y = 0;
 
             float force = 13;
             if (is_on_enemy_ink_ground)
