@@ -22,14 +22,12 @@ namespace Splatoon2D
         static Sprite ArmSprite;
         static SoundEffect enter_ink_sound, swim_sound, slide_sound, squid_jump_sound, shoot_sound;
         static SoundEffectInstance swim_sound_instance;
-        static Effect Jam;
         public float damage; // from 0 (safe) to 100 (fully inked)
         public bool is_on_ink = false, is_on_enemy_ink_ground = false;
 
         public static Vector2 human_size;
 
         public Vector2 MaskPosition, MaskSpriteOffset, CurrentMaskPosition, LastTrailGenerated;
-        List<Vector2> CurrentMaskPositionList;
         public enum PlayerState { idle, run, jump, attack, to_squid, to_kid }
         public PlayerState CurrentState, PreviousState;
         public enum PlayerForm { kid, squid }

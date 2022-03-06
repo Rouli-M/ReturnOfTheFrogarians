@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace Splatoon2D
 {
-    public class Marina:PhysicalObject
+    public class Marina:NPC
     {
         int frame_since_last_ink_detected = 10000;
         public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn)

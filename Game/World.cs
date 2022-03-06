@@ -88,12 +88,18 @@ namespace Splatoon2D
 
             Stuff = new List<PhysicalObject>()
             {
-                //new Frogtarian(new Vector2(-400, 0)),
+                //new BigFrogarian(new Vector2(-400, 0)),
                 new Frogtarian(new Vector2(-400, -1000)),
                 new Frogtarian(new Vector2(3637, -235)),
                 new Frogtarian(new Vector2(4279, -1448)),
                 new Frogtarian(new Vector2(4935, -906)),
                 new Frogtarian(new Vector2(6659, -431)),
+                
+                new BigFrogarian(new Vector2(4007, -675)),
+                new BigFrogarian(new Vector2(5713, -725)),
+                new BigFrogarian(new Vector2(7228, -150)),
+                new BigFrogarian(new Vector2(5316, -1400)),
+                new BigFrogarian(new Vector2(6870, -875)),
 
                 new Balloon(new Vector2(-270, -150)), // spawn balloon
                 new Balloon(new Vector2(591, -430)), // second balloon

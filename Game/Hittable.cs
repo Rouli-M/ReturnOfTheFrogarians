@@ -14,6 +14,7 @@ namespace Splatoon2D
         public int total_life, life, loot, shake_force;
         public static Sprite balloon1, balloon2, balloon3, balloon4;
         public static Sprite frogtarian_idle, frogtarian_move, frogtarian_shoot, interrogation, exclamation;
+        public static Sprite big_frogarian_idle, big_frogarian_press;
         public static SoundEffect bell_sound, ballon_pop_sound;
         //Color inkable_surface_color; // color of the sprite that will receive player ink
         static Effect InkEffect;
@@ -126,6 +127,9 @@ namespace Splatoon2D
             frogtarian_idle = new Sprite(2, 151, 191, 333, Content.Load<Texture2D>("frog_idle"), FeetYOffset:10);
             frogtarian_move = new Sprite(6, 151, 191, 120, Content.Load<Texture2D>("frog_walk"), FeetYOffset: 10);
             frogtarian_shoot = new Sprite(3, 151, 191, 100, Content.Load<Texture2D>("frog_attack"), FeetYOffset: 10);
+
+            big_frogarian_idle = new Sprite(2, 564/2, 185, 333, Content.Load<Texture2D>("large_frog_idle"), FeetYOffset: 0);
+            big_frogarian_press = new Sprite(4, 564/2, 185, 300, Content.Load<Texture2D>("large_frog_attack"), FeetYOffset: 0, loopAnimation:false);
 
             InkEffect = Content.Load<Effect>("InkEffect");
             ink_text0 = Content.Load<Texture2D>("ink_effect/ink_text_0");

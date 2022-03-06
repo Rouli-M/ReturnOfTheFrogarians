@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Balloon.cs" />
     <Compile Include="Bell.cs" />
+    <Compile Include="BigFrogarian.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DebugManager.cs" />
     <Compile Include="Egg.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="InkShot.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Marina.cs" />
+    <Compile Include="NPC.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="Player.cs" />
