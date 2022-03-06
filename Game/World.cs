@@ -46,8 +46,7 @@ namespace Splatoon2D
                 new Rectangle(2250 + 100, - 700, 700 - 100, 150),
 
                 */
-                			new Rectangle(-2200, 0, 3000, 200) ,
-                            new Rectangle(-2000, -1000, 650, 7000) ,
+                            new Rectangle(-2200, 0, 3000, 200) ,
                             new Rectangle(-3000, -2000, 1100, 7000) ,
                             new Rectangle(-4000, -2000, 3000, 800) ,
                             new Rectangle(-3650, -500, 3650, 200) ,
@@ -74,9 +73,6 @@ namespace Splatoon2D
                             new Rectangle(5700, -1400, 475, 240) ,
                             new Rectangle(6100, -1400, 125, 440) ,
                             new Rectangle(-1075, -1275, 550, 75) ,
-                            new Rectangle(4800, -1400, 150, 110) ,
-                            new Rectangle(5250, -1400, 150, 120) ,
-                            new Rectangle(3475, -1200, 700, 115) ,
                             new Rectangle(4075, -1400, 100, 290) ,
                             new Rectangle(4100, -1400, 400, 110) ,
                             new Rectangle(6500, -875, 500, 215) ,
@@ -84,6 +80,10 @@ namespace Splatoon2D
                             new Rectangle(-2050, -2400, 10350, 535) ,
                             new Rectangle(7675, -2175, 625, 2655) ,
                             new Rectangle(3000, -200, 300, 7000) ,
+                            new Rectangle(-2000, -1000, 650, 7000) ,
+                            new Rectangle(5225, -1400, 200, 120) ,
+                            new Rectangle(4775, -1400, 200, 110) ,
+                            new Rectangle(3475, -1200, 700, 115) ,
             };
 
             Stuff = new List<PhysicalObject>()

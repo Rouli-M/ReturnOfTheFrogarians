@@ -61,7 +61,7 @@ namespace Splatoon2D
                 GamepadUsed = false;
                 Jump = ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Z) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.W) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Up);
                 Shoot = ms.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
-                Squid = ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift);
+                Squid = ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) || ks.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space);
 
                 if (LeftPressed(ks) && RightPressed(ks) || !LeftPressed(ks) && !RightPressed(ks)) movement_direction = 0;
                 else if (LeftPressed(ks)) movement_direction = -1;
