@@ -22,19 +22,37 @@ namespace Splatoon2D
 
         public static Sprite bell_idle, bell_hit, marina_idle, marina_inked;
         public static Sprite rabbit_idle, rabbit_disappear, rabbit_rise, rabbit_fall, rabbit_charge, rabbit_button, rabbit_press;
+        public static Sprite bump_locked, bump_idle, bump_bump;
+        public static SoundEffect marina_sound1, marina_sound2, explosion, bump, question_sound, victory, enemy_shoot, rabbit_sound1, rabbit_sound2, rabbit_sound3;
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             bell_idle = new Sprite(Content.Load<Texture2D>("bell_idle"));
             bell_hit = new Sprite(3, 209, 172, 100, Content.Load<Texture2D>("bell_ring"), loopAnimation:false);
             marina_idle = new Sprite(4, 129, 154, 220, Content.Load<Texture2D>("marina_idle"));
             marina_inked = new Sprite(2, 129, 154, 220, Content.Load<Texture2D>("marina_inked"));
+            marina_sound1 = Content.Load<SoundEffect>("marina1");
+            marina_sound2 = Content.Load<SoundEffect>("marina2");
+
             rabbit_idle = new Sprite(2, 218/2, 162, 240, Content.Load<Texture2D>("rabbit/idle"));
-            rabbit_press = new Sprite(4, 484/4, 162, 130, Content.Load<Texture2D>("rabbit/press_button"), loopAnimation: false);
+            rabbit_press = new Sprite(4, 484/4, 167, 130, Content.Load<Texture2D>("rabbit/press_button"), loopAnimation: false);
             rabbit_disappear = new Sprite(6, 726/6, 162, 130, Content.Load<Texture2D>("rabbit/disappear"), loopAnimation:false);
             rabbit_rise = new Sprite(Content.Load<Texture2D>("rabbit/rise"));
             rabbit_fall = new Sprite(Content.Load<Texture2D>("rabbit/fall"));
             rabbit_charge = new Sprite(Content.Load<Texture2D>("rabbit/charge_jump"));
             rabbit_button = new Sprite(Content.Load<Texture2D>("rabbit/button_out"));
+            rabbit_sound1 = Content.Load<SoundEffect>("rabbit/sound1");
+            rabbit_sound2 = Content.Load<SoundEffect>("rabbit/sound2");
+            rabbit_sound3 = Content.Load<SoundEffect>("rabbit/sound3");
+            bump_idle = new Sprite(Content.Load<Texture2D>("bumper_neutral"));
+            bump_bump = new Sprite(2, 123, 75, 88, Content.Load<Texture2D>("bumper_bump"), loopAnimation: false);
+            bump_locked = new Sprite(Content.Load<Texture2D>("bumper_empty"));
+
+            // misc sound effect
+            explosion = Content.Load<SoundEffect>("explosion");
+            bump = Content.Load<SoundEffect>("bump");
+            question_sound = Content.Load<SoundEffect>("question");
+            victory = Content.Load<SoundEffect>("victory");
+            enemy_shoot = Content.Load<SoundEffect>("enemy_shoot");
         }
 
         public PhysicalObject(Vector2 HurtboxSize, Vector2 FeetPosition, bool isParticle = false)

@@ -38,6 +38,12 @@ namespace Splatoon2D
             shake_force = 5;
         }
 
+        public override void Die(World world)
+        {
+            SoundEffectPlayer.Play(explosion);
+            base.Die(world);
+        }
+
         public override void Update(GameTime gameTime, World world, Player player)
         {
             FrogtarianState oldState = state;
@@ -53,7 +59,11 @@ namespace Splatoon2D
                     if (ViewPlayer(player)) Shoot(world);
                     else if (state_frames == 61 && previousState == FrogtarianState.shooting)
                     {
-                        if (!ViewPlayer(player)) world.Spawn(new Particle(FeetPosition + new Vector2(56, - Hurtbox.Height + 30), interrogation, 61));
+                            if (!ViewPlayer(player))
+                            {
+                                world.Spawn(new Particle(FeetPosition + new Vector2(56, -Hurtbox.Height + 30), interrogation, 61));
+                                SoundEffectPlayer.Play(question_sound);
+                            }
                     }
                     else if (state_frames > 100)
                         state = FrogtarianState.moving;
@@ -147,6 +157,7 @@ namespace Splatoon2D
         private void Shoot(World world)
         {
             if (shoot_cooldown > 0) return;
+            SoundEffectPlayer.Play(enemy_shoot);
             shoot_cooldown = 110;
             state = FrogtarianState.shooting;
             world.Spawn(new InkShot(FeetPosition + new Vector2(direction * 75, -61), (float)(Math.PI/2 - direction * Math.PI/2 * 0.8f) , true));

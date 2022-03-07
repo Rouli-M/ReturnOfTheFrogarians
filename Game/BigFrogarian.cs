@@ -47,9 +47,16 @@ namespace Splatoon2D
             base.Update(gameTime, world, player);
         }
 
+        public override void Die(World world)
+        {
+            // copy pasted from  class. Should be in a base class
+            SoundEffectPlayer.Play(explosion);
+            base.Die(world);
+        }
+
         bool ViewPlayer(Player player)
         {
-            // copy pasted from frogarian class. Should be in a base class
+            // copy pasted from  class. Should be in a base class
             return (player.Hitbox.Intersects(ViewField) && !(player.is_on_ink && player.CurrentForm == Player.PlayerForm.squid));
         }
     }

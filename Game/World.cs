@@ -88,7 +88,9 @@ namespace Splatoon2D
 
             Stuff = new List<PhysicalObject>()
             {
-                //new BigFrogarian(new Vector2(-400, 0)),
+                new Bumper(new Vector2(-400, -100), (float)Math.PI/2),
+                new Bumper(new Vector2(1874, -419)),
+                new Bumper(new Vector2(-600, -100), turning:true),
                 new Frogtarian(new Vector2(-400, -1000)),
                 new Frogtarian(new Vector2(3637, -235)),
                 new Frogtarian(new Vector2(4279, -1448)),

@@ -59,6 +59,7 @@
     <Compile Include="Balloon.cs" />
     <Compile Include="Bell.cs" />
     <Compile Include="BigFrogarian.cs" />
+    <Compile Include="Bumper.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="DebugManager.cs" />
     <Compile Include="Egg.cs" />

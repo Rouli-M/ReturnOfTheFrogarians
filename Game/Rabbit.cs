@@ -12,6 +12,7 @@ namespace Splatoon2D
         RabbitState currentState;
         int charge_jump_frames;
         int jump_number;
+        int sprite_frames = 0;
         int prerace_timer = 350, intro_timer = 0;
         bool intro_said = false;
         Bell bell;
@@ -45,12 +46,14 @@ namespace Splatoon2D
             {
                 if(player.FeetPosition.X < FeetPosition.X + 50)
                 {
+                    CurrentSprite = rabbit_idle;
                     if (prerace_timer < 350) Say("Don't try to cheat!", 100, true, clear:true);
                     prerace_timer = 350;
                     if (lifetime % 500 == 244) Say("Get behind me when you're ready");
                 }
                 else
                 {
+                    CurrentSprite = rabbit_charge;
                     prerace_timer--;
                     if (prerace_timer == 300) Say("3...", 60, true, clear: true);
                     if (prerace_timer == 200) Say("2...", 60, true, clear: true);
@@ -113,14 +116,30 @@ namespace Splatoon2D
                     CurrentSprite = rabbit_idle;
                     FeetPosition = Spawn;
                 }
+                else if (CurrentSprite == rabbit_button)
+                {
+                    if (sprite_frames > 50) CurrentSprite = rabbit_press;
+                }
+                else if (CurrentSprite == rabbit_press)
+                {
+                    if (CurrentSprite.frame_event == 3)
+                    {
+                        Bumper.unlocked = true;
+                        SoundEffectPlayer.Play(victory);
+                    }
+                    if (sprite_frames > 200) CurrentSprite = rabbit_idle;
+                }
             }
 
             CurrentSprite.UpdateFrame(gameTime);
 
-            if(PreviousSprite != CurrentSprite)
+            if (PreviousSprite != CurrentSprite)
             {
+                sprite_frames = 0;
                 CurrentSprite.ResetAnimation();
             }
+            else sprite_frames++;
+
             base.Update(gameTime, world, player);
         }
 
@@ -131,6 +150,12 @@ namespace Splatoon2D
             CurrentSprite = rabbit_charge;
             bell.GetRaceReady();
         }
+
+        public override void SpeakEvent()
+        {
+            SoundEffectPlayer.RandomPlay(1f, (float)r.NextDouble() * 0.5f, rabbit_sound1, rabbit_sound2, rabbit_sound3);
+        }
+
 
         Vector2 GetJumpForce(int jumpID)
         {

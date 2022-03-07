@@ -42,16 +42,10 @@ namespace Splatoon2D
             FramePlaylistPitch = new List<float>() { };
         }
 
-        public static void RandomPlay(float Volume = 1f, float Pitch = 1f, params SoundEffect[] soundEffects)
+        public static void RandomPlay(float Volume = 1f, float Pitch = 0f, params SoundEffect[] soundEffects)
         {
-            int i = 0;
-
-            int random = 1;
-            while (random != 0)
-            {
-                random = Player.r.Next(0, soundEffects.Count());
-                if (random == 0) soundEffects[i].Play();
-            }
+            int random = Player.r.Next(0, soundEffects.Count());
+            soundEffects[random].Play();
         }
     }
 }

@@ -97,6 +97,24 @@
 /processorParam:Quality=Best
 /build:bell_sound.wav
 
+#begin bump.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bump.wav
+
+#begin bumper_bump.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bumper_bump.png
+
 #begin bumper_bump.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -120,6 +138,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:bumper_empty.png
+
+#begin bumper_empty.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bumper_empty.png
+
+#begin bumper_neutral.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:bumper_neutral.png
 
 #begin bumper_neutral.png
 /importer:TextureImporter
@@ -301,6 +343,12 @@
 /processorParam:TextureFormat=Color
 /build:enemy_paint_particle.png
 
+#begin enemy_shoot.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:enemy_shoot.wav
+
 #begin exclamation.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -312,6 +360,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:exclamation.png
+
+#begin explosion.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:explosion.wav
 
 #begin frog_attack.png
 /importer:TextureImporter
@@ -667,6 +721,18 @@
 /processorParam:TextureFormat=Color
 /build:marina_inked.png
 
+#begin marina1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:marina1.wav
+
+#begin marina2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:marina2.wav
+
 #begin pearl.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -678,6 +744,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:pearl.png
+
+#begin question.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:question.wav
 
 #begin rabbit/button_out.png
 /importer:TextureImporter
@@ -762,6 +834,24 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:rabbit/rise.png
+
+#begin rabbit/sound1.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:rabbit/sound1.wav
+
+#begin rabbit/sound2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:rabbit/sound2.wav
+
+#begin rabbit/sound3.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:rabbit/sound3.wav
 
 #begin rectangle.png
 /importer:TextureImporter
@@ -1099,6 +1189,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:uuuh.png
+
+#begin victory.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:victory.wav
 
 #begin walk.png
 /importer:TextureImporter

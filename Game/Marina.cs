@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Splatoon2D
 {
@@ -64,6 +65,12 @@ namespace Splatoon2D
 
             CurrentSprite.UpdateFrame(gameTime);
             base.Update(gameTime, world, player);
+        }
+
+
+        public override void SpeakEvent()
+        {
+            SoundEffectPlayer.RandomPlay(1f, (float)r.NextDouble() * 0.4f, marina_sound1, marina_sound2);
         }
 
         public string GetRandomExclamation()
