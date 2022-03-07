@@ -12,6 +12,8 @@ namespace Splatoon2D
     public class Bell : PhysicalObject
     {
         int egg_to_release;
+        bool race_ready = false;
+        public bool hit_by_player = false;
         SoundEffectInstance bell_sound_instance; // here because we want to stop it
         public Bell(Vector2 Spawn):base(new Vector2(50, 60), Spawn)
         {
@@ -19,6 +21,18 @@ namespace Splatoon2D
             Gravity = 0f;
             egg_to_release = 7;
         }
+
+        public void GetRaceReady()
+        {
+            race_ready = true;
+            hit_by_player = false;
+        }
+
+        public void GetRaceUnReady()
+        {
+            race_ready = false;
+        }
+
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
@@ -40,6 +54,7 @@ namespace Splatoon2D
                             egg_to_release--;
                             HUD.SpawnEgg(1, Hurtbox.Center.ToVector2());
                         }
+                        if (race_ready) hit_by_player = true;
                     }
                 }
                

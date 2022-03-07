@@ -14,7 +14,6 @@ namespace Splatoon2D
         public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn, new Vector2(30, -190))
         {
             CurrentSprite = marina_idle;
-            Gravity = 1f;
         }
 
         public override void Update(GameTime gameTime, World world, Player player)
@@ -46,9 +45,9 @@ namespace Splatoon2D
                     spoke_intro = true;
                     Say("Oh hey you!", 150);
                     Say("You're not a laywer\n  or something?", 200);
-                    Say("Good, we're gonna\nneed your help", 200);
+                    Say("Good, I'm gonna\nneed your help", 200);
                     Say("These Frogarians\nare everywhere...", 200);
-                    Say("I don't know how\nthey got here", 200);
+                    Say("I don't know how\nthey got there", 200);
                     Say("But obviously they should'nt\ninvade us like that", 200);
                     Say("Could you maybe\ntake care of them?", 200);
                 }

@@ -117,7 +117,6 @@ namespace Splatoon2D
                 new Egg(new Vector2(-2000 + 650 + 60, -140)), // left from spawn eggs
                 new Egg(new Vector2(-2000 + 650 + 60, -40)), // left from spawn eggs
 
-                new Bell(new Vector2(1348, -300 - 83)),
                 new Marina(new Vector2(823, -317)),
                 
                 // egg boxes
@@ -128,6 +127,10 @@ namespace Splatoon2D
                 new Egg(new Vector2(3630, -810), 5), // above hole field on right, have to jump
                 new Egg(new Vector2(3780, -1476), 5) // on plateform high above hole field
             };
+
+            Bell bell = new Bell(new Vector2(1348, -300 - 83));
+            Stuff.Add(bell);
+            Stuff.Add(new Rabbit(new Vector2(7500, -791), bell));
 
             Stuff.AddRange(EggLine(new Vector2(220, -100), new Vector2(0, -1), 3)); // line mur à droite du spawn
             Stuff.AddRange(EggLine(new Vector2(2300, -748), new Vector2(1, 0), 9)); // plateform above before hole filed

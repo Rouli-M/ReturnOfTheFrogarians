@@ -50,6 +50,11 @@ namespace Splatoon2D
             if (JustPressed(Keys.F11)) game.graphics.ToggleFullScreen();
             if (JustPressed(Keys.C)) world.PaintedGround.Clear();
             if (JustPressed(Keys.C)) world.PaintedWalls.Clear();
+            if (JustPressed(Keys.V)) world.Paint(new Rectangle(-10000, -10000,  20000, 20000));
+            if (JustPressed(Keys.X))
+            {
+                foreach (PhysicalObject o in world.Stuff) if (o is Hittable h) h.Die(world);
+            }
 
             if (!editor_enabled) return;
 

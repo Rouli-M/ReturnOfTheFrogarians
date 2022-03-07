@@ -21,12 +21,20 @@ namespace Splatoon2D
         internal bool is_particle = false, wallcollision = false, groundcollision = false, push_player = false, is_solid = false, player_hit = false, is_boxable = true, is_movable = true;
 
         public static Sprite bell_idle, bell_hit, marina_idle, marina_inked;
+        public static Sprite rabbit_idle, rabbit_disappear, rabbit_rise, rabbit_fall, rabbit_charge, rabbit_button, rabbit_press;
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             bell_idle = new Sprite(Content.Load<Texture2D>("bell_idle"));
             bell_hit = new Sprite(3, 209, 172, 100, Content.Load<Texture2D>("bell_ring"), loopAnimation:false);
             marina_idle = new Sprite(4, 129, 154, 220, Content.Load<Texture2D>("marina_idle"));
             marina_inked = new Sprite(2, 129, 154, 220, Content.Load<Texture2D>("marina_inked"));
+            rabbit_idle = new Sprite(2, 218/2, 162, 240, Content.Load<Texture2D>("rabbit/idle"));
+            rabbit_press = new Sprite(4, 484/4, 162, 130, Content.Load<Texture2D>("rabbit/press_button"), loopAnimation: false);
+            rabbit_disappear = new Sprite(6, 726/6, 162, 130, Content.Load<Texture2D>("rabbit/disappear"), loopAnimation:false);
+            rabbit_rise = new Sprite(Content.Load<Texture2D>("rabbit/rise"));
+            rabbit_fall = new Sprite(Content.Load<Texture2D>("rabbit/fall"));
+            rabbit_charge = new Sprite(Content.Load<Texture2D>("rabbit/charge_jump"));
+            rabbit_button = new Sprite(Content.Load<Texture2D>("rabbit/button_out"));
         }
 
         public PhysicalObject(Vector2 HurtboxSize, Vector2 FeetPosition, bool isParticle = false)
@@ -135,6 +143,11 @@ namespace Splatoon2D
         {
             if (o.FeetPosition.X >= FeetPosition.X) return 1;
             else return -1;
+        }
+
+        public float DistanceWith(PhysicalObject o)
+        {
+            return (o.Hurtbox.Center.ToVector2() - Hurtbox.Center.ToVector2()).Length();
         }
     }
 }
