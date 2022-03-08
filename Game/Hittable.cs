@@ -34,7 +34,7 @@ namespace Splatoon2D
             {
                 if(o is InkShot shot)
                 {
-                    if(ShotTouched(shot))
+                    if(ShotTouched(shot) && !shot.is_enemy)
                     {
                         ShotReaction(world, player, shot);
                     }

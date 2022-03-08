@@ -48,7 +48,6 @@ namespace Splatoon2D
                 */
                             new Rectangle(-2200, 0, 3000, 200) ,
                             new Rectangle(-3000, -2000, 1100, 7000) ,
-                            new Rectangle(-4000, -2000, 3000, 800) ,
                             new Rectangle(-3650, -500, 3650, 200) ,
                             new Rectangle(0, -60, 300, 200) ,
                             new Rectangle(250, -300, 1800, 500) ,
@@ -77,20 +76,34 @@ namespace Splatoon2D
                             new Rectangle(4100, -1400, 400, 110) ,
                             new Rectangle(6500, -875, 500, 215) ,
                             new Rectangle(7225, -775, 300, 95) ,
-                            new Rectangle(-2050, -2400, 10350, 535) ,
                             new Rectangle(7675, -2175, 625, 2655) ,
                             new Rectangle(3000, -200, 300, 7000) ,
                             new Rectangle(-2000, -1000, 650, 7000) ,
                             new Rectangle(5225, -1400, 200, 120) ,
                             new Rectangle(4775, -1400, 200, 110) ,
                             new Rectangle(3475, -1200, 700, 115) ,
+                            new Rectangle(-4000, -1600, 3000, 400) ,
+                            new Rectangle(-1975, -1950, 450, 420) ,
+                            new Rectangle(1925, -1550, 350, 360) ,
+                            new Rectangle(-825, -1600, 425, 65) ,
+                            new Rectangle(475, -1600, 500, 70) ,
+                            new Rectangle(425, -1600, 100, 280) ,
+                            new Rectangle(1225, -1900, 800, 715) ,
+                            new Rectangle(425, -1375, 400, 190) ,
+                            new Rectangle(-2050, -2400, 10350, 535) ,
             };
 
             Stuff = new List<PhysicalObject>()
             {
-                new Bumper(new Vector2(-400, -100), (float)Math.PI/2),
-                new Bumper(new Vector2(1874, -419)),
-                new Bumper(new Vector2(-600, -100), turning:true),
+                new Bumper(new Vector2(1874, -419), -0.3f),
+                new Bumper(new Vector2(-960, -940), (float)Math.PI/2), // full right
+                new Bumper(new Vector2(-490, -940),  0), // full right 2
+                new Bumper(new Vector2(1047, -1121),  -0.45f), 
+                new Bumper(new Vector2(3100 + 80, -1173 - 120 + 80),  -0.76f), // secret tofu access
+                new Bumper(new Vector2(2759, -1444 - 120),  -1.7f), // secret tofu access 2
+                //new Bumper(new Vector2(2620, -830),  0f), // secret tofu access bottom to ink
+                new Bumper(new Vector2(-5, -1526), turning:true),
+
                 new Frogtarian(new Vector2(-400, -1000)),
                 new Frogtarian(new Vector2(3637, -235)),
                 new Frogtarian(new Vector2(4279, -1448)),
@@ -101,7 +114,7 @@ namespace Splatoon2D
                 new BigFrogarian(new Vector2(5713, -725)),
                 new BigFrogarian(new Vector2(7228, -150)),
                 new BigFrogarian(new Vector2(5316, -1400)),
-                new BigFrogarian(new Vector2(6870, -875)),
+                new BigFrogarian(new Vector2(6870 + 50, -875)),
 
                 new Balloon(new Vector2(-270, -150)), // spawn balloon
                 new Balloon(new Vector2(591, -430)), // second balloon
@@ -112,7 +125,9 @@ namespace Splatoon2D
                 new Balloon(new Vector2(2041, -531)), // ballon at intersection top/bottom
                 new Balloon(new Vector2(1841, -827)), // ballon jsut above
                 new Balloon(new Vector2(7353, -1030)), // rabbit 1
-                new Balloon(new Vector2(7549, -1030)), // rabbit 1
+                new Balloon(new Vector2(7549, -1030)), // rabbit 2
+                new Balloon(new Vector2(-490, -1100)), // above bumper
+                new Balloon(new Vector2(4872, -1580)), // on plateform above in plateform series
 
 
                 new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
@@ -123,11 +138,15 @@ namespace Splatoon2D
                 
                 // egg boxes
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
-                new Egg(new Vector2(- 200, - 500 - 50), 5), // above spawn
+                new Egg(new Vector2(-1268, -571), 5), // above spawn
                 new Egg(new Vector2(2986, -472), 5), // above hole field, have to drop from above
                 new Egg(new Vector2(3150, -818), 5), // above hole field, have to jump
                 new Egg(new Vector2(3630, -810), 5), // above hole field on right, have to jump
-                new Egg(new Vector2(3780, -1476), 5) // on plateform high above hole field
+                new Egg(new Vector2(3780, -1476), 5), // on plateform high above hole field
+                new Egg(new Vector2(520 + 70, -1429), 5), // hidden stash in small cove end game
+                new Egg(new Vector2(570 + 70, -1459), 5), // hidden stash in small cove end game
+                new Egg(new Vector2(620 + 70, -1429), 5), // hidden stash in small cove end game
+                new Egg(new Vector2(1668, -676), 5), // above statue have to use bumper
             };
 
             Bell bell = new Bell(new Vector2(1348, -300 - 83));
@@ -140,6 +159,8 @@ namespace Splatoon2D
             Stuff.AddRange(EggLine(new Vector2(7440, -660), new Vector2(0, 1), 6)); // On wall bottom full right
             Stuff.AddRange(EggLine(new Vector2(5025, -1501), new Vector2(1, 0), 3)); // au dessus du vide en jump des plateformes
             Stuff.AddRange(EggLine(new Vector2(4557, -1501), new Vector2(1, 0), 3)); // deuxième au dessus du vide en jump des plateformes
+            Stuff.AddRange(EggLine(new Vector2(-970, -1330), new Vector2(1, 0), 7)); // above after bumpers
+            Stuff.AddRange(EggLine(new Vector2(1668, -626), new Vector2(0, 1), 5)); // statue below eggbox
 
             //Stuff.Clear();
         }
@@ -439,6 +460,9 @@ namespace Splatoon2D
                 (new Vector2(-663, -505), statue5),
                 (new Vector2(-1055, -505), statue1),
                 (new Vector2(-663 + 392, -505), statue1),
+                (new Vector2(5954, -1380), statue1),
+                (new Vector2(2601, -700), statue1),
+                (new Vector2(-766, -1270), statue1),
             };
 
             FrontDecor = new List<(Vector2, Sprite)>

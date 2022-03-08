@@ -43,6 +43,7 @@ namespace Splatoon2D
         public int form_frames { get; private set; } 
         public int state_frames { get; private set; }
         public int coyote_frames = 0; // if > 0, legally allowed to jump
+        public int dash_frames = 0; // cooldown
         public int shoot_cooldown = 0, heal_cooldown = 0, cant_squid_cooldown = 0;
 
         public Player():base(human_size, new Vector2(0,0))
@@ -77,13 +78,18 @@ namespace Splatoon2D
             PreviousState = CurrentState;
             Vector2 PreviousVelocity = Velocity;
 
-            if (FeetPosition.Y > 1500)
-            {
-                FeetPosition = new Vector2(0, -1);
-                Velocity = new Vector2(0, 0);
-            }
-
             GroundFactor = 0.5f;
+            if(dash_frames > 0)
+            {
+                dash_frames--;
+                Gravity = 0.3f;
+                
+                if (dash_frames == 0)
+                {
+                    Velocity.X *= 0.5f;
+                    Gravity = 0.7f;
+                }
+            }
 
             if(CurrentForm == PlayerForm.kid) HitboxSize = new Vector2(50, 130);
             else HitboxSize = new Vector2(50, 30);
@@ -161,6 +167,7 @@ namespace Splatoon2D
                                     else if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
 
                                     /*
+                                     * Code supposed to make the walk/run animation play in reverse when walking backward but it looks weird
                                     if (Direction != Input.movement_direction)
                                     {
                                         walk.reverse = true;
@@ -180,7 +187,7 @@ namespace Splatoon2D
                                     if (Input.aim_direction != 0) Direction = Input.aim_direction;
                                     else if (Input.movement_direction != 0) Direction = Math.Sign(Input.movement_direction);
 
-                                    Velocity.X *= 0.9f;
+                                    if(dash_frames == 0) Velocity.X *= 0.9f;
                                     ApplyForce(new Vector2(0.5f * Input.movement_direction, 0));
                                     if (IsOnGround(world)) CurrentState = PlayerState.idle;
                                     break;
@@ -279,8 +286,10 @@ namespace Splatoon2D
                                 {
                                     if(Math.Abs(Velocity.X) > 4 && Math.Abs(Velocity.Y) < 2f)
                                     {
-                                        ApplyForce(new Vector2(0, -0.3f)); // long jump 
+                                        ApplyForce(new Vector2(0, -0.3f)); // long jump  float effect
                                     }
+                                    if(Velocity.X == 0 && Velocity.Y >= 0) 
+                                        ApplyForce(new Vector2(Input.movement_vector.X * 3, 0));
                                     if (IsOnGround(world) || is_on_ink) CurrentState = PlayerState.idle;
                                     break;
                                 }

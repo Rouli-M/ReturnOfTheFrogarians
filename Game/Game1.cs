@@ -28,6 +28,8 @@ namespace Splatoon2D
         static public float GlobalResizeRatio, BadFramerateRegister;
         static List<Rectangle> RectangleToDrawList = new List<Rectangle>() { };
         int intro_frames; //disclaimer when launching the game
+        const int INTRO_FRAMES = 600;
+        Sprite loading_screen, loading_animation;
 
         public Game1()
         {
@@ -83,7 +85,10 @@ namespace Splatoon2D
             var scaleY = 1f;
 
             base.Initialize();
-
+            intro_frames = INTRO_FRAMES;
+#if DEBUG
+            intro_frames = 0;
+#endif
 
             matrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
             player = new Player();
@@ -110,6 +115,8 @@ namespace Splatoon2D
             InkShot.LoadContent(Content);
             Hittable.LoadContent(Content);
             Egg.LoadContent(Content);
+            loading_animation = new Sprite(15, 100, 1500/15, 100,  Content.Load<Texture2D>("loading"));
+            loading_screen = new Sprite(Content.Load<Texture2D>("welcome"));
             base.LoadContent(); // ???
         }
 
@@ -129,11 +136,19 @@ namespace Splatoon2D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
+            if(intro_frames > 0 && intro_frames < INTRO_FRAMES)
+            {
+                intro_frames--;
+                loading_animation.UpdateFrame(gameTime);
+                return;
+            }
             ks = Keyboard.GetState();
             GamePadCapabilities capabilities = GamePad.GetCapabilities(PlayerIndex.One);
             // If there a controller attached, handle it
+#if DEBUG
+            DebugManager.Update(this, gameTime, world, player, ks, Mouse.GetState());
             if(DebugManager.SelectedGround == Rectangle.Empty)
+#endif
             {
                 Input.Update(player);
                 player.Update(gameTime, world, player);
@@ -142,8 +157,9 @@ namespace Splatoon2D
             Camera.Update(player, world);
             HUD.Update(player);
             SoundEffectPlayer.Update();
-            DebugManager.Update(this, gameTime, world, player, ks, Mouse.GetState());
             base.Update(gameTime);
+
+            if(intro_frames == INTRO_FRAMES) intro_frames--; // shitty
         }
 
         /// <summary>
@@ -155,6 +171,14 @@ namespace Splatoon2D
             totalGameTime += gameTime.ElapsedGameTime.Milliseconds;
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.AnisotropicWrap, null, null, null, transformMatrix: matrix);
 
+            if (intro_frames > 0)
+            {
+                loading_screen.ScreenDraw(spriteBatch, new Vector2(0, 0));
+                loading_animation.ScreenDraw(spriteBatch, new Vector2(1100, 600));
+                spriteBatch.End();
+                return;
+            }
+
             GraphicsDevice.Clear(Color.White);
             world.Draw(spriteBatch);
             spriteBatch.End();
@@ -163,7 +187,9 @@ namespace Splatoon2D
             player.Draw(spriteBatch);
             HUD.Draw(spriteBatch);
 
+#if DEBUG
             DebugManager.Draw(spriteBatch);
+#endif
             spriteBatch.End();
 
             base.Draw(gameTime);

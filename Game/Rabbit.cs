@@ -14,7 +14,7 @@ namespace Splatoon2D
         int jump_number;
         int sprite_frames = 0;
         int prerace_timer = 350, intro_timer = 0;
-        bool intro_said = false;
+        bool intro_said = false, waiting_for_loser = false;
         Bell bell;
         Vector2 Spawn;
 
@@ -95,12 +95,7 @@ namespace Splatoon2D
                             }
                             else
                             {
-                                Say("Too slow!");
-                                Say("Have you been eating correctly?", () => 
-                                { 
-                                    CurrentSprite = rabbit_disappear;
-                                    Say("Try again I guess");
-                                }, 180);
+                                waiting_for_loser = true;
                             }
                             bell.GetRaceUnReady();
                         }
@@ -110,7 +105,17 @@ namespace Splatoon2D
             }
             else if(currentState == RabbitState.race_end)
             {
-                if (CurrentSprite == rabbit_disappear && CurrentSprite.isOver)
+                if(CurrentSprite == rabbit_idle && waiting_for_loser && DistanceWith(player) < 300)
+                {
+                    waiting_for_loser = false;
+                    Say("Too slow!");
+                    Say("Have you been eating correctly?", () =>
+                    {
+                        CurrentSprite = rabbit_disappear;
+                        Say("Try again I guess");
+                    }, 180);
+                }
+                else if (CurrentSprite == rabbit_disappear && CurrentSprite.isOver)
                 {
                     currentState = RabbitState.race_wait;
                     CurrentSprite = rabbit_idle;
@@ -127,7 +132,11 @@ namespace Splatoon2D
                         Bumper.unlocked = true;
                         SoundEffectPlayer.Play(victory);
                     }
-                    if (sprite_frames > 200) CurrentSprite = rabbit_idle;
+                    if (sprite_frames > 200)
+                    {
+                        CurrentSprite = rabbit_idle;
+                        Say("Happy bouncing!");
+                    }
                 }
             }
 
