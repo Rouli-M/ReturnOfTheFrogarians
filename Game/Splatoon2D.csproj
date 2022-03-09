@@ -14,6 +14,7 @@
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -55,6 +55,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Balloon.cs" />
     <Compile Include="Bell.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="Marina.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="Pearl.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="Rabbit.cs" />
     <Compile Include="SoundEffectPlayer.cs" />
     <Compile Include="Sprite.cs" />
+    <Compile Include="Tofu.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
   <ItemGroup>

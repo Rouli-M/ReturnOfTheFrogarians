@@ -11,7 +11,7 @@ namespace Splatoon2D
     public class Marina:NPC
     {
         int frame_since_last_ink_detected = 10000;
-        bool spoke_intro = false;
+        bool spoke_intro = false, has_given_box = false;
         public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn, new Vector2(30, -190))
         {
             CurrentSprite = marina_idle;
@@ -41,6 +41,11 @@ namespace Splatoon2D
 
             if ((player.FeetPosition - FeetPosition).Length() < 400)
             {
+                if (HUD.egg_count >= 190 && !has_given_box)
+                {
+                    Say("Since you like them so much,\n take this, weirdo.", () => { world.Spawn(new Egg(FeetPosition + new Vector2(0, -150), 5)); Say("", 100, priority: true); }, 200, once: true, priority: true);
+                    has_given_box = true;
+                }
                 if (!spoke_intro)
                 {
                     spoke_intro = true;
@@ -52,7 +57,13 @@ namespace Splatoon2D
                     Say("But obviously they should'nt\ninvade us like that", 200);
                     Say("Could you maybe\ntake care of them?", 200);
                 }
-                if (HUD.egg_count > 75) Say("Woah, that's a lot of eggs!", 200, false, true);
+                if (HUD.egg_count > 150) Say("This egg obsession is\nstarting to be weird.", 200, false, true);
+                else if (HUD.egg_count > 100)
+                {
+                    Say("What are you going to do\nwith all these eggs?", 200, false, true);
+                    Say("An omelet?", 120, false, true);
+                }
+                else if (HUD.egg_count > 75) Say("Woah, that's a lot of eggs!", 200, false, true);
                 else if (HUD.egg_count > 50) Say("You've been doing great,\n    keep it up!", 200, false, true);
                 else if (HUD.egg_count > 10) Say("You get to keep the eggs,\n   lucky you!", 200, false, true);
             }

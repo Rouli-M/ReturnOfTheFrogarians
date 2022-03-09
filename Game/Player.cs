@@ -123,7 +123,7 @@ namespace Splatoon2D
                 coyote_frames = 10;
                 inked_coyote = is_on_ink;
             }
-            if (is_on_ink_wall) coyote_frames = 0;
+            if (is_on_ink_wall && CurrentForm == PlayerForm.squid) coyote_frames = 0;
 
             // random bit of code to stop swim sound
             if (previous_is_on_ink && !is_on_ink) swim_sound_instance.Stop();
@@ -425,8 +425,9 @@ namespace Splatoon2D
 
         public void Jump()
         {
+            Console.WriteLine("Jump registered");
             if (coyote_frames == 0) return;
-            //Console.WriteLine("Jump registered");
+            
             bool small = !is_on_ink && CurrentForm == PlayerForm.squid && !inked_coyote;
 
             if (Velocity.X > 20) Velocity.X = 20;

@@ -12,12 +12,14 @@ namespace Splatoon2D
     {
         static Sprite player_shot_sprite, enemy_shot_sprite, player_shot_denied_sprite;
         Sprite ink_shot_sprite;
-        public bool is_enemy;
-        public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false) : base(is_enemy ? new Vector2(25, 25) : new Vector2(5,5), SpawnPos)
+        public bool is_enemy, is_fast;
+        public InkShot(Vector2 SpawnPos, float Angle, bool is_enemy = false, bool fast = false) : base(is_enemy ? new Vector2(25, 25) : new Vector2(5,5), SpawnPos)
         {
             Velocity = (is_enemy ? 4.5f : 17) * new Vector2((float)Math.Cos(Angle), - (float)Math.Sin(Angle));
             Gravity = 0f;
             this.is_enemy = is_enemy;
+            this.is_fast = fast;
+            if (fast) Velocity *= 2;
             if (is_enemy) ink_shot_sprite = enemy_shot_sprite;
             else ink_shot_sprite = player_shot_sprite;
         }
@@ -25,6 +27,7 @@ namespace Splatoon2D
         public override void Update(GameTime gameTime, World world, Player player)
         {
             if (lifetime > 14 && !is_enemy) Gravity = 2f;
+            else if(is_fast) Gravity = 0.1f;
             else Gravity = 0.05f;
             XTreshold = 0.001f;
 

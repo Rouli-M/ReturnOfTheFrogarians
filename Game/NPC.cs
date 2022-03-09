@@ -33,7 +33,10 @@ namespace Splatoon2D
                     Discourse.RemoveAt(0);
                     // Remove next text if it's too short
                     while (Discourse.Count > 1 && Discourse[0].time > Discourse[0].total_time - 20)
+                    {
+                        Discourse[0].todo();
                         Discourse.RemoveAt(0);
+                    }
                 }
                 else
                 {

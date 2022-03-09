@@ -76,21 +76,22 @@ namespace Splatoon2D
                             new Rectangle(4100, -1400, 400, 110) ,
                             new Rectangle(6500, -875, 500, 215) ,
                             new Rectangle(7225, -775, 300, 95) ,
-                            new Rectangle(7675, -2175, 625, 2655) ,
                             new Rectangle(3000, -200, 300, 7000) ,
                             new Rectangle(-2000, -1000, 650, 7000) ,
                             new Rectangle(5225, -1400, 200, 120) ,
                             new Rectangle(4775, -1400, 200, 110) ,
                             new Rectangle(3475, -1200, 700, 115) ,
                             new Rectangle(-4000, -1600, 3000, 400) ,
-                            new Rectangle(-1975, -1950, 450, 420) ,
-                            new Rectangle(1925, -1550, 350, 360) ,
                             new Rectangle(-825, -1600, 425, 65) ,
                             new Rectangle(475, -1600, 500, 70) ,
                             new Rectangle(425, -1600, 100, 280) ,
                             new Rectangle(1225, -1900, 800, 715) ,
                             new Rectangle(425, -1375, 400, 190) ,
+                            new Rectangle(-1975, -1950, 450, 420) ,
                             new Rectangle(-2050, -2400, 10350, 535) ,
+                            new Rectangle(7675, -1675, 625, 2555) ,
+                            new Rectangle(7925, -1925, 375, 345) ,
+                            new Rectangle(1925, -1300, 350, 110) ,
             };
 
             Stuff = new List<PhysicalObject>()
@@ -126,8 +127,13 @@ namespace Splatoon2D
                 new Balloon(new Vector2(1841, -827)), // ballon jsut above
                 new Balloon(new Vector2(7353, -1030)), // rabbit 1
                 new Balloon(new Vector2(7549, -1030)), // rabbit 2
-                new Balloon(new Vector2(-490, -1100)), // above bumper
+                //new Balloon(new Vector2(-490, -1100)), // above bumper
                 new Balloon(new Vector2(4872, -1580)), // on plateform above in plateform series
+                new Balloon(new Vector2(2940, -1420)), // above bumper right
+                new Balloon(new Vector2(0, -1745)), // above bumper turning
+                new Balloon(new Vector2(1475, -860)), // above statue have to use bumper
+                new Balloon(new Vector2(6330, -836)), // on narrow ascending space to rabbit
+                new Balloon(new Vector2(4288, -1700)), // above highest frogarian
 
 
                 new Egg(new Vector2(-2000 + 650 + 60, -230)), // left from spawn eggs
@@ -135,6 +141,8 @@ namespace Splatoon2D
                 new Egg(new Vector2(-2000 + 650 + 60, -40)), // left from spawn eggs
 
                 new Marina(new Vector2(823, -317)),
+                new Pearl(new Vector2(-1382, -1608)),
+                new Tofu(new Vector2(7841, -1689)),
                 
                 // egg boxes
                 new Egg(new Vector2(-1700, -1000 - 50), 5), // hidden top left
@@ -146,6 +154,9 @@ namespace Splatoon2D
                 new Egg(new Vector2(520 + 70, -1429), 5), // hidden stash in small cove end game
                 new Egg(new Vector2(570 + 70, -1459), 5), // hidden stash in small cove end game
                 new Egg(new Vector2(620 + 70, -1429), 5), // hidden stash in small cove end game
+                new Egg(new Vector2(0, -0) + new Vector2(2132, -1380), 5), // hidden stash in high cove end game
+                new Egg(new Vector2(50, -30) + new Vector2(2132, -1380), 5), // hidden stash in high cove end game
+                new Egg(new Vector2(100, -0)+ new Vector2(2132, -1380), 5), // hidden stash in high cove end game
                 new Egg(new Vector2(1668, -676), 5), // above statue have to use bumper
             };
 

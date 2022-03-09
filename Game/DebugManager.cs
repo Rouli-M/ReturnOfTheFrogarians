@@ -54,7 +54,11 @@ namespace Splatoon2D
             if (JustPressed(Keys.B)) Bumper.unlocked = !Bumper.unlocked;
             if (JustPressed(Keys.X))
             {
-                foreach (PhysicalObject o in world.Stuff) if (o is Hittable h) h.Die(world);
+                foreach (PhysicalObject o in world.Stuff)
+                {
+                    if (o is Hittable h) h.Die(world);
+                    if (o is Egg e) HUD.SpawnEgg(e.count, e.Hurtbox.Center.ToVector2());
+                }
             }
 
             if (!editor_enabled) return;

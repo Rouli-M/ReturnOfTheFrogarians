@@ -28,7 +28,7 @@ namespace Splatoon2D
         static public float GlobalResizeRatio, BadFramerateRegister;
         static List<Rectangle> RectangleToDrawList = new List<Rectangle>() { };
         int intro_frames; //disclaimer when launching the game
-        const int INTRO_FRAMES = 600;
+        const int INTRO_FRAMES = 750;
         Sprite loading_screen, loading_animation;
 
         public Game1()

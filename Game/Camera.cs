@@ -17,7 +17,8 @@ namespace Splatoon2D
             if(player.lifetime % 5 == 0) ScreenShake *= -0.5f;
 
             if (static_cam) Zoom = 0.5f;
-            else Zoom = 1.3f;
+            else if(Bumper.unlocked) Zoom = 1.1f;
+            else Zoom = RegularZoom;
 
             CameraOffset = new Vector2();
 

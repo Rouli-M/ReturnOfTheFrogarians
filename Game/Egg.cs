@@ -10,7 +10,7 @@ namespace Splatoon2D
 {
     public class Egg:PhysicalObject
     {
-        int count;
+        public int count;
         Vector2 offset = Vector2.Zero;
         private static Sprite egg, egg_box;
         public Egg(Vector2 Spawn, int count = 1):base(new Vector2(25, 25), Spawn)

@@ -151,6 +151,18 @@
 /processorParam:TextureFormat=Color
 /build:crypto1.png
 
+#begin crypto1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:crypto1.png
+
 #begin crypto2.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -162,6 +174,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:crypto2.png
+
+#begin crypto2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:crypto2.png
+
+#begin crypto3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:crypto3.png
 
 #begin crypto3.png
 /importer:TextureImporter
@@ -661,18 +697,6 @@
 /processorParam:TextureFormat=Color
 /build:loading.png
 
-#begin loading.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:loading.png
-
 #begin marina_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -708,6 +732,18 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:marina2.wav
+
+#begin pearl.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:pearl.png
 
 #begin pearl.png
 /importer:TextureImporter
@@ -1154,6 +1190,18 @@
 /processorParam:TextureFormat=Color
 /build:tileset/wall_paint_green.png
 
+#begin tofu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:tofu.png
+
 #begin uuuh.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -1195,18 +1243,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:walk_slow.png
-
-#begin welcome.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:welcome.png
 
 #begin welcome.png
 /importer:TextureImporter

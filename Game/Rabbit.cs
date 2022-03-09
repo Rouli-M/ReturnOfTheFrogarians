@@ -49,7 +49,7 @@ namespace Splatoon2D
                     CurrentSprite = rabbit_idle;
                     if (prerace_timer < 350) Say("Don't try to cheat!", 100, true, clear:true);
                     prerace_timer = 350;
-                    if (lifetime % 500 == 244) Say("Get behind me when you're ready");
+                    if (lifetime % 500 == 244 && DistanceWith(player) < 600) Say("Get behind me when you're ready");
                 }
                 else
                 {
