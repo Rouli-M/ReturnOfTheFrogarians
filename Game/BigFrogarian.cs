@@ -63,6 +63,7 @@ namespace Splatoon2D
 
         void Shoot(World world)
         {
+            SoundEffectPlayer.Play(enemy_shoot);
             world.Spawn(new InkShot(FeetPosition + new Vector2(+115, -30), (float)(Math.PI / 2 - Math.PI / 2 * 0.8f), true, queue_big_shot_frames > 0));
             world.Spawn(new InkShot(FeetPosition + new Vector2(-115, -30), (float)(Math.PI / 2 + Math.PI / 2 * 0.8f), true, queue_big_shot_frames > 0));
             world.Spawn(new InkShot(FeetPosition + new Vector2(+75, -91), (float)(Math.PI / 2 - Math.PI / 2 * 0.2f), true , queue_big_shot_frames > 0));
