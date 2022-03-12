@@ -85,6 +85,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="Tofu.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="Zapfish.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

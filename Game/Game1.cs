@@ -136,6 +136,7 @@ namespace Splatoon2D
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (!this.IsActive) return;
             if(intro_frames > 0 && intro_frames < INTRO_FRAMES)
             {
                 intro_frames--;

@@ -15,7 +15,7 @@ namespace Splatoon2D
         // I'm coding mainly to myself. Attributes are often static
         // or public just because it's convenient on the moment. 
 
-        static Sprite idle, walk, jump, walk_slow, to_squid, to_kid;
+        static Sprite idle, walk, jump, walk_slow, to_squid, to_kid, celebrating;
         static Sprite squid_idle, squid_walk, squid_hidden, squid_rise, squid_fall;
         static Sprite gun_rest, gun_shoot, gun_cocked;
         static Sprite enemy_ink_particle;
@@ -28,7 +28,7 @@ namespace Splatoon2D
         public static Vector2 human_size;
 
         public Vector2 MaskPosition, MaskSpriteOffset, CurrentMaskPosition, LastTrailGenerated;
-        public enum PlayerState { idle, run, jump, attack, to_squid, to_kid }
+        public enum PlayerState { idle, run, jump, attack, to_squid, to_kid, celebrating }
         public PlayerState CurrentState, PreviousState;
         public enum PlayerForm { kid, squid }
         public PlayerForm CurrentForm, PreviousForm;
@@ -79,7 +79,8 @@ namespace Splatoon2D
             Vector2 PreviousVelocity = Velocity;
 
             GroundFactor = 0.5f;
-            if(dash_frames > 0)
+            if (CurrentState == PlayerState.celebrating) Gravity = 0f;
+            else if(dash_frames > 0)
             {
                 dash_frames--;
                 Gravity = 0.3f;
@@ -383,6 +384,8 @@ namespace Splatoon2D
                         break;
                     }
             }
+            if (CurrentState == PlayerState.celebrating)
+                CurrentSprite = celebrating;
 
             if (CurrentSprite != PreviousSprite) CurrentSprite.ResetAnimation();
             CurrentSprite.direction = Direction;
@@ -610,6 +613,7 @@ namespace Splatoon2D
             gun_cocked = new Sprite(Content.Load<Texture2D>("gun_cocked"));
             gun_shoot = new Sprite(2, 85, 39, 70, Content.Load<Texture2D>("gun_shoot"), loopAnimation:false);
             enemy_ink_particle = new Sprite(Content.Load<Texture2D>("enemy_paint_particle"));
+            celebrating = new Sprite(Content.Load<Texture2D>("celebrating"));
 
             slide_sound = Content.Load<SoundEffect>("slide_tiny");
             enter_ink_sound = Content.Load<SoundEffect>("splash");

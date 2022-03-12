@@ -9,7 +9,7 @@ namespace Splatoon2D
 {
     public class Pearl:NPC
     {
-        int crypto_count = 0;
+        int crypto_count = 0, frame_since_last_ink_detected = 0;
         bool said_dialog = false;
         bool has_given_box = false;
         public Pearl(Vector2 Spawn) : base(new Vector2(100, 100), Spawn, new Vector2(180, -220))
@@ -19,7 +19,23 @@ namespace Splatoon2D
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
-            if(lifetime % 140 == 12)
+            foreach (PhysicalObject o in world.Stuff)
+            {
+                if (o is InkShot s)
+                {
+                    if (Hurtbox.Contains(s.FeetPosition))
+                    {
+                        s.Cancel(world);
+                        if (CurrentSprite != pearl_inked) Say(GetRandomExclamation(), 70, true);
+                        CurrentSprite = pearl_inked;
+                        frame_since_last_ink_detected = 0;
+                    }
+                }
+            }
+
+            frame_since_last_ink_detected++;
+
+            if (lifetime % 140 == 12)
             {
                 Sprite crypto = crypto1;
                 if (crypto_count % 3 == 1) crypto = crypto2;
@@ -51,10 +67,35 @@ namespace Splatoon2D
                     if (lineID == 2) Say("NOOOOOOOOOOOOOO", 120);
                     if (lineID == 3) Say("it's going to go up I'm sure of it!!!", 120);
                     if (lineID == 4) Say("deregulate the finance world!!!", 120);
+                    if (lineID == 5) Say("my whalet id is s0ci22c3wt5", 120);
                 }
             }
-                CurrentSprite.UpdateFrame(gameTime);
+
+
+            if (CurrentSprite == pearl_inked && frame_since_last_ink_detected > 70)
+            {
+                CurrentSprite = pearl_sprite;
+            }
+
+            CurrentSprite.UpdateFrame(gameTime);
             base.Update(gameTime, world, player);
+
+        }
+
+        public string GetRandomExclamation()
+        {
+            int id = r.Next(0, 11);
+            if (id == 0) return "woah!!";
+            if (id == 2) return "stop dat!!";
+            if (id == 3) return "??? what";
+            if (id == 4) return "why ARE YOU SHOOTING";
+            if (id == 5) return "let me trade!!!!";
+            if (id == 6) return "this is just like highschool";
+            if (id == 7) return "is that an unregistered weapon???";
+            if (id == 8) return "you want to start a war or somethin?";
+            if (id == 9) return "of course you have purple hair and pronouns";
+            if (id == 10) return "are you sanitized??";
+            return "hey!!";
         }
     }
 }

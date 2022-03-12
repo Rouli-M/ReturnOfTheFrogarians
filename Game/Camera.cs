@@ -26,7 +26,12 @@ namespace Splatoon2D
 
             if (!static_cam)
             {
-                 if (totally_fixed) CenterPositionDestination = new Vector2(400, -150);
+                if (player.CurrentState == Player.PlayerState.celebrating)
+                {
+                    CenterPositionDestination = player.FeetPosition + new Vector2(-100, 30);
+                    Zoom = 1.5f;
+                }
+                else if (totally_fixed) CenterPositionDestination = new Vector2(400, -150);
                 else if (player_locked || player.CurrentForm == Player.PlayerForm.squid) CenterPositionDestination = new Vector2((player.FeetPosition.X), player.FeetPosition.Y - 50);
                 else
                 {

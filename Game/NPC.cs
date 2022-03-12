@@ -29,13 +29,15 @@ namespace Splatoon2D
             {
                 if (Discourse[0].time == Discourse[0].total_time)
                 {
-                    Discourse[0].todo();
+                    Action do_next = Discourse[0].todo;
                     Discourse.RemoveAt(0);
+                    do_next();
                     // Remove next text if it's too short
                     while (Discourse.Count > 1 && Discourse[0].time > Discourse[0].total_time - 20)
                     {
-                        Discourse[0].todo();
+                        Action do_next2 = Discourse[0].todo;
                         Discourse.RemoveAt(0);
+                        do_next2();
                     }
                 }
                 else

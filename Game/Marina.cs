@@ -43,7 +43,9 @@ namespace Splatoon2D
             {
                 if (HUD.egg_count >= 190 && !has_given_box)
                 {
-                    Say("Since you like them so much,\n take this, weirdo.", () => { world.Spawn(new Egg(FeetPosition + new Vector2(0, -150), 5)); Say("", 100, priority: true); }, 200, once: true, priority: true);
+                    Say("Since you like them so much,\n take this, weirdo.", () => { 
+                        world.Spawn(new Egg(FeetPosition + new Vector2(0, -150), 5)); Say("", 100, priority: true); return;
+                    }, 200, once: true, priority: true);
                     has_given_box = true;
                 }
                 if (!spoke_intro)
@@ -53,9 +55,9 @@ namespace Splatoon2D
                     Say("You're not a laywer\n  or something?", 200);
                     Say("Good, I'm gonna\nneed your help", 200);
                     Say("These Frogarians\nare everywhere...", 200);
-                    Say("I don't know how\nthey got there", 200);
-                    Say("But obviously they should'nt\ninvade us like that", 200);
-                    Say("Could you maybe\ntake care of them?", 200);
+                    Say("And the zapfish\ndisappeared again", 200);
+                    Say("We need it for\nelectricity and stuff", 200);
+                    Say("Could you maybe\nget it back?", 200);
                 }
                 if (HUD.egg_count > 150) Say("This egg obsession is\nstarting to be weird.", 200, false, true);
                 else if (HUD.egg_count > 100)

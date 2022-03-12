@@ -22,8 +22,8 @@ namespace Splatoon2D
 
         public static Sprite bell_idle, bell_hit, marina_idle, marina_inked;
         public static Sprite rabbit_idle, rabbit_disappear, rabbit_rise, rabbit_fall, rabbit_charge, rabbit_button, rabbit_press;
-        public static Sprite pearl_sprite, tofu_sprite, crypto1, crypto2, crypto3;
-        public static Sprite bump_locked, bump_idle, bump_bump;
+        public static Sprite pearl_sprite, pearl_inked, tofu_sprite, crypto1, crypto2, crypto3;
+        public static Sprite bump_locked, bump_idle, bump_bump, zapfish_idle, zapfish_win;
         public static SoundEffect marina_sound1, marina_sound2, explosion, bump, question_sound, victory, enemy_shoot, rabbit_sound1, rabbit_sound2, rabbit_sound3;
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
@@ -52,6 +52,9 @@ namespace Splatoon2D
             bump_idle = new Sprite(Content.Load<Texture2D>("bumper_neutral"));
             bump_bump = new Sprite(2, 123, 75, 88, Content.Load<Texture2D>("bumper_bump"), loopAnimation: false);
             bump_locked = new Sprite(Content.Load<Texture2D>("bumper_empty"));
+            pearl_inked = new Sprite(Content.Load<Texture2D>("pearl_protect"));
+            zapfish_idle = new Sprite(2, 366/2, 145, 230, Content.Load<Texture2D>("zapfish"));
+            zapfish_win = new Sprite(Content.Load<Texture2D>("zapfish_celebrate"));
 
             // misc sound effect
             explosion = Content.Load<SoundEffect>("explosion");

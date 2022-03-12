@@ -96,6 +96,7 @@ namespace Splatoon2D
 
             Stuff = new List<PhysicalObject>()
             {
+                new Zapfish(new Vector2(1213, -570)),
                 new Bumper(new Vector2(1874, -419), -0.3f),
                 new Bumper(new Vector2(1510, -580), 0.3f),
                 new Bumper(new Vector2(-960, -940), (float)Math.PI/2), // full right

@@ -14,14 +14,23 @@ namespace Splatoon2D
         public static Sprite MouseSprite, EggSprite, SmallEggSprite, EggBoxSprite;
         public static SoundEffect collect_sound2; 
         public static Sprite dmg1, dmg2, dmg3, dmg4, dmg5;
+        public static Sprite congrats, on, beating, the, game;
         private static SpriteFont RouliFont;
         private static Random R = new Random();
         private static Player _player;
         private static List<(int, Vector2, Vector2)> eggs = new List<(int, Vector2, Vector2)>();
         private static Vector2 EggAttractionPoint = new Vector2(100, 600);
-        public static int egg_count = 0;
+        public static int egg_count = 0, win_frames = 0;
         public static void Draw(SpriteBatch spriteBatch)
         {
+            // win overlay
+            if (win_frames > 50) congrats.ScreenDraw(spriteBatch, new Vector2(0, 0));
+            if (win_frames > 75) on.ScreenDraw(spriteBatch, new Vector2(630, 100));
+            if (win_frames > 100) beating.ScreenDraw(spriteBatch, new Vector2(800, 0));
+            if (win_frames > 125) the.ScreenDraw(spriteBatch, new Vector2(70, 550));
+            if (win_frames > 150) game.ScreenDraw(spriteBatch, new Vector2(600, 470));
+
+            if (win_frames > 0) return;
             Sprite overlay_dmg_sprite = null;
             if (_player.damage > 5 * 100 / 6f) overlay_dmg_sprite = dmg5;
             else if (_player.damage > 4 * 100 / 6f) overlay_dmg_sprite = dmg4;
@@ -67,6 +76,19 @@ namespace Splatoon2D
                 else updatedEggs.Add((e.i + 1, e.p + new_v, new_v));
             }
             eggs = updatedEggs;
+
+            if(win_frames > 0)
+            {
+                win_frames++;
+
+                if (win_frames > 500)
+                {
+                    player.CurrentState = Player.PlayerState.jump;
+                    player.Velocity = new Vector2(0, -8f);
+                    win_frames = 0;
+                    player.Gravity = 0.7f;
+                }
+            }
         }
 
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
@@ -83,7 +105,21 @@ namespace Splatoon2D
             dmg4 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage4"), scale: 6f);
             dmg5 = new Sprite(Content.Load<Texture2D>("HUD/screen_damage5"), scale: 6f);
 
+            congrats = new Sprite(Content.Load<Texture2D>("HUD/congrats"), scale: 2f);
+            on = new Sprite(Content.Load<Texture2D>("HUD/on"), scale: 2f);
+            beating = new Sprite(Content.Load<Texture2D>("HUD/beating"), scale: 2f);
+            the = new Sprite(Content.Load<Texture2D>("HUD/the"), scale: 2f);
+            game = new Sprite(Content.Load<Texture2D>("HUD/game"), scale: 2f);
+
             collect_sound2 = Content.Load<SoundEffect>("HUD/collect_sound2");
+        }
+
+        public static void TriggerWin(Player player)
+        {
+            win_frames = 1;
+            player.CurrentState = Player.PlayerState.celebrating;
+            player.Velocity = Vector2.Zero;
+            player.Direction = 1;
         }
 
         public static void SpawnEgg(int count, Vector2 SpawnPosition)

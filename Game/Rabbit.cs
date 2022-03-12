@@ -33,7 +33,7 @@ namespace Splatoon2D
             if (intro_said) intro_timer++;
             if (currentState == RabbitState.spawn)
             {
-                if (DistanceWith(player) < 200 && !intro_said)
+                if (DistanceWith(player) < 200 && player.FeetPosition.Y < FeetPosition.Y + 10 && !intro_said)
                 {
                     intro_said = true;
                     Say("Hey there", 120, false, true);
