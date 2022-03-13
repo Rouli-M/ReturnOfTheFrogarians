@@ -91,7 +91,7 @@ namespace Splatoon2D
                             {
                                 Say("Woah, you're pretty fast!", 180);
                                 Say("I guess I have some\ntraining to do", 180);
-                                Say("Here, I think this\nmight prove usefull", () => { CurrentSprite = rabbit_button; }, 180);
+                                Say("Here, I think this\nmight prove usefull", () => { CurrentSprite = rabbit_button; sprite_frames = 0; }, 180);
                             }
                             else
                             {
@@ -109,6 +109,7 @@ namespace Splatoon2D
                 {
                     waiting_for_loser = false;
                     Say("Too slow!");
+                    Say("You know you have to\nactually hit the bell right?", 140);
                     Say("Have you been eating correctly?", () =>
                     {
                         CurrentSprite = rabbit_disappear;
@@ -123,7 +124,7 @@ namespace Splatoon2D
                 }
                 else if (CurrentSprite == rabbit_button)
                 {
-                    if (sprite_frames > 50) CurrentSprite = rabbit_press;
+                    if (sprite_frames > 120) CurrentSprite = rabbit_press;
                 }
                 else if (CurrentSprite == rabbit_press)
                 {

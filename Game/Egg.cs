@@ -25,6 +25,7 @@ namespace Splatoon2D
             if(player.Hitbox.Intersects(Hurtbox))
             {
                 HUD.SpawnEgg(count, Hurtbox.Center.ToVector2());
+                SoundEffectPlayer.Play(HUD.collect_sound2, 0.3f, 0.8f);
                 world.Remove(this);
             }
             offset = 6 * new Vector2(0, (float)Math.Sin(lifetime / 10f));

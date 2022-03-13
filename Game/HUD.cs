@@ -15,6 +15,7 @@ namespace Splatoon2D
         public static SoundEffect collect_sound2; 
         public static Sprite dmg1, dmg2, dmg3, dmg4, dmg5;
         public static Sprite congrats, on, beating, the, game;
+        private static SoundEffect win, boom;
         private static SpriteFont RouliFont;
         private static Random R = new Random();
         private static Player _player;
@@ -43,6 +44,8 @@ namespace Splatoon2D
 
             EggSprite.ScreenDraw(spriteBatch, new Microsoft.Xna.Framework.Vector2(30, 600));
             spriteBatch.DrawString(RouliFont, "x" + egg_count, new Vector2(133, 622), Color.Black);
+            if(Zapfish.played_win_animation)
+                spriteBatch.DrawString(RouliFont, "/200", new Vector2(260, 670), Color.Black * 0.5f, 0f, Vector2.Zero, 0.4f, SpriteEffects.None, 0f);
 
             foreach ((int i, Vector2 p, Vector2 v) e in eggs)
             {
@@ -81,6 +84,13 @@ namespace Splatoon2D
             {
                 win_frames++;
 
+                if (win_frames == 50) SoundEffectPlayer.Play(boom, 1f, 0f);
+                if (win_frames == 75) SoundEffectPlayer.Play(boom, 1f, 0.15f);
+                if (win_frames == 100) SoundEffectPlayer.Play(boom, 1f, 0.3f);
+                if (win_frames == 125) SoundEffectPlayer.Play(boom, 1f, 0.45f);
+                if (win_frames == 150) SoundEffectPlayer.Play(boom, 1f, 0.6f);
+                if (win_frames == 200) SoundEffectPlayer.Play(win, 1f);
+
                 if (win_frames > 450)
                 {
                     player.CurrentState = Player.PlayerState.jump;
@@ -112,6 +122,8 @@ namespace Splatoon2D
             game = new Sprite(Content.Load<Texture2D>("HUD/game"), scale: 2f);
 
             collect_sound2 = Content.Load<SoundEffect>("HUD/collect_sound2");
+            win = Content.Load<SoundEffect>("win");
+            boom = Content.Load<SoundEffect>("boom");
         }
 
         public static void TriggerWin(Player player)

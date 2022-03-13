@@ -342,6 +342,7 @@ namespace Splatoon2D
                     gun_shoot.ResetAnimation();
                     ArmSprite = gun_shoot;
                     shoot_cooldown = 12;
+                    if (HUD.egg_count >= 200) shoot_cooldown = 4;
                 }
                 else if (ArmSprite != gun_shoot || ArmSprite == gun_shoot && ArmSprite.isOver) ArmSprite = gun_cocked;
             }

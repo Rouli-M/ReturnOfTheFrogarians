@@ -97,6 +97,12 @@
 /processorParam:Quality=Best
 /build:bell_sound.wav
 
+#begin boom.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:boom.wav
+
 #begin bump.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -793,30 +799,6 @@
 /processorParam:TextureFormat=Color
 /build:pearl_protect.png
 
-#begin pearl_protect.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:pearl_protect.png
-
-#begin pearl_protect.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:pearl_protect.png
-
 #begin question.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1327,6 +1309,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:welcome.png
+
+#begin win.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:win.wav
 
 #begin zapfish.png
 /importer:TextureImporter
