@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Splatoon2D
 {
-    public class Zapfish : PhysicalObject
+    public class Zapfish : NPC
     {
-        bool played_win_animation = false;
-        public Zapfish(Vector2 Spawn):base(new Vector2(180, 120), Spawn)
+        public static bool played_win_animation = false;
+        public Zapfish(Vector2 Spawn):base(new Vector2(180, 120), Spawn, Vector2.Zero)
         {
             CurrentSprite = zapfish_idle;
             GroundFactor = 1f;
             WallBounceFactor = 1f;
             GroundBounceFactor = 1f;
+            Gravity = 0f;
         }
 
         public override void Update(GameTime gameTime, World world, Player player)

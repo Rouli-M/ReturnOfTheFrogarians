@@ -10,35 +10,14 @@ namespace Splatoon2D
 {
     public class Marina:NPC
     {
-        int frame_since_last_ink_detected = 10000;
         bool spoke_intro = false, has_given_box = false;
-        public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn, new Vector2(30, -190))
+        public Marina(Vector2 Spawn):base(new Vector2(140, 130), Spawn, new Vector2(30, -200))
         {
             CurrentSprite = marina_idle;
         }
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
-            foreach(PhysicalObject o in world.Stuff)
-            {
-                if(o is InkShot s)
-                {
-                    if (Hurtbox.Contains(s.FeetPosition))
-                    {
-                        s.Cancel(world);
-                        if (CurrentSprite != marina_inked) Say(GetRandomExclamation(), 70, true);
-                        CurrentSprite = marina_inked;
-                        frame_since_last_ink_detected = 0;
-                    }
-                    else if (Vector2.Distance(o.FeetPosition, FeetPosition) < 250)
-                    {
-
-                    }
-
-                }
-            }
-            frame_since_last_ink_detected++;
-
             if ((player.FeetPosition - FeetPosition).Length() < 400)
             {
                 if (HUD.egg_count >= 190 && !has_given_box)
@@ -68,6 +47,10 @@ namespace Splatoon2D
                 else if (HUD.egg_count > 75) Say("Woah, that's a lot of eggs!", 200, false, true);
                 else if (HUD.egg_count > 50) Say("You've been doing great,\n    keep it up!", 200, false, true);
                 else if (HUD.egg_count > 10) Say("You get to keep the eggs,\n   lucky you!", 200, false, true);
+            
+                if(!Zapfish.played_win_animation && lifetime % 1000 == 244 && spoke_intro) 
+                    Say(GetRandomZapfishQuestion(), 160);
+
             }
 
 
@@ -80,6 +63,12 @@ namespace Splatoon2D
             base.Update(gameTime, world, player);
         }
 
+        public override void ShotReaction(World world, InkShot shot)
+        {
+            if (CurrentSprite != marina_inked) Say(GetRandomExclamation(), 70, true);
+            CurrentSprite = marina_inked;
+            base.ShotReaction(world, shot);
+        }
 
         public override void SpeakEvent()
         {
@@ -96,9 +85,21 @@ namespace Splatoon2D
             if (id == 5) return "Stop!";
             if (id == 6) return "Ouch!";
             if (id == 7) return "Be carefull!!";
-            if (id == 8) return "I'm not a frog!!";
+            if (id == 8) return "I'm not a frogarian!!";
             if (id == 9) return "I'm under attack!";
             return "Not cool!";
+        }
+
+        public string GetRandomZapfishQuestion()
+        {
+            int id = r.Next(0, 5);
+            if (id == 0) return "I wonder where the zapfish could be...";
+            if (id == 1) return "Hope they're not hurting the zapfish...";
+            if (id == 2) return "Zapfish... I miss him. Or her.";
+            if (id == 3) return "ZAPFISH!! CAN YOU HEAR ME?";
+            if (id == 4) return "These damn frogarians, thinking\nthey can do what they want...";
+
+            return "...";
         }
     }
 }

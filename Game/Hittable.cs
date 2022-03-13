@@ -17,7 +17,7 @@ namespace Splatoon2D
         public static Sprite big_frogarian_idle, big_frogarian_press;
         public static SoundEffect bell_sound, ballon_pop_sound;
         //Color inkable_surface_color; // color of the sprite that will receive player ink
-        static Effect InkEffect;
+        public static Effect InkEffect;
         static Texture2D ink_text0, ink_text1, ink_text2, ink_text3, ink_text4, ink_text5;
         public Effect _InkEffect;
         public Vector2 shake_offset;
@@ -73,42 +73,42 @@ namespace Splatoon2D
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            DrawInkedSprite(spriteBatch, CurrentSprite, _InkEffect, life / (float)total_life, FeetPosition + shake_offset);
+        }
+
+        public static void DrawInkedSprite(SpriteBatch spriteBatch, Sprite sprite, Effect _InkEffect, float percentInked, Vector2 DrawPosition)
+        {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.LinearWrap, null, null, null, transformMatrix: Game1.matrix);
             /*
             */
             //
-            _InkEffect.Parameters["jam_texture"].SetValue(GetInkText());
+            _InkEffect.Parameters["jam_texture"].SetValue(GetInkText(percentInked));
 
-            float x_offset = (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)) * CurrentSprite.frameWidth;
-            float y_offset = (CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) * CurrentSprite.frameHeight;
-            _InkEffect.Parameters["spritesheet_offset_x"].SetValue(x_offset); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
-            _InkEffect.Parameters["spritesheet_offset_y"].SetValue(y_offset);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
-            _InkEffect.Parameters["spritesheet_width"].SetValue((float)CurrentSprite.Texture.Width); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
-            _InkEffect.Parameters["spritesheet_height"].SetValue((float)CurrentSprite.Texture.Height);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
-            _InkEffect.Parameters["frame_number_x"].SetValue(CurrentSprite.Texture.Width / (float)CurrentSprite.frameWidth); // (float)(CurrentSprite.frameWidth / (float)CurrentSprite.Texture.Width) *
-            _InkEffect.Parameters["frame_number_y"].SetValue(CurrentSprite.Texture.Height / (float)CurrentSprite.frameHeight);// (float)(CurrentSprite.frameIndex - (CurrentSprite.frameIndex % (CurrentSprite.Texture.Width / CurrentSprite.frameWidth))) / (CurrentSprite.Texture.Width / CurrentSprite.frameWidth)); // (CurrentSprite.frameHeight / (float)CurrentSprite.Texture.Height) *
+            float x_offset = (sprite.frameIndex % (sprite.Texture.Width / sprite.frameWidth)) * sprite.frameWidth;
+            float y_offset = (sprite.frameIndex - (sprite.frameIndex % (sprite.Texture.Width / sprite.frameWidth))) * sprite.frameHeight;
+            _InkEffect.Parameters["spritesheet_offset_x"].SetValue(x_offset); // (float)(sprite.frameWidth / (float)sprite.Texture.Width) *
+            _InkEffect.Parameters["spritesheet_offset_y"].SetValue(y_offset);// (float)(sprite.frameIndex - (sprite.frameIndex % (sprite.Texture.Width / sprite.frameWidth))) / (sprite.Texture.Width / sprite.frameWidth)); // (sprite.frameHeight / (float)sprite.Texture.Height) *
+            _InkEffect.Parameters["spritesheet_width"].SetValue((float)sprite.Texture.Width); // (float)(sprite.frameWidth / (float)sprite.Texture.Width) *
+            _InkEffect.Parameters["spritesheet_height"].SetValue((float)sprite.Texture.Height);// (float)(sprite.frameIndex - (sprite.frameIndex % (sprite.Texture.Width / sprite.frameWidth))) / (sprite.Texture.Width / sprite.frameWidth)); // (sprite.frameHeight / (float)sprite.Texture.Height) *
+            _InkEffect.Parameters["frame_number_x"].SetValue(sprite.Texture.Width / (float)sprite.frameWidth); // (float)(sprite.frameWidth / (float)sprite.Texture.Width) *
+            _InkEffect.Parameters["frame_number_y"].SetValue(sprite.Texture.Height / (float)sprite.frameHeight);// (float)(sprite.frameIndex - (sprite.frameIndex % (sprite.Texture.Width / sprite.frameWidth))) / (sprite.Texture.Width / sprite.frameWidth)); // (sprite.frameHeight / (float)sprite.Texture.Height) *
 
             _InkEffect.CurrentTechnique.Passes[0].Apply();
 
-            DrawCurrentSprite(spriteBatch);
+            sprite.DrawFromFeet(spriteBatch, DrawPosition);
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.AnisotropicWrap, null, null, null, transformMatrix: Game1.matrix);
         }
 
-        public virtual void DrawCurrentSprite(SpriteBatch spriteBatch)
+        public static Texture2D GetInkText(float percentInked)
         {
-            CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition + shake_offset);
-        }
-
-        public Texture2D GetInkText()
-        {
-            if (life / (float)total_life > 5 / 6f) return ink_text0;
-            if (life / (float)total_life > 4 / 6f) return ink_text1;
-            if (life / (float)total_life > 3 / 6f) return ink_text2;
-            if (life / (float)total_life > 2 / 6f) return ink_text3;
-            if (life / (float)total_life > 1 / 6f) return ink_text4;
+            if (percentInked > 5 / 6f) return ink_text0;
+            if (percentInked > 4 / 6f) return ink_text1;
+            if (percentInked > 3 / 6f) return ink_text2;
+            if (percentInked > 2 / 6f) return ink_text3;
+            if (percentInked > 1 / 6f) return ink_text4;
             return ink_text5;
         }
 

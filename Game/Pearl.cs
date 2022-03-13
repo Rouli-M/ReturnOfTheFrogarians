@@ -9,7 +9,7 @@ namespace Splatoon2D
 {
     public class Pearl:NPC
     {
-        int crypto_count = 0, frame_since_last_ink_detected = 0;
+        int crypto_count = 0;
         bool said_dialog = false;
         bool has_given_box = false;
         public Pearl(Vector2 Spawn) : base(new Vector2(100, 100), Spawn, new Vector2(180, -220))
@@ -19,22 +19,6 @@ namespace Splatoon2D
 
         public override void Update(GameTime gameTime, World world, Player player)
         {
-            foreach (PhysicalObject o in world.Stuff)
-            {
-                if (o is InkShot s)
-                {
-                    if (Hurtbox.Contains(s.FeetPosition))
-                    {
-                        s.Cancel(world);
-                        if (CurrentSprite != pearl_inked) Say(GetRandomExclamation(), 70, true);
-                        CurrentSprite = pearl_inked;
-                        frame_since_last_ink_detected = 0;
-                    }
-                }
-            }
-
-            frame_since_last_ink_detected++;
-
             if (lifetime % 140 == 12)
             {
                 Sprite crypto = crypto1;
@@ -80,6 +64,13 @@ namespace Splatoon2D
             CurrentSprite.UpdateFrame(gameTime);
             base.Update(gameTime, world, player);
 
+        }
+
+        public override void ShotReaction(World world, InkShot shot)
+        {
+            if (CurrentSprite != pearl_inked) Say(GetRandomExclamation(), 70, true);
+            CurrentSprite = pearl_inked;
+            base.ShotReaction(world, shot);
         }
 
         public string GetRandomExclamation()

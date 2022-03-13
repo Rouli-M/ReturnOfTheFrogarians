@@ -44,9 +44,9 @@ namespace Splatoon2D
             base.Die(world);
         }
 
-        public override void DrawCurrentSprite(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            CurrentSprite.DrawFromFeet(spriteBatch, FeetPosition + new Vector2(0, 80) + offset + shake_offset);
+            DrawInkedSprite(spriteBatch, CurrentSprite, _InkEffect, life / (float)total_life, FeetPosition + new Vector2(0, 80) + offset + shake_offset);
         }
 
     }

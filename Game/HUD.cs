@@ -81,7 +81,7 @@ namespace Splatoon2D
             {
                 win_frames++;
 
-                if (win_frames > 500)
+                if (win_frames > 450)
                 {
                     player.CurrentState = Player.PlayerState.jump;
                     player.Velocity = new Vector2(0, -8f);
