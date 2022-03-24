@@ -67,7 +67,7 @@ namespace Splatoon2D
 
         public virtual void Die(World world)
         {
-            HUD.SpawnEgg(loot, FeetPosition);
+            HUD.SpawnEgg(loot, Hurtbox.Center.ToVector2());
             world.Remove(this);
         }
 

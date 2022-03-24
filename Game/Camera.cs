@@ -6,17 +6,17 @@ namespace Splatoon2D
 {
     public static class Camera
     {
-        public static float RegularZoom = 1.3f, Zoom = 1.3f;
+        public static float RegularZoom = 1.3f, Zoom = 1.3f, DebugZoom = 1f;
         public static Vector2 TopLeftCameraPosition, CenterPositionDestination, CenterPosition = new Vector2(0,0), CameraOffset = new Vector2(0,0);
         public static Vector2 RoomRail, TopLeftRailCameraPosition, ScreenShake = new Vector2(0, 0);
         private static bool player_locked = true, totally_fixed = false;
-        public static bool static_cam = false;
+        public static bool static_cam = false, debug_zoom = false;
         public static void Update(Player player, World world)
         {
             //ScreenShake *= 0.9f;
             if(player.lifetime % 5 == 0) ScreenShake *= -0.5f;
 
-            if (static_cam) Zoom = 0.5f;
+            if (debug_zoom) Zoom = DebugZoom;
             else if(Bumper.unlocked) Zoom = 1.1f;
             else Zoom = RegularZoom;
 

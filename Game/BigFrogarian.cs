@@ -12,7 +12,7 @@ namespace Splatoon2D
         Sprite _idle, _press;
         Rectangle ViewField;
         int shoot_cooldown = 0, exclamation_cooldown = 0, question_cooldown = 0, queue_big_shot_frames = 0;
-        bool player_seen = false;
+        public bool player_seen = false;
         public BigFrogarian(Vector2 Spawn):base(new Vector2(120,120), Spawn)
         {
             _idle = new Sprite(big_frogarian_idle);
@@ -59,6 +59,11 @@ namespace Splatoon2D
             CurrentSprite.UpdateFrame(gameTime);
             base.Update(gameTime, world, player);
             if (ViewPlayer(player)) player_seen = true;
+            if (player.Hitbox.Intersects(Hurtbox))
+            {
+                player.Damage(30);
+                player.Bump(this);
+            }
         }
 
         void Shoot(World world)
@@ -73,6 +78,7 @@ namespace Splatoon2D
 
         public override void ShotReaction(World world, Player player, InkShot shot)
         {
+            SoundEffectPlayer.Play(frog_hit, 1f, (float)r.NextDouble() * 0.4f);
             if (!ViewPlayer(player) && exclamation_cooldown == 0)
             {
                 world.Spawn(new Particle(FeetPosition + new Vector2(80, -Hurtbox.Height + 10), exclamation, 61));

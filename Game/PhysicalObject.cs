@@ -24,7 +24,7 @@ namespace Splatoon2D
         public static Sprite rabbit_idle, rabbit_disappear, rabbit_rise, rabbit_fall, rabbit_charge, rabbit_button, rabbit_press;
         public static Sprite pearl_sprite, pearl_inked, tofu_sprite, crypto1, crypto2, crypto3;
         public static Sprite bump_locked, bump_idle, bump_bump, zapfish_idle, zapfish_win;
-        public static SoundEffect marina_sound1, marina_sound2, explosion, bump, question_sound, victory, enemy_shoot, rabbit_sound1, rabbit_sound2, rabbit_sound3;
+        public static SoundEffect marina_sound1, marina_sound2, explosion, bump, question_sound, victory, enemy_shoot, frog_hit, rabbit_sound1, rabbit_sound2, rabbit_sound3;
         public static void LoadContent(Microsoft.Xna.Framework.Content.ContentManager Content)
         {
             bell_idle = new Sprite(Content.Load<Texture2D>("bell_idle"));
@@ -62,6 +62,7 @@ namespace Splatoon2D
             question_sound = Content.Load<SoundEffect>("question");
             victory = Content.Load<SoundEffect>("victory");
             enemy_shoot = Content.Load<SoundEffect>("enemy_shoot");
+            frog_hit = Content.Load<SoundEffect>("frog_hit");
         }
 
         public PhysicalObject(Vector2 HurtboxSize, Vector2 FeetPosition, bool isParticle = false)

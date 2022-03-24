@@ -73,6 +73,7 @@
     <Compile Include="InkShot.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Marina.cs" />
+    <Compile Include="MusicManager.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="Particle.cs" />
     <Compile Include="Pearl.cs" />

@@ -15,6 +15,7 @@ namespace Splatoon2D
         int direction;
         int shoot_cooldown;
         int turn_timer; // number of frames taken to turn around
+        public bool see_player = false;
 
         Sprite _idle, _move, _shoot;
 
@@ -61,12 +62,16 @@ namespace Splatoon2D
                     {
                             if (!ViewPlayer(player))
                             {
+                                see_player = false;
                                 world.Spawn(new Particle(FeetPosition + new Vector2(56, -Hurtbox.Height + 30), interrogation, 61));
                                 SoundEffectPlayer.Play(question_sound);
                             }
                     }
                     else if (state_frames > 100)
-                        state = FrogtarianState.moving;
+                        {
+                            state = FrogtarianState.moving;
+                            see_player = false;
+                        }
                     break;
                 case FrogtarianState.moving:
                     if (ViewPlayer(player)) Shoot(world);
@@ -133,6 +138,8 @@ namespace Splatoon2D
 
         public override void ShotReaction(World world, Player player, InkShot shot)
         {
+            SoundEffectPlayer.Play(frog_hit, 1f, (float)r.NextDouble() * 0.4f);
+
             if (Direction(player) != direction && turn_timer == 0)
             {
                 world.Spawn(new Particle(FeetPosition + new Vector2(56, -Hurtbox.Height + 30), exclamation, 61));
@@ -157,6 +164,7 @@ namespace Splatoon2D
         private void Shoot(World world)
         {
             if (shoot_cooldown > 0) return;
+            see_player = true;
             SoundEffectPlayer.Play(enemy_shoot);
             shoot_cooldown = 110;
             state = FrogtarianState.shooting;

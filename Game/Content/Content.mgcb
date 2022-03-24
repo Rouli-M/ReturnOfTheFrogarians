@@ -373,6 +373,12 @@
 /processorParam:TextureFormat=Color
 /build:frog_egg.png
 
+#begin frog_hit.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:frog_hit.wav
+
 #begin frog_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -962,6 +968,18 @@
 /processorParam:Quality=Best
 /build:slide_tiny.wav
 
+#begin song_fight.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:song_fight.wav
+
+#begin song_normal.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:song_normal.wav
+
 #begin splash.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor
@@ -1093,6 +1111,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:statue6.png
+
+#begin statue7.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:statue7.png
 
 #begin swim.wav
 /importer:WavImporter

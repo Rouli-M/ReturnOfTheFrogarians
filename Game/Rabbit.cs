@@ -67,7 +67,7 @@ namespace Splatoon2D
                 if(CurrentSprite == rabbit_charge)
                 {
                     charge_jump_frames++;
-                    if(charge_jump_frames > 22)
+                    if(charge_jump_frames > 24)
                     {
                         CurrentSprite = rabbit_rise;
                         ApplyForce(GetJumpForce(jump_number));
@@ -83,7 +83,7 @@ namespace Splatoon2D
                 {
                     if (IsOnGround(world))
                     {
-                        if (jump_number == 12)
+                        if (jump_number == 13)
                         {
                             CurrentSprite = rabbit_idle;
                             currentState = RabbitState.race_end;
@@ -113,6 +113,7 @@ namespace Splatoon2D
                     Say("Have you been eating correctly?", () =>
                     {
                         CurrentSprite = rabbit_disappear;
+                        CurrentSprite.ResetAnimation();
                         Say("Try again I guess");
                     }, 180);
                 }
@@ -178,8 +179,9 @@ namespace Splatoon2D
             if (jumpID == 7) return new Vector2(-11f, -12);
             if (jumpID == 8) return new Vector2(-11f, -12);
             if (jumpID == 9) return new Vector2(-7f, -31);
-            if (jumpID == 10) return new Vector2(-15f, -14f);
+            if (jumpID == 10) return new Vector2(-16f, -14f);
             if (jumpID == 11) return new Vector2(-10f, -14f);
+            if (jumpID == 12) return new Vector2(-15f, -18f);
                           
             return new Vector2(0, -15);        
         }

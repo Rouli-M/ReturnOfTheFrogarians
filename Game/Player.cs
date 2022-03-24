@@ -46,9 +46,9 @@ namespace Splatoon2D
         public int dash_frames = 0; // cooldown
         public int shoot_cooldown = 0, heal_cooldown = 0, cant_squid_cooldown = 0;
 
-        public Player():base(human_size, new Vector2(0,0))
+        public Player():base(human_size, new Vector2(0, 0))
         {
-            FeetPosition = new Vector2(-640, -1);
+            FeetPosition = new Vector2(-640 - 1000, -1);
             CurrentState = PlayerState.idle;
             CurrentForm = PlayerForm.kid;
            
@@ -325,6 +325,7 @@ namespace Splatoon2D
                 {
                     Vector2 InkSpawnPoint = FeetPosition;
                     Vector2 ArmJointPos = GetArmRelativePoint();
+                    if (ArmJointPos.Y < -1000) ArmJointPos = new Vector2(-5, -76);
                     if (Direction == -1) ArmJointPos.X *= -1;
 
                     Vector2 OffsetInAimDirection = 77 * new Vector2((float)Math.Cos(Input.Angle), -(float)Math.Sin(Input.Angle));
@@ -456,6 +457,9 @@ namespace Splatoon2D
                 if (!small) SoundEffectPlayer.Play(squid_jump_sound);
             }
             if (small) force = 8;
+#if !DEBUG
+            if (HUD.egg_count >= 200) force *= 1.5f;
+#endif
             ApplyForce(new Vector2(0, -force));
         }
 

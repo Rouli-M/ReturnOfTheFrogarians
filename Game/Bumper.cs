@@ -78,7 +78,7 @@ namespace Splatoon2D
                 p.CurrentState = Player.PlayerState.jump;
             }
             else o.FeetPosition = Hurtbox.Center.ToVector2() + new Vector2(0, o.HurtboxSize.Y / 2);
-            if(_bump.firstFrame) SoundEffectPlayer.Play(bump);
+            SoundEffectPlayer.Play(bump);
             o.Velocity = force * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
             CurrentSprite = _bump;
         }

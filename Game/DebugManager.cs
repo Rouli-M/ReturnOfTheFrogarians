@@ -47,6 +47,14 @@ namespace Splatoon2D
             if (JustPressed(Keys.F5)) show_infos = !show_infos;
             if (JustPressed(Keys.F6)) show_ground = !show_ground;
             if (JustPressed(Keys.F7)) Camera.static_cam = !Camera.static_cam;
+            if (JustPressed(Keys.F8))
+            {
+                Camera.debug_zoom = !Camera.debug_zoom;
+                if(Camera.DebugZoom % 0.1f != 0) Camera.DebugZoom -= 0.1f;
+                else Camera.DebugZoom += 0.1f;
+                if (Camera.DebugZoom > 2.05f) Camera.DebugZoom = 2.05f;
+                if (Camera.DebugZoom < 0.3f) Camera.DebugZoom = 0.3f;
+            }
             if (JustPressed(Keys.F11)) game.graphics.ToggleFullScreen();
             if (JustPressed(Keys.C)) world.PaintedGround.Clear();
             if (JustPressed(Keys.C)) world.PaintedWalls.Clear();

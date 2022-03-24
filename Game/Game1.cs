@@ -115,6 +115,7 @@ namespace Splatoon2D
             InkShot.LoadContent(Content);
             Hittable.LoadContent(Content);
             Egg.LoadContent(Content);
+            MusicManager.LoadContent(Content);
             loading_animation = new Sprite(15, 100, 1500/15, 100,  Content.Load<Texture2D>("loading"));
             loading_screen = new Sprite(Content.Load<Texture2D>("welcome"));
             base.LoadContent(); // ???
@@ -140,6 +141,7 @@ namespace Splatoon2D
             if(intro_frames > 0 && intro_frames < INTRO_FRAMES)
             {
                 intro_frames--;
+                if (intro_frames == 140) MediaPlayer.Play(MusicManager.normal);
                 loading_animation.UpdateFrame(gameTime);
                 return;
             }
@@ -158,6 +160,7 @@ namespace Splatoon2D
             Camera.Update(player, world);
             HUD.Update(player);
             SoundEffectPlayer.Update();
+            if(intro_frames == 0) MusicManager.Update(world, player);
             base.Update(gameTime);
 
             if(intro_frames == INTRO_FRAMES) intro_frames--; // shitty
